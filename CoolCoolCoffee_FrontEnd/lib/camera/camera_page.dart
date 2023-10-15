@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-//import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
-import 'package:google_ml_kit/google_ml_kit.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+//import 'package:google_ml_kit/google_ml_kit.dart';
 
 class CameraPage extends StatefulWidget {
   const CameraPage({Key? key}) : super(key: key);
@@ -14,7 +14,8 @@ class CameraPage extends StatefulWidget {
 class _CameraPageState extends State<CameraPage> {
   XFile? _image; //이미지를 담을 변수 선언
   final ImagePicker picker = ImagePicker(); //ImagePicker 초기화
-  String scannedText = "";
+  String engScannedText = "";
+  String korScannedText = "";
   //이미지를 가져오는 함수
   Future getImage(ImageSource imageSource) async {
     //pickedFile에 ImagePicker로 가져온 이미지가 담긴다.
@@ -33,21 +34,32 @@ class _CameraPageState extends State<CameraPage> {
 
     // textRecognizer 초기화, 이때 script에 인식하고자하는 언어를 인자로 넘겨줌
     // ex) 영어는 script: TextRecognitionScript.latin, 한국어는 script: TextRecognitionScript.korean
-    final textRecognizer =
-    GoogleMlKit.vision.textRecognizer(script: TextRecognitionScript.latin);
+    final engTextRecognizer =
+    TextRecognizer(script: TextRecognitionScript.latin);
+
+    final korTextRecognizer =
+    TextRecognizer(script: TextRecognitionScript.korean);
 
     // 이미지의 텍스트 인식해서 recognizedText에 저장
-    RecognizedText recognizedText =
-    await textRecognizer.processImage(inputImage);
+    RecognizedText engRecognizedText =
+    await engTextRecognizer.processImage(inputImage);
+    RecognizedText korRecognizedText =
+    await korTextRecognizer.processImage(inputImage);
 
     // Release resources
-    await textRecognizer.close();
-
+    await engTextRecognizer.close();
+    await korTextRecognizer.close();
     // 인식한 텍스트 정보를 scannedText에 저장
-    scannedText = "";
-    for (TextBlock block in recognizedText.blocks) {
+    engScannedText = "";
+    for (TextBlock block in engRecognizedText.blocks) {
       for (TextLine line in block.lines) {
-        scannedText = scannedText + line.text + "\n";
+        engScannedText = engScannedText + line.text + "\n";
+      }
+    }
+    korScannedText = "";
+    for (TextBlock block in korRecognizedText.blocks) {
+      for (TextLine line in block.lines) {
+        korScannedText = korScannedText + line.text + "\n";
       }
     }
 
@@ -64,7 +76,7 @@ class _CameraPageState extends State<CameraPage> {
           children: [
             SizedBox(height: 30, width: double.infinity),
             _buildPhotoArea(),
-            _buildRecognizedText(),
+            _buildEngRecognizedText(),
             SizedBox(height: 20),
             _buildButton(),
           ],
@@ -87,8 +99,11 @@ class _CameraPageState extends State<CameraPage> {
     );
   }
 
-  Widget _buildRecognizedText() {
-    return Text(scannedText); //getRecognizedText()에서 얻은 scannedText 값 출력
+  Widget _buildEngRecognizedText() {
+    return Text(engScannedText); //getRecognizedText()에서 얻은 scannedText 값 출력
+  }
+  Widget _buildKorRecognizedText() {
+    return Text(korScannedText); //getRecognizedText()에서 얻은 scannedText 값 출력
   }
 
   Widget _buildButton() {
