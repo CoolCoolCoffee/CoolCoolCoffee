@@ -1,4 +1,5 @@
 import 'package:coolcoolcoffee_front/camera/camera_page.dart';
+import 'package:coolcoolcoffee_front/menu/menu_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,7 +14,7 @@ class CoolCoolCoffee extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       //theme: ThemeData(primarySwatch: ),
-      home: CameraPage(),
+      home: MenuPage(),
     );
   }
 }
