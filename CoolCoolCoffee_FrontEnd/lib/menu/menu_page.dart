@@ -1,3 +1,4 @@
+import 'package:coolcoolcoffee_front/camera/camera_page.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +41,8 @@ class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin
             icon: Icons.label_outline_rounded,
             titleStyle: TextStyle(fontSize: 16, color: Colors.white),
             onPress: () {
-              _animationController!.reverse();
+              //_animationController!.reverse();
+              Navigator.push(context, MaterialPageRoute(builder: (context) => CameraPage("Starbucks label")));
             },
           ),
           Bubble(
@@ -50,7 +52,9 @@ class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin
             icon: Icons.screenshot_outlined,
             titleStyle: TextStyle(fontSize: 16, color: Colors.white),
             onPress: () {
-              _animationController!.reverse();
+              //_animationController!.reverse();
+              Navigator.push(context, MaterialPageRoute(builder: (context) => CameraPage("App Capture")));
+
             },
           ),
           Bubble(
@@ -60,7 +64,8 @@ class _MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin
             icon: Icons.local_convenience_store_rounded,
             titleStyle: TextStyle(fontSize: 16, color: Colors.white),
             onPress: () {
-              _animationController!.reverse();
+              //_animationController!.reverse();
+              Navigator.push(context, MaterialPageRoute(builder: (context) => CameraPage("conveni")));
             },
           ),
         ],
