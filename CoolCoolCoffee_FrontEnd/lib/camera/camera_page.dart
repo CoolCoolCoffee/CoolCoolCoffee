@@ -5,9 +5,9 @@ import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart
 //import 'package:google_ml_kit/google_ml_kit.dart';
 
 class CameraPage extends StatefulWidget {
-  final String cameraMenu;
-
-  const CameraPage(this.cameraMenu);
+  final String cameraMode;
+  final String cameraGallery;
+  const CameraPage({Key? key, required this.cameraMode,required this.cameraGallery}) : super(key: key);
 
   @override
   State<CameraPage> createState() => _CameraPageState();
@@ -72,10 +72,11 @@ class _CameraPageState extends State<CameraPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: Text("${widget.cameraMenu}")),
+        appBar: AppBar(title: Text("${widget.cameraMode}")),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Text("${widget.cameraGallery}"),
             SizedBox(height: 30, width: double.infinity),
             _buildPhotoArea(),
             _buildEngRecognizedText(),

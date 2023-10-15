@@ -1,5 +1,6 @@
 import 'package:coolcoolcoffee_front/camera/camera_page.dart';
 import 'package:coolcoolcoffee_front/menu/menu_page.dart';
+import 'package:coolcoolcoffee_front/menu/camera_button.dart';
 import 'package:flutter/material.dart';
 
 void main() {
