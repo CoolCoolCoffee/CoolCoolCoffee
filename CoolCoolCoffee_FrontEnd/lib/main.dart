@@ -2,11 +2,17 @@ import 'package:coolcoolcoffee_front/camera/camera_page.dart';
 import 'package:coolcoolcoffee_front/menu/menu_page.dart';
 import 'package:coolcoolcoffee_front/menu/camera_button.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 
 import 'firebase_options.dart';
+import 'menu/brand_list_view.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  );
   runApp(const CoolCoolCoffee());
 }
 
