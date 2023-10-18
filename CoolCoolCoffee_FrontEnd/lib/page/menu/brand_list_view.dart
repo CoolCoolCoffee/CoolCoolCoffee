@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:coolcoolcoffee_front/menu/brand_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../model/brand.dart';
 
 class BrandListView extends StatefulWidget {
   const BrandListView({super.key});

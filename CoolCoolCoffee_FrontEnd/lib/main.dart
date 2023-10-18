@@ -1,12 +1,10 @@
-import 'package:coolcoolcoffee_front/camera/camera_page.dart';
-import 'package:coolcoolcoffee_front/menu/menu_page.dart';
-import 'package:coolcoolcoffee_front/menu/camera_button.dart';
+
+import 'package:coolcoolcoffee_front/page_state/page_state.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 
 import 'firebase_options.dart';
-import 'menu/brand_list_view.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +28,7 @@ class CoolCoolCoffee extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       //theme: ThemeData(primarySwatch: ),
-      home: MenuPage(),
+      home: PageStates(),
     );
   }
 }

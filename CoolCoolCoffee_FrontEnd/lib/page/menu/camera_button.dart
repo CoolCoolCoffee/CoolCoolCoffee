@@ -1,6 +1,8 @@
-import 'package:coolcoolcoffee_front/camera/camera_page.dart';
+
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
+
+import '../camera/camera_page.dart';
 
 class CameraButton extends StatefulWidget {
   const CameraButton({super.key});
