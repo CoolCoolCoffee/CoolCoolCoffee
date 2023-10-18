@@ -18,6 +18,11 @@ class _MenuPageState extends State<MenuPage> {
           onPressed: () {},
           icon: Icon(Icons.arrow_back),
         ),
+        centerTitle: true,
+        title: Text("음료 검색하기"),
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.star))
+        ],
         /*bottom: IconButton(
           onPressed: () {},
           icon: Icon(Icons.star),
