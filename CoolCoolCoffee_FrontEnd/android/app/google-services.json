@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "588637140407",
+    "firebase_url": "https://coolcoolcoffee-2a74f-default-rtdb.firebaseio.com",
+    "project_id": "coolcoolcoffee-2a74f",
+    "storage_bucket": "coolcoolcoffee-2a74f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:588637140407:android:7cdd6850f2222093e6a432",
+        "android_client_info": {
+          "package_name": "com.example.coolcoolcoffee_front"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfEmKOB5Pa1xxAl7GG5SsbqdymVULsNHc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -79,7 +79,7 @@ class _CameraPageState extends State<CameraPage> {
             Text("${widget.cameraGallery}"),
             SizedBox(height: 30, width: double.infinity),
             _buildPhotoArea(),
-            _buildEngRecognizedText(),
+            _buildKorRecognizedText(),
             SizedBox(height: 20),
             _buildButton(),
           ],
