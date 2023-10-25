@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'calendar.dart';
 import 'sleep_condition.dart';
+import 'sleep_info.dart';
 
 class SleepPage extends StatefulWidget {
   const SleepPage({super.key});
@@ -16,17 +17,15 @@ class _SleepPageState extends State<SleepPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sleep Page'),
+        title: Text('Sleep Calendar Page'),
       ),
       body: Column(
         children: [
           CalendarWidget(),
-          // 추가: SleepConditionWidget
-          Expanded(
-            child: Container(
-              color: Colors.tealAccent,
-            ),
-          ),
+          Text('어제의 수면정보가 맞나요?'),
+          SleepInfoWidget(),
+          SizedBox(height: 30),
+          Text('피곤도를 기록해주세요~'),
           SleepConditionWidget(
             onFatigueSelected: (int sleepLevel) {
               setState(() {
@@ -37,7 +36,6 @@ class _SleepPageState extends State<SleepPage> {
 
           // 선택된 피곤도 표시
           Text('Sleep Condition: $sleepCondition'),
-
         ],
       ),
     );
