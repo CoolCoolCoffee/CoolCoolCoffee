@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  table_calendar: ^3.0.8
   image_picker: ^1.0.4
   google_mlkit_text_recognition: ^0.10.0
   floating_action_bubble: ^1.1.4
