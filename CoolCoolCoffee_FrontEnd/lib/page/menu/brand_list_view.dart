@@ -40,10 +40,14 @@ class _BrandListViewState extends State<BrandListView> {
                               height: 5,
                             ),
                             CircleAvatar(
+                              backgroundColor: Colors.white,
                               radius: 25,
                                 backgroundImage: NetworkImage(documentSnapshot['logo_img']),
                             ),
-                            Text(documentSnapshot.id)
+                            Text(
+                                documentSnapshot.id,
+                              style: TextStyle(fontSize: 13),
+                            )
                             /*Card(
                               margin: const EdgeInsets.all(10),
                               child: ListTile(

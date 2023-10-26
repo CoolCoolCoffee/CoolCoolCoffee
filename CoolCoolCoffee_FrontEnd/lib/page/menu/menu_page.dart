@@ -47,7 +47,7 @@ class _MenuPageState extends State<MenuPage> {
       ),
       body:Column(
         children: [
-          Container(height: 20,color: Colors.red,),
+          Container(height: 20,),
           Expanded(child: BrandListView()),
           Expanded(
             flex: 7,
