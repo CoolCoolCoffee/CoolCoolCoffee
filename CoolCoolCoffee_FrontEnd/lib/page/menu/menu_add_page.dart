@@ -84,17 +84,23 @@ class _MenuAddPageState extends State<MenuAddPage> {
                         crossAxisAlignment: CrossAxisAlignment.start ,
                         children: [
                           Container(height: 5,),
-                          Text(
-                              _brand,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.grey
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Text(
+                                _brand,
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.grey
+                              ),
                             ),
                           ),
-                          Text(
-                              _menu.id,
-                            style: TextStyle(
-                              fontSize: 30
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Text(
+                                _menu.id,
+                              style: TextStyle(
+                                fontSize: 20
+                              ),
                             ),
                           )],
                       ),
