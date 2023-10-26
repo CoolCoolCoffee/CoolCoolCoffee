@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class SleepConditionWidget extends StatefulWidget {
-  final Function(int fatigueLevel) onFatigueSelected;
+  final Function(int conditionLevel) onConditionSelected;
 
-  const SleepConditionWidget({Key? key, required this.onFatigueSelected})
+  const SleepConditionWidget({Key? key, required this.onConditionSelected})
       : super(key: key);
 
   @override
@@ -11,58 +11,93 @@ class SleepConditionWidget extends StatefulWidget {
 }
 
 class _SleepConditionWidgetState extends State<SleepConditionWidget> {
-  int selectedFatigue = 1;
+  int selectedCondition = 1;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(5, (index) {
-        return GestureDetector(
-          onTap: () {
-            setState(() {
-              selectedFatigue = index + 1;
-            });
-            widget.onFatigueSelected(selectedFatigue);
-          },
-          child: Column(
-            children: [
-              Container(
-                margin: EdgeInsets.all(9),
-                width: 60,
-                height: 70,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: selectedFatigue == index + 1
-                      ? Colors.blue
-                      : Colors.grey,
-                ),
-                child: Center(
-                  child: Text(
-                    (index + 1).toString(),
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              Text(
-                getFatigueText(index + 1),
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
+    return Container(
+      //color: Color(0xFFD0B89E),
+      color: Colors.white,
+      child: Column(
+        children: [
+          Text(
+            '피곤도를 기록해주세요',
+            style: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.w500
+            ),
           ),
-        );
-      }),
+          Container(
+            padding: EdgeInsets.all(8.0), // Adjust the padding as needed
+            decoration: BoxDecoration(
+              color: Colors.white, // Light brown color
+              borderRadius: BorderRadius.circular(12.0), // Adjust the border radius as needed
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(5, (index) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedCondition = index + 1;
+                    });
+                    widget.onConditionSelected(selectedCondition);
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.all(9),
+                        width: 60,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: selectedCondition == index + 1
+                              ? Colors.brown
+                              : Colors.white,
+                          border: Border.all(
+                            color: Colors.brown,
+                            width: 3.0,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            (index + 1).toString(),
+                            style: TextStyle(
+                              color: selectedCondition == index + 1
+                                  ? Colors.white
+                                  : Colors.brown,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        getConditionLevel(index + 1),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.brown,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
+            ),
+          ),
+          Text(
+            'Sleep Condition: $selectedCondition',
+            style: TextStyle(fontSize: 16.0),
+          ),
+        ],
+      ),
     );
   }
 
-  String getFatigueText(int fatigueLevel) {
-    switch (fatigueLevel) {
+  String getConditionLevel(int conditionLevel) {
+    switch (conditionLevel) {
       case 1:
         return '매우 피곤';
       case 2:
