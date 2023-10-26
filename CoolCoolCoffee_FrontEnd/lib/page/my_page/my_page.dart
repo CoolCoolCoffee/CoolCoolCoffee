@@ -1,3 +1,5 @@
+import 'package:coolcoolcoffee_front/page/menu/brand_list_view.dart';
+import 'package:coolcoolcoffee_front/page/menu/menu_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,5 +16,6 @@ class _MyPageState extends State<MyPage> {
     return Container(
       color: Colors.blue,
     );
+
   }
 }

@@ -1,4 +1,5 @@
 
+import 'package:coolcoolcoffee_front/page/menu/menu_list_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -17,21 +18,43 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         leading: IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+              Icons.arrow_back,
+            color: Colors.black,
+          ),
         ),
         centerTitle: true,
-        title: Text("음료 검색하기"),
+        title: Text(
+            "음료 검색하기",
+          style: TextStyle(
+            color: Colors.black
+          ),
+        ),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.star))
+          IconButton(
+            onPressed: () {},
+            icon: Image.asset(
+              "assets/star_unfilled_with_outer.png",
+              fit: BoxFit.fill,
+            ),
+          )
         ],
-        /*bottom: IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.star),
-        ),*/
       ),
-      body:BrandListView(),
+      body:Column(
+        children: [
+          Container(height: 20,color: Colors.red,),
+          Expanded(child: BrandListView()),
+          Expanded(
+            flex: 7,
+            child: MenuListView(brandName: 'Starbucks',)
+          )
+        ],
+      ),
       floatingActionButton: CameraButton(),
     );
   }
