@@ -18,7 +18,7 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
             Text(
               '어제의 수면정보가 맞나요?',
               style: TextStyle(
-                fontSize: 18.0,
+                fontSize: 15.0,
                   fontWeight: FontWeight.w500 // Set the text color to white
               ),
             ),

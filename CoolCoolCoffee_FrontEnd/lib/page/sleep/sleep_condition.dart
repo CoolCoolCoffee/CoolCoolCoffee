@@ -23,7 +23,7 @@ class _SleepConditionWidgetState extends State<SleepConditionWidget> {
           Text(
             '피곤도를 기록해주세요',
             style: TextStyle(
-              fontSize: 18.0,
+              fontSize: 15.0,
               fontWeight: FontWeight.w500
             ),
           ),
