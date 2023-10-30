@@ -26,10 +26,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -59,5 +56,15 @@ class DefaultFirebaseOptions {
     projectId: 'coolcoolcoffee-2a74f',
     databaseURL: 'https://coolcoolcoffee-2a74f-default-rtdb.firebaseio.com',
     storageBucket: 'coolcoolcoffee-2a74f.appspot.com',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyCq2rWyb3-EyyIc8LW62plEhVTwTXV095M',
+    appId: '1:588637140407:ios:080646f359c30bcce6a432',
+    messagingSenderId: '588637140407',
+    projectId: 'coolcoolcoffee-2a74f',
+    databaseURL: 'https://coolcoolcoffee-2a74f-default-rtdb.firebaseio.com',
+    storageBucket: 'coolcoolcoffee-2a74f.appspot.com',
+    iosBundleId: 'com.eunhwa.coolcoolcoffeeFrontend',
   );
 }
