@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coolcoolcoffee_front/firestore/starbucks_database.dart';
+import 'package:coolcoolcoffee_front/model/menu.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -19,7 +22,7 @@ class _StarbucksLabelState extends State<StarbucksLabel> {
   String engScannedText = "";
   String korScannedText = "";
   bool ice = false;
-  String menu = "";
+  String full_menu_name = "";
   //이미지를 가져오는 함수
   Future getImage(ImageSource imageSource) async {
     //pickedFile에 ImagePicker로 가져온 이미지가 담긴다.
@@ -73,8 +76,33 @@ class _StarbucksLabelState extends State<StarbucksLabel> {
       }
     }
     final starbucks_menu = korScannedText.split(' ');
+    var starbucks_label_docs = await FirebaseFirestore.instance
+      .collection('Cafe_brand')
+      .doc('스타벅스')
+      .collection('starbucks_label')
+      .get()
+      .then((subcol) {
+        subcol.docs.forEach((element) {
+          print(element.id);
+          print("menu");
+          print(starbucks_menu[1]);
+          print("end");
+          if(starbucks_menu[1].trim() == element.id.trim()){
+            print("dfdfdfd!!");
+            if(ice){
+              full_menu_name = element['ice'];
+              print(full_menu_name);
+            }else{
+              full_menu_name = element['hot'];
+              print(full_menu_name);
+            }
+          }
+        });
+      });
     setState(() {});
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +145,7 @@ class _StarbucksLabelState extends State<StarbucksLabel> {
     return Text(engScannedText); //getRecognizedText()에서 얻은 scannedText 값 출력
   }*/
   Widget _buildKorRecognizedText() {
-    return Text(korScannedText); //getRecognizedText()에서 얻은 scannedText 값 출력
+    return Text(full_menu_name); //getRecognizedText()에서 얻은 scannedText 값 출력
   }
 
   Widget _buildButton() {
