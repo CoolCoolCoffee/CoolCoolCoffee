@@ -1,4 +1,5 @@
 
+import 'package:coolcoolcoffee_front/page/camera/starbucks_label.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
 
@@ -94,7 +95,12 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
               TextButton(
                 child: const Text("카메라"),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CameraPage(cameraMode: cameraMode, cameraGallery: "camera")));
+                  if(cameraMode == "Starbucks label"){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => StarbucksLabel(cameraMode: cameraMode, cameraGallery: "camera")));
+                  }
+                  else{
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => CameraPage(cameraMode: cameraMode, cameraGallery: "camera")));
+                  }
                 },
               ),
               TextButton(
