@@ -51,6 +51,7 @@ class _AppCaptureState extends State<AppCapture> {
     colors.clear();
     for (var color in generator.paletteColors) {
       colors.add(color);
+      print(color.hashCode.toString());
     }
     setState(() {});
   }
@@ -70,32 +71,18 @@ class _AppCaptureState extends State<AppCapture> {
               //_buildKorRecognizedText(),
               SizedBox(height: 20),
               _buildButton(),
-              GridView.builder(
+              ListView.builder(
                   shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
+                  scrollDirection: Axis.vertical,
                   itemCount: colors.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 1,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10
-                  ),
                   itemBuilder: (context, index){
                     return Container(
-                      color: Colors.green,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Container(
-
-                              margin: EdgeInsets.all(10),
-                              color: colors[index].color,
-                            ),
-                          ),
-                          Text(colors[index].hashCode.toString())
-                        ],
-                      ),
-                    );
+                        height: 30,
+                        margin: EdgeInsets.all(10),
+                        color: colors[index].color,
+                        child: Text(colors[index].hashCode.toString()),
+                      );
                   })
             ],
           ),
