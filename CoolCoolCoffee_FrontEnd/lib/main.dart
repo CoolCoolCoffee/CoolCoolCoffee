@@ -1,4 +1,5 @@
 
+import 'package:coolcoolcoffee_front/page/camera/app_capture.dart';
 import 'package:coolcoolcoffee_front/page/camera/color_palette.dart';
 import 'package:coolcoolcoffee_front/page_state/page_state.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -29,7 +30,7 @@ class CoolCoolCoffee extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       //theme: ThemeData(primarySwatch: ),
-      home: ColorPalette(),
+      home: AppCapture(cameraMode: 'app capture',cameraGallery: 'gallery'),
     );
   }
 }

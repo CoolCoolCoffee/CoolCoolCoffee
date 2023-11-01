@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:palette_generator/palette_generator.dart';
 //import 'package:google_ml_kit/google_ml_kit.dart';
 
 class AppCapture extends StatefulWidget {
@@ -17,6 +18,7 @@ class _AppCaptureState extends State<AppCapture> {
   XFile? _image; //이미지를 담을 변수 선언
   final ImagePicker picker = ImagePicker(); //ImagePicker 초기화
   String korScannedText = "";
+  List<PaletteColor> colors = [];
   //이미지를 가져오는 함수
   Future getImage(ImageSource imageSource) async {
     //pickedFile에 ImagePicker로 가져온 이미지가 담긴다.
@@ -30,32 +32,28 @@ class _AppCaptureState extends State<AppCapture> {
   }
 
   void getRecognizedText(XFile image) async {
-    // XFile 이미지를 InputImage 이미지로 변환
     final InputImage inputImage = InputImage.fromFilePath(image.path);
-
-    // textRecognizer 초기화, 이때 script에 인식하고자하는 언어를 인자로 넘겨줌
-    // ex) 영어는 script: TextRecognitionScript.latin, 한국어는 script: TextRecognitionScript.korean
-
     final korTextRecognizer =
     TextRecognizer(script: TextRecognitionScript.korean);
-
-    // 이미지의 텍스트 인식해서 recognizedText에 저장
     RecognizedText korRecognizedText =
     await korTextRecognizer.processImage(inputImage);
-
-    // Release resources
     await korTextRecognizer.close();
-    // 인식한 텍스트 정보를 scannedText에 저장
     korScannedText = "";
     for (TextBlock block in korRecognizedText.blocks) {
       for (TextLine line in block.lines) {
         korScannedText = korScannedText + line.text + "\n";
       }
     }
-
+    final PaletteGenerator generator = await
+    PaletteGenerator.fromImageProvider(
+      Image.file(File(_image!.path)).image,
+    );
+    colors.clear();
+    for (var color in generator.paletteColors) {
+      colors.add(color);
+    }
     setState(() {});
   }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -69,9 +67,36 @@ class _AppCaptureState extends State<AppCapture> {
               Text("${widget.cameraGallery}"),
               SizedBox(height: 30, width: double.infinity),
               _buildPhotoArea(),
-              _buildKorRecognizedText(),
+              //_buildKorRecognizedText(),
               SizedBox(height: 20),
               _buildButton(),
+              GridView.builder(
+                  shrinkWrap: true,
+                  itemCount: colors.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio: 1,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10
+                  ),
+                  itemBuilder: (context, index){
+                    return Container(
+                      color: Colors.green,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Container(
+
+                              margin: EdgeInsets.all(10),
+                              color: colors[index].color,
+                            ),
+                          ),
+                          Text(colors[index].hashCode.toString())
+                        ],
+                      ),
+                    );
+                  })
             ],
           ),
         ),
@@ -116,4 +141,6 @@ class _AppCaptureState extends State<AppCapture> {
       ],
     );
   }
+
+
 }
