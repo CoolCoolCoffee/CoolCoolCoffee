@@ -42,7 +42,6 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
             icon: Icons.label_outline_rounded,
             titleStyle: TextStyle(fontSize: 16, color: Colors.white),
             onPress: () {
-              //_animationController!.reverse();
               _dialogBuilder(context, "Starbucks label");
             },
           ),
@@ -53,9 +52,7 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
             icon: Icons.screenshot_outlined,
             titleStyle: TextStyle(fontSize: 16, color: Colors.white),
             onPress: () {
-              //_animationController!.reverse();
               _dialogBuilder(context, "App Capture");
-              //Navigator.push(context, MaterialPageRoute(builder: (context) => CameraPage("App Capture","camera")));
             },
           ),
           Bubble(
@@ -65,9 +62,7 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
             icon: Icons.local_convenience_store_rounded,
             titleStyle: TextStyle(fontSize: 16, color: Colors.white),
             onPress: () {
-              //_animationController!.reverse();
               _dialogBuilder(context, "conveni");
-              //Navigator.push(context, MaterialPageRoute(builder: (context) => CameraPage("conveni","camera")));
             },
           ),
         ],

@@ -46,10 +46,10 @@ class _MenuAddPageState extends State<MenuAddPage> {
       ),
       body: Column(
         children: [
-          Container(height: 20,),
           Expanded(
             flex: 3,
             child: Container(
+              padding: EdgeInsets.only(top: 20),
               child: Stack(
                 children: [
                   Container(
@@ -191,12 +191,17 @@ class _MenuAddPageState extends State<MenuAddPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text('카페인 함량'),
+                              Text(
+                                '카페인 함량',
+                                style: TextStyle(
+                                  fontSize: 10
+                                ),
+                              ),
                               Container(height: 5,),
                               Text(
                                 _menu['caffeine_per_size']['Tall'].toString(),
                                 style: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold
                                 ),
                               )
@@ -204,11 +209,10 @@ class _MenuAddPageState extends State<MenuAddPage> {
                           ),
                         ) 
                     ),
-                    Container(width: 10,),
                     Expanded(
                         flex: 4,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 0.0),
+                        child: Container(
+                          padding: const EdgeInsets.only(left: 10,top: 5,bottom: 5,),
                           child: ElevatedButton(
                             onPressed: (){},
                             child: Text(

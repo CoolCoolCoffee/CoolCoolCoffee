@@ -46,7 +46,7 @@ class _BrandListViewState extends State<BrandListView> {
                             ),
                             Text(
                                 documentSnapshot.id,
-                              style: TextStyle(fontSize: 13),
+                              style: TextStyle(fontSize: 10),
                             )
                             /*Card(
                               margin: const EdgeInsets.all(10),
