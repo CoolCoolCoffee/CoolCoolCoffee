@@ -23,6 +23,8 @@ if (flutterVersionName == null) {
 }
 
 android {
+    compileSdk 34
+
     namespace "com.example.coolcoolcoffee_front"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
@@ -45,7 +47,7 @@ android {
         applicationId "com.example.coolcoolcoffee_front"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 21
+        minSdkVersion 26
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -67,4 +69,6 @@ flutter {
 dependencies {
     implementation 'com.google.mlkit:text-recognition:16.0.0'
     implementation 'com.google.mlkit:text-recognition-korean:16.0.0'
+
+    implementation "androidx.health.connect:connect-client:1.0.0-alpha06"
 }
