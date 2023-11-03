@@ -166,6 +166,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_health_connect:
+    dependency: "direct main"
+    description:
+      name: flutter_health_connect
+      sha256: "59cf18d42a7036ee796728c4cee19bf1095b747fed78f10e09a0594e2ea6d203"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.3"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -429,6 +437,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.0"
+  timezone:
+    dependency: "direct main"
+    description:
+      name: timezone
+      sha256: "1cfd8ddc2d1cfd836bc93e67b9be88c3adaeca6f40a00ca999104c30693cdca0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.2"
   typed_data:
     dependency: transitive
     description:
