@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/function/camera_functions.dart';
+import 'package:coolcoolcoffee_front/page/camera/app_capture.dart';
 import 'package:coolcoolcoffee_front/page/camera/starbucks_label.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_add_page.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
@@ -160,7 +161,13 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
               TextButton(
                 child: const Text("갤러리"),
                 onPressed: () {
-                  getImage(ImageSource.gallery, cameraMode);
+                  if(cameraMode == "App Capture"){
+                    print("dnfkdnfndf");
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AppCapture(cameraMode: "dff", cameraGallery: "fdfd")));
+                  }else{
+                    getImage(ImageSource.gallery, cameraMode);
+                  }
+
                 },
               ),
             ],

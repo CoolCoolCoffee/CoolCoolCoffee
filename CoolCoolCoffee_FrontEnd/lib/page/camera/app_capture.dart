@@ -18,7 +18,8 @@ class _AppCaptureState extends State<AppCapture> {
   XFile? _image; //이미지를 담을 변수 선언
   final ImagePicker picker = ImagePicker(); //ImagePicker 초기화
   String korScannedText = "";
-  List<PaletteColor> colors = [];
+  //String engScannedText = "";
+  //List<PaletteColor> colors = [];
   //이미지를 가져오는 함수
   Future getImage(ImageSource imageSource) async {
     //pickedFile에 ImagePicker로 가져온 이미지가 담긴다.
@@ -44,15 +45,27 @@ class _AppCaptureState extends State<AppCapture> {
         korScannedText = korScannedText + line.text + "\n";
       }
     }
-    final PaletteGenerator generator = await
+   /* final engTextRecognizer =
+    TextRecognizer(script: TextRecognitionScript.latin);
+    RecognizedText engRecognizedText =
+    await engTextRecognizer.processImage(inputImage);
+    await engTextRecognizer.close();
+    engScannedText = "";
+    for (TextBlock block in engRecognizedText.blocks) {
+      for (TextLine line in block.lines) {
+        engScannedText = engScannedText + line.text + "\n";
+      }
+    }*/
+
+    /*final PaletteGenerator generator = await
     PaletteGenerator.fromImageProvider(
-      Image.file(File(_image!.path)).image,
+      Image.file(File(image.path)).image,
     );
     colors.clear();
     for (var color in generator.paletteColors) {
       colors.add(color);
-      print(color.hashCode.toString());
-    }
+      print(color.color.value.toRadixString(16).toString());
+    }*/
     setState(() {});
   }
   @override
@@ -68,10 +81,11 @@ class _AppCaptureState extends State<AppCapture> {
               Text("${widget.cameraGallery}"),
               SizedBox(height: 30, width: double.infinity),
               _buildPhotoArea(),
-              //_buildKorRecognizedText(),
+              _buildKorRecognizedText(),
+              //_buildEngRecognizedText(),
               SizedBox(height: 20),
               _buildButton(),
-              ListView.builder(
+             /* ListView.builder(
                   shrinkWrap: true,
                   physics: ClampingScrollPhysics(),
                   scrollDirection: Axis.vertical,
@@ -81,9 +95,9 @@ class _AppCaptureState extends State<AppCapture> {
                         height: 30,
                         margin: EdgeInsets.all(10),
                         color: colors[index].color,
-                        child: Text(colors[index].hashCode.toString()),
+                        child: Text(colors[index].color.value.toRadixString(16).toString()),
                       );
-                  })
+                  })*/
             ],
           ),
         ),
@@ -107,6 +121,9 @@ class _AppCaptureState extends State<AppCapture> {
   Widget _buildKorRecognizedText() {
     return Text(korScannedText); //getRecognizedText()에서 얻은 scannedText 값 출력
   }
+  /*Widget _buildEngRecognizedText() {
+    return Text(engScannedText); //getRecognizedText()에서 얻은 scannedText 값 출력
+  }*/
 
   Widget _buildButton() {
     return Row(
