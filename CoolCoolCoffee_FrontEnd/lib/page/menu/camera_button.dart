@@ -61,9 +61,7 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
     await korTextRecognizer.close();
 
     if(cameraMode=="Starbucks label"){
-      print("starbucks label start");
       await starbucksLabel(korRecognizedText);
-      print("starbucks 끝?");
     }else if(cameraMode=="App Capture"){
       await fetchMenuFromAppCapture(korRecognizedText);
     }else{
@@ -72,7 +70,6 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
 
     //setState(() {});
     //await pushMenuAddPage(brand, menu);
-    print("업로드 완");
   }
   Future<void> fetchMenuFromAppCapture(RecognizedText recText) async{
     print("Hi!!! App Capture");
@@ -83,12 +80,9 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
   }
 
   Future<void> starbucksLabel(RecognizedText recText) async{
-    print("camera function 들어가서 fetch 시작");
     var getList = await CameraFunc().fetchMenuFromStarbucksLabel(recText);
     if(getList.length == 2){
-      print("ㅁ[뉴 창 업로드 전 ${getList[0]} ${getList[1]}");
       await pushMenuAddPage(getList[0], getList[1]);
-      print("업로드 와");
     }
   }
   Future<void> pushMenuAddPage(String brand, String menuName) async{

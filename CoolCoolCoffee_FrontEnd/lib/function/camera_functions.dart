@@ -9,8 +9,8 @@ class CameraFunc{
     ret.add(brand);
     bool ice = false;
     String menu = "";
-    print("fetch start");
     String korScannedText = "";
+
     for (TextBlock block in recText.blocks) {
       for (TextLine line in block.lines) {
         if(line.text.contains(RegExp(r'S\)|T\)|G\)|V\)'))) {
@@ -20,7 +20,9 @@ class CameraFunc{
         }
       }
     }
+
     final starbucksMenu = korScannedText.split(' ');
+
     var wait = await FirebaseFirestore.instance
         .collection('Cafe_brand')
         .doc(brand)
@@ -39,7 +41,7 @@ class CameraFunc{
         }
       });
     });
-    print("fetch $menu");
+
     return ret;
   }
 }
