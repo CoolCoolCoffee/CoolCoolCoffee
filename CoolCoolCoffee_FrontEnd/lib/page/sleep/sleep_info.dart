@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_health_connect/flutter_health_connect.dart';
 import 'package:timezone/timezone.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:intl/intl.dart';
 
 class SleepInfoWidget extends StatefulWidget {
   const SleepInfoWidget({Key? key}) : super(key: key);
@@ -16,8 +17,6 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
   ];
   bool readOnly = true;
   String resultText = '';
-  String resultText_start = '';
-  String resultText_end = '';
   String resultText_start_real = '';
   String resultText_end_real = '';
 
@@ -61,18 +60,20 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
 
                       var startTimeEpochSecond_start =
                       typePoints['SleepSession']['records'][0]['startTime']['epochSecond'];
-                      resultText_start = startTimeEpochSecond_start.toString();
+                      //resultText_start = startTimeEpochSecond_start.toString();
                       var seoul = getLocation('Asia/Seoul');
-                      resultText_start_real = TZDateTime.fromMillisecondsSinceEpoch(
-                          seoul, startTimeEpochSecond_start * 1000)
-                          .toString();
+                      var resultText_start = TZDateTime.fromMillisecondsSinceEpoch(
+                          seoul, startTimeEpochSecond_start * 1000);
 
                       var startTimeEpochSecond_end =
                       typePoints['SleepSession']['records'][0]['endTime']['epochSecond'];
-                      resultText_end = startTimeEpochSecond_end.toString();
-                      resultText_end_real = TZDateTime.fromMillisecondsSinceEpoch(
-                          seoul, startTimeEpochSecond_end * 1000)
-                          .toString();
+                      //resultText_end = startTimeEpochSecond_end.toString();
+                      var resultText_end = TZDateTime.fromMillisecondsSinceEpoch(
+                          seoul, startTimeEpochSecond_end * 1000);
+
+                      var formatter = DateFormat('h:mm a');
+                      resultText_start_real = formatter.format(resultText_start);
+                      resultText_end_real = formatter.format(resultText_end);
                     } catch (e) {
                       resultText = e.toString();
                     }
@@ -116,7 +117,7 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
                         resultText_start_real,
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 12.0,
+                          fontSize: 23.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -149,7 +150,7 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
                         resultText_end_real,
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 12.0,
+                          fontSize: 23.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
