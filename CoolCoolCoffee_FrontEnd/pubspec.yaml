@@ -40,6 +40,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_core: ^2.18.0
   flutter_provider: ^2.1.0
+  palette_generator: ^0.3.3+3
 
 
 dev_dependencies:
