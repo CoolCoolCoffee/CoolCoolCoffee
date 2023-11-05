@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+class Event {
+  final DateTime date;
+  final int index;
+  Event({required this.date, required this.index});
+}
+
 class CalendarWidget extends StatefulWidget {
   const CalendarWidget({Key? key}) : super(key: key);
 
@@ -11,6 +17,18 @@ class CalendarWidget extends StatefulWidget {
 class _CalendarWidgetState extends State<CalendarWidget> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
+  Map<DateTime, int> dateColors = {};
+
+  @override
+  void initState() {
+    super.initState();
+    // Add specific dates to display markers
+    dateColors[DateTime.utc(2023, 11, 12)] = 1;
+    dateColors[DateTime.utc(2023, 11, 13)] = 2;
+    dateColors[DateTime.utc(2023, 11, 14)] = 3;
+    dateColors[DateTime.utc(2023, 11, 15)] = 4;
+    dateColors[DateTime.utc(2023, 11, 16)] = 5;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +61,21 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             titleCentered: true,
             formatButtonVisible: false, // 선택 버튼 숨기기
           ),
+          calendarBuilders: CalendarBuilders(
+            markerBuilder: (context, date, events) {
+              if (dateColors.containsKey(date)) {
+                return Container(
+                  width: 35,
+                  decoration: BoxDecoration(
+                    color: _getColorFromIndex(dateColors[date]!),
+                    shape: BoxShape.circle,
+                  ),
+                );
+              } else {
+                return null;
+              }
+            },
+          ),
         ),
         Padding(
           padding: const EdgeInsets.all(16.0),
@@ -53,5 +86,22 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         ),
       ],
     );
+  }
+
+  Color _getColorFromIndex(int index) {
+    switch (index) {
+      case 1: // 매우 피곤
+        return Colors.deepPurple.withOpacity(0.7);
+      case 2: // 조금 피곤
+        return Colors.deepOrange.withOpacity(0.5);
+      case 3: // 보통
+        return Colors.blue.withOpacity(0.3);
+      case 4: // 개운
+        return Colors.tealAccent.withOpacity(0.2);
+      case 5: // 매우 개운
+        return Colors.greenAccent.withOpacity(0.7);
+      default:
+        return Colors.transparent;
+    }
   }
 }
