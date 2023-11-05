@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coolcoolcoffee_front/function/camera_functions.dart';
 import 'package:coolcoolcoffee_front/page/camera/starbucks_label.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_add_page.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
@@ -60,13 +61,18 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
     await korTextRecognizer.close();
 
     if(cameraMode=="Starbucks label"){
-      await fetchMenuFromStarbucksLabel(korRecognizedText);
+      print("starbucks label start");
+      await starbucksLabel(korRecognizedText);
+      print("starbucks 끝?");
     }else if(cameraMode=="App Capture"){
       await fetchMenuFromAppCapture(korRecognizedText);
     }else{
       await fetchMenuFromConveni(korRecognizedText);
     }
-    setState(() {});
+
+    //setState(() {});
+    //await pushMenuAddPage(brand, menu);
+    print("업로드 완");
   }
   Future<void> fetchMenuFromAppCapture(RecognizedText recText) async{
     print("Hi!!! App Capture");
@@ -75,40 +81,16 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
   Future<void> fetchMenuFromConveni(RecognizedText recText) async{
     print("Hi!!!conveni");
   }
-  Future<void> fetchMenuFromStarbucksLabel(RecognizedText recText) async{
-    brand = "스타벅스";
-    print("fetch start");
-    String korScannedText = "";
-    for (TextBlock block in recText.blocks) {
-      for (TextLine line in block.lines) {
-        if(line.text.contains(RegExp(r'S\)|T\)|G\)|V\)'))) {
-          korScannedText = korScannedText + line.text + "\n";
-        }else if(line.text == 'ice'){
-          ice = true;
-        }
-      }
-    }
-    final starbucksMenu = korScannedText.split(' ');
-    var wait = await FirebaseFirestore.instance
-        .collection('Cafe_brand')
-        .doc(brand)
-        .collection('starbucks_label')
-        .get()
-        .then((subcol) {
-      subcol.docs.forEach((element) {
-        if(starbucksMenu[1].trim() == element.id.trim()){
-          if(ice){
-            menu = element['hot'];
-          }else{
-            menu = element['hot'];
-          }
-        }
-      });
-    });
-    print("fetch $menu");
-    await pushMenuAddPage(brand,menu);
-  }
 
+  Future<void> starbucksLabel(RecognizedText recText) async{
+    print("camera function 들어가서 fetch 시작");
+    var getList = await CameraFunc().fetchMenuFromStarbucksLabel(recText);
+    if(getList.length == 2){
+      print("ㅁ[뉴 창 업로드 전 ${getList[0]} ${getList[1]}");
+      await pushMenuAddPage(getList[0], getList[1]);
+      print("업로드 와");
+    }
+  }
   Future<void> pushMenuAddPage(String brand, String menuName) async{
     print("push start $brand $menuName");
     var wait = await FirebaseFirestore.instance
