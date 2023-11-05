@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:coolcoolcoffee_front/firestore/starbucks_database.dart';
 import 'package:coolcoolcoffee_front/model/menu.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
@@ -23,6 +22,7 @@ class _StarbucksLabelState extends State<StarbucksLabel> {
   String korScannedText = "";
   bool ice = false;
   String full_menu_name = "";
+  late Future<String> fetchMenu;
   //이미지를 가져오는 함수
   Future getImage(ImageSource imageSource) async {
     //pickedFile에 ImagePicker로 가져온 이미지가 담긴다.
@@ -38,33 +38,11 @@ class _StarbucksLabelState extends State<StarbucksLabel> {
   void getRecognizedText(XFile image) async {
     // XFile 이미지를 InputImage 이미지로 변환
     final InputImage inputImage = InputImage.fromFilePath(image.path);
-
-    // textRecognizer 초기화, 이때 script에 인식하고자하는 언어를 인자로 넘겨줌
-    // ex) 영어는 script: TextRecognitionScript.latin, 한국어는 script: TextRecognitionScript.korean
-   /* final engTextRecognizer =
-    TextRecognizer(script: TextRecognitionScript.latin);
-*/
     final korTextRecognizer =
     TextRecognizer(script: TextRecognitionScript.korean);
-    // 이미지의 텍스트 인식해서 recognizedText에 저장
-   /* RecognizedText engRecognizedText =
-    await engTextRecognizer.processImage(inputImage);*/
     RecognizedText korRecognizedText =
     await korTextRecognizer.processImage(inputImage);
-
-    // Release resources
-    //await engTextRecognizer.close();
     await korTextRecognizer.close();
-    // 인식한 텍스트 정보를 scannedText에 저장
-    /*engScannedText = "";
-    for (TextBlock block in engRecognizedText.blocks) {
-      for (TextLine line in block.lines) {
-        if(line.text.contains(RegExp(r'S\)|T\)|G\)|V\)')) || line.text == 'ice') {
-          engScannedText = engScannedText + line.text + "\n";
-        }
-      }
-    }*/
-
     korScannedText = "";
     for (TextBlock block in korRecognizedText.blocks) {
       for (TextLine line in block.lines) {
@@ -76,30 +54,30 @@ class _StarbucksLabelState extends State<StarbucksLabel> {
       }
     }
     final starbucks_menu = korScannedText.split(' ');
-    var starbucks_label_docs = await FirebaseFirestore.instance
-      .collection('Cafe_brand')
-      .doc('스타벅스')
-      .collection('starbucks_label')
-      .get()
-      .then((subcol) {
-        subcol.docs.forEach((element) {
-          print(element.id);
-          print("menu");
-          print(starbucks_menu[1]);
-          print("end");
-          if(starbucks_menu[1].trim() == element.id.trim()){
-            print("dfdfdfd!!");
-            if(ice){
-              full_menu_name = element['ice'];
-              print(full_menu_name);
-            }else{
-              full_menu_name = element['hot'];
-              print(full_menu_name);
-            }
-          }
-        });
-      });
+    fetchMenu = fetchMenuName(starbucks_menu[1]);
+    full_menu_name = fetchMenu as String;
     setState(() {});
+  }
+  Future<String> fetchMenuName(String starbucks_acro) async{
+    String menu_name = "";
+    final starbucks_ = await FirebaseFirestore.instance
+        .collection('Cafe_brand')
+        .doc('스타벅스')
+        .collection('starbucks_label')
+        .get()
+        .then((subcol) {
+      subcol.docs.forEach((element) {
+        if(starbucks_acro.trim() == element.id.trim()){
+          print("dfdfdfd!!");
+          if(ice){
+            menu_name = element['ice'];
+          }else{
+            menu_name = element['hot'];
+          }
+        }
+      });
+    });
+    return menu_name;
   }
 
 
@@ -140,10 +118,6 @@ class _StarbucksLabelState extends State<StarbucksLabel> {
       color: Colors.grey,
     );
   }
-
-  /*Widget _buildEngRecognizedText() {
-    return Text(engScannedText); //getRecognizedText()에서 얻은 scannedText 값 출력
-  }*/
   Widget _buildKorRecognizedText() {
     return Text(full_menu_name); //getRecognizedText()에서 얻은 scannedText 값 출력
   }

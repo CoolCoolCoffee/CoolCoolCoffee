@@ -1,7 +1,11 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/page/camera/starbucks_label.dart';
+import 'package:coolcoolcoffee_front/page/menu/menu_add_page.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../camera/camera_page.dart';
 
@@ -15,6 +19,11 @@ class CameraButton extends StatefulWidget {
 class _CameraButtonState extends State<CameraButton> with SingleTickerProviderStateMixin{
   Animation<double>? _animation;
   AnimationController? _animationController;
+  XFile? _image; //이미지를 담을 변수 선언
+  final ImagePicker picker = ImagePicker(); //ImagePicker 초기화
+  bool ice = false;
+  String brand = "";
+  String menu = "";
 
   @override
   void initState() {
@@ -22,14 +31,93 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
       vsync: this,
       duration: Duration(milliseconds: 260),
     );
-
     final curvedAnimation = CurvedAnimation(
         parent: _animationController!,
         curve: Curves.easeInOut,
     );
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
-
     super.initState();
+  }
+
+  Future getImage(ImageSource imageSource, String cameraMode) async {
+    //pickedFile에 ImagePicker로 가져온 이미지가 담긴다.
+    final XFile? pickedFile = await picker.pickImage(source: imageSource);
+    if (pickedFile != null) {
+      setState(() {
+        _image = XFile(pickedFile.path); //가져온 이미지를 _image에 저장
+      });
+      getRecognizedText(_image!,cameraMode);
+    }
+  }
+
+  void getRecognizedText(XFile image, String cameraMode) async {
+    // XFile 이미지를 InputImage 이미지로 변환
+    final InputImage inputImage = InputImage.fromFilePath(image.path);
+    final korTextRecognizer =
+    TextRecognizer(script: TextRecognitionScript.korean);
+    RecognizedText korRecognizedText =
+    await korTextRecognizer.processImage(inputImage);
+    await korTextRecognizer.close();
+
+    if(cameraMode=="Starbucks label"){
+      await fetchMenuFromStarbucksLabel(korRecognizedText);
+    }else if(cameraMode=="App Capture"){
+      await fetchMenuFromAppCapture(korRecognizedText);
+    }else{
+      await fetchMenuFromConveni(korRecognizedText);
+    }
+    setState(() {});
+  }
+  Future<void> fetchMenuFromAppCapture(RecognizedText recText) async{
+    print("Hi!!! App Capture");
+    print(recText);
+  }
+  Future<void> fetchMenuFromConveni(RecognizedText recText) async{
+    print("Hi!!!conveni");
+  }
+  Future<void> fetchMenuFromStarbucksLabel(RecognizedText recText) async{
+    brand = "스타벅스";
+    print("fetch start");
+    String korScannedText = "";
+    for (TextBlock block in recText.blocks) {
+      for (TextLine line in block.lines) {
+        if(line.text.contains(RegExp(r'S\)|T\)|G\)|V\)'))) {
+          korScannedText = korScannedText + line.text + "\n";
+        }else if(line.text == 'ice'){
+          ice = true;
+        }
+      }
+    }
+    final starbucksMenu = korScannedText.split(' ');
+    var wait = await FirebaseFirestore.instance
+        .collection('Cafe_brand')
+        .doc(brand)
+        .collection('starbucks_label')
+        .get()
+        .then((subcol) {
+      subcol.docs.forEach((element) {
+        if(starbucksMenu[1].trim() == element.id.trim()){
+          if(ice){
+            menu = element['hot'];
+          }else{
+            menu = element['hot'];
+          }
+        }
+      });
+    });
+    print("fetch $menu");
+    await pushMenuAddPage(brand,menu);
+  }
+
+  Future<void> pushMenuAddPage(String brand, String menuName) async{
+    print("push start $brand $menuName");
+    var wait = await FirebaseFirestore.instance
+        .collection('Cafe_brand')
+        .doc(brand)
+        .collection('menus')
+        .doc(menuName)
+        .get();
+    await Navigator.push(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: wait, brandName: '스타벅스')));
   }
 
   @override
@@ -41,9 +129,8 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
             iconColor: Colors.white,
             bubbleColor: Colors.blue,
             icon: Icons.label_outline_rounded,
-            titleStyle: TextStyle(fontSize: 16, color: Colors.white),
+            titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
             onPress: () {
-              //_animationController!.reverse();
               _dialogBuilder(context, "Starbucks label");
             },
           ),
@@ -52,11 +139,9 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
             iconColor: Colors.white,
             bubbleColor: Colors.blue,
             icon: Icons.screenshot_outlined,
-            titleStyle: TextStyle(fontSize: 16, color: Colors.white),
+            titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
             onPress: () {
-              //_animationController!.reverse();
               _dialogBuilder(context, "App Capture");
-              //Navigator.push(context, MaterialPageRoute(builder: (context) => CameraPage("App Capture","camera")));
             },
           ),
           Bubble(
@@ -64,11 +149,9 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
             iconColor: Colors.white,
             bubbleColor: Colors.blue,
             icon: Icons.local_convenience_store_rounded,
-            titleStyle: TextStyle(fontSize: 16, color: Colors.white),
+            titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
             onPress: () {
-              //_animationController!.reverse();
               _dialogBuilder(context, "conveni");
-              //Navigator.push(context, MaterialPageRoute(builder: (context) => CameraPage("conveni","camera")));
             },
           ),
         ],
@@ -95,18 +178,13 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
               TextButton(
                 child: const Text("카메라"),
                 onPressed: () {
-                  if(cameraMode == "Starbucks label"){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => StarbucksLabel(cameraMode: cameraMode, cameraGallery: "camera")));
-                  }
-                  else{
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => CameraPage(cameraMode: cameraMode, cameraGallery: "camera")));
-                  }
+                  getImage(ImageSource.camera, cameraMode);
                 },
               ),
               TextButton(
                 child: const Text("갤러리"),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CameraPage(cameraMode: cameraMode, cameraGallery: "gallery")));
+                  getImage(ImageSource.gallery, cameraMode);
                 },
               ),
             ],

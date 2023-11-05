@@ -16,10 +16,10 @@ class MenuAddPage extends StatefulWidget {
 class _MenuAddPageState extends State<MenuAddPage> {
   @override
   Widget build(BuildContext context) {
-
+    print("addmenu start");
     final _brand = widget.brandName;
     final _menu = widget.menuSnapshot;
-
+    print("${_menu.id} add menu");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
