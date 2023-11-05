@@ -47,8 +47,8 @@ class _SleepConditionWidgetState extends State<SleepConditionWidget> {
                     children: [
                       Container(
                         margin: EdgeInsets.all(9),
-                        width: 60,
-                        height: 50,
+                        width: 50,
+                        height: 40,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: selectedCondition == index + 1

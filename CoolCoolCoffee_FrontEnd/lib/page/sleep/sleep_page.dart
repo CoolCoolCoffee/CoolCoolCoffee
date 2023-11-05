@@ -28,7 +28,7 @@ class _SleepPageState extends State<SleepPage> {
           ),
         ),
         backgroundColor: Colors.white,
-        toolbarHeight: 60,
+        toolbarHeight: 50,
         iconTheme: IconThemeData(color: Colors.white),
       ),
       body: Column(
