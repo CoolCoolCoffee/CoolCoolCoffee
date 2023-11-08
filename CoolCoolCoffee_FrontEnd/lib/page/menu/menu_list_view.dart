@@ -90,7 +90,13 @@ class _MenuListViewState extends State<MenuListView> {
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  Text(brand_name),
+                                  Text(
+                                      brand_name,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey
+                                    ),
+                                  ),
                                   Text(documentSnapshot.id)],
                               ),
                             ),
