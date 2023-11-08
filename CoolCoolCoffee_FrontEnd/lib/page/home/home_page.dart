@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'caffeine_left.dart';
+import 'drink_list.dart';
+import 'clock.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -26,7 +29,16 @@ class _HomePageState extends State<HomePage> {
         toolbarHeight: 50,
         iconTheme: IconThemeData(color: Colors.white),
     ),
-    body: Text('b'),
+    body: Column(
+      children: [
+        SizedBox(height: 30),
+        ClockWidget(),
+        SizedBox(height: 50),
+        CaffeineLeftWidget(),
+        SizedBox(height: 50),
+        DrinkListWidget()
+      ],
+    )
     );
   }
 }
