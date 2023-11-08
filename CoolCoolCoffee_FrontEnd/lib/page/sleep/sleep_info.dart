@@ -83,11 +83,18 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
 
                     setState(() {});
                   },
-                  child: const Text('Get Record'),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.brown, // Change the button color here
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0), // Change the button border radius here
+                    ),
+                    elevation: 5, // Change the button elevation (shadow) here
+                  ),
+                  child: const Text('가져오기'),
                 ),
               ],
             ),
-            SizedBox(height: 7),
+            //SizedBox(height: 7),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

@@ -28,7 +28,6 @@ class _SleepConditionWidgetState extends State<SleepConditionWidget> {
             ),
           ),
           Container(
-            padding: EdgeInsets.all(8.0), // Adjust the padding as needed
             decoration: BoxDecoration(
               color: Colors.white, // Light brown color
               borderRadius: BorderRadius.circular(12.0), // Adjust the border radius as needed
@@ -47,8 +46,8 @@ class _SleepConditionWidgetState extends State<SleepConditionWidget> {
                     children: [
                       Container(
                         margin: EdgeInsets.all(9),
-                        width: 50,
-                        height: 40,
+                        width: 55,
+                        height: 50,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: selectedCondition == index + 1
@@ -72,7 +71,7 @@ class _SleepConditionWidgetState extends State<SleepConditionWidget> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 2),
+                      //SizedBox(height: 2),
                       Text(
                         getConditionLevel(index + 1),
                         style: TextStyle(

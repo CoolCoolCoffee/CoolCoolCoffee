@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'calendar.dart';
 import 'sleep_condition.dart';
 import 'sleep_info.dart';
-import 'package:coolcoolcoffee_front/health/health_connect.dart';
 
 class SleepPage extends StatefulWidget {
   const SleepPage({super.key});
@@ -40,7 +39,7 @@ class _SleepPageState extends State<SleepPage> {
             child: Column(
               children: [
                 SleepInfoWidget(),
-                //SizedBox(height: 30),
+                SizedBox(height: 15),
                 SleepConditionWidget(
                   onConditionSelected: (int sleepLevel) {
                     setState(() {

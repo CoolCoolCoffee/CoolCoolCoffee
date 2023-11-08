@@ -91,15 +91,15 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   Color _getColorFromIndex(int index) {
     switch (index) {
       case 1: // 매우 피곤
-        return Colors.deepPurple.withOpacity(0.7);
+        return Colors.brown.withOpacity(0.8);
       case 2: // 조금 피곤
-        return Colors.deepOrange.withOpacity(0.5);
+        return Colors.brown.withOpacity(0.6);
       case 3: // 보통
-        return Colors.blue.withOpacity(0.3);
+        return Colors.brown.withOpacity(0.4);
       case 4: // 개운
-        return Colors.tealAccent.withOpacity(0.2);
+        return Colors.brown.withOpacity(0.3);
       case 5: // 매우 개운
-        return Colors.greenAccent.withOpacity(0.7);
+        return Colors.brown.withOpacity(0.1);
       default:
         return Colors.transparent;
     }
