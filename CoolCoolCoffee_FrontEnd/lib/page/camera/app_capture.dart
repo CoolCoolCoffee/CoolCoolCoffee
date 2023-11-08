@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
-import 'package:palette_generator/palette_generator.dart';
+//import 'package:palette_generator/palette_generator.dart';
 //import 'package:google_ml_kit/google_ml_kit.dart';
 
 class AppCapture extends StatefulWidget {
