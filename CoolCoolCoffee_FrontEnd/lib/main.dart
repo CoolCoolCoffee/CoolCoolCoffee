@@ -1,4 +1,5 @@
 
+import 'package:coolcoolcoffee_front/page/login/login_page.dart';
 import 'package:coolcoolcoffee_front/page_state/page_state.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -26,9 +27,9 @@ class CoolCoolCoffee extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       //theme: ThemeData(primarySwatch: ),
-      home: PageStates(),
+      home: LoginPage(),
     );
   }
 }
