@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import 'login_page.dart';
 
@@ -16,9 +15,9 @@ class _SignUpPageState extends State<SignUpPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passController = TextEditingController();
-  TextEditingController _pass2Controller = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
+  final TextEditingController _pass2Controller = TextEditingController();
 
   String _email = '';
   String _password = '';
@@ -47,7 +46,7 @@ class _SignUpPageState extends State<SignUpPage> {
       //   toastLength: Toast.LENGTH_SHORT,
       //   gravity: ToastGravity.CENTER,
       //   backgroundColor: Colors.grey,
-      //   textColor: Colors.blue,ㅅ
+      //   textColor: Colors.blue,
       // );
 
       Navigator.of(context).push(

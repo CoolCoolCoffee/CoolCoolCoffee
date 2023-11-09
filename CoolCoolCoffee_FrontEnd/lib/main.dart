@@ -1,5 +1,5 @@
 
-import 'package:coolcoolcoffee_front/page/login/login_page.dart';
+import 'package:coolcoolcoffee_front/page/login/user_form_page.dart';
 import 'package:coolcoolcoffee_front/page_state/page_state.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -29,7 +29,7 @@ class CoolCoolCoffee extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       //theme: ThemeData(primarySwatch: ),
-      home: LoginPage(),
+      home: UserFormPage(),
     );
   }
 }

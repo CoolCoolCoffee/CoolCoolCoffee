@@ -138,9 +138,9 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   Container(
                       alignment: Alignment.topRight,
-                      child: Text('계정이 없으신가요?')
+                      child: const Text('계정이 없으신가요?')
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   TextButton(
                       onPressed: (){
                         Navigator.of(context).push(
