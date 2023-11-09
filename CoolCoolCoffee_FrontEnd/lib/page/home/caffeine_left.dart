@@ -16,29 +16,13 @@ class _CaffeineLeftWidgetState extends State<CaffeineLeftWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Container(
-              width: 250,
+              width: 350,
               height: 100,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: Colors.brown,
-                  width: 3.0,
-                ),
               ),
             ),
-            Container(
-              width: 60,
-              height: 100,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: Colors.brown,
-                  width: 3.0,
-                ),
-              ),
-            )
           ],
         ),
       ),

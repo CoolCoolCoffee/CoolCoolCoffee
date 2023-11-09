@@ -15,6 +15,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.brown.withOpacity(0.1),
         appBar: AppBar(
           title: Center(
             child: Text(
@@ -31,11 +32,11 @@ class _HomePageState extends State<HomePage> {
     ),
     body: Column(
       children: [
-        SizedBox(height: 30),
+        SizedBox(height: 10),
         ClockWidget(),
-        SizedBox(height: 50),
+        SizedBox(height: 30),
         CaffeineLeftWidget(),
-        SizedBox(height: 50),
+        SizedBox(height: 20),
         DrinkListWidget()
       ],
     )

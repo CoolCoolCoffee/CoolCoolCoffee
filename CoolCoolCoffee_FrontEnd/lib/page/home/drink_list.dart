@@ -10,21 +10,50 @@ class DrinkListWidget extends StatefulWidget {
 class _DrinkListWidgetState extends State<DrinkListWidget> {
   @override
   Widget build(BuildContext context){
-    return Container(
-      child: Center(
-        child: Container(
-          width: 350,
-          height: 150,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: Colors.brown,
-              width: 3.0,
+    return Column(
+      children: [
+        Text(
+          "오늘 000님이 마신 카페인 음료",
+          style: TextStyle(
+            fontSize: 20
+          ),
+        ),
+        RichText(
+            text : TextSpan(
+              children: [
+                TextSpan(
+                  text: "앞으로 ",
+                  style: TextStyle(
+                    color: Colors.black
+                  ),
+                ),
+                TextSpan(
+                  text: "150mg ",
+                  style: TextStyle(
+                      color: Colors.orange
+                  ),
+                ),
+                TextSpan(
+                  text: "마실 수 있어요!",
+                  style: TextStyle(
+                      color: Colors.black
+                  ),
+                ),
+              ]
+            )
+        ),
+        SizedBox(height: 7),
+        Center(
+          child: Container(
+            width: 350,
+            height: 130,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 }
