@@ -73,10 +73,18 @@ class _MenuAddPageState extends State<MenuAddPage> {
             color: Colors.black
           ),
         ),
-        actions: [IconButton(
-          onPressed: (){},
-          icon: Image.asset('assets/star_unfilled_with_outer.png'),
-        ),]
+        actions: [
+          FractionallySizedBox(
+            heightFactor: 0.7,
+            child: IconButton(
+              onPressed: () {},
+              icon: Image.asset(
+                "assets/star_unfilled_with_outer.png",
+                fit: BoxFit.fill,
+              ),
+            ),
+          )
+        ]
       ),
       body: Column(
         children: [
