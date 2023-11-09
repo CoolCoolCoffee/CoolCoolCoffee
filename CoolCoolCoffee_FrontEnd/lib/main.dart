@@ -29,7 +29,7 @@ class CoolCoolCoffee extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       //theme: ThemeData(primarySwatch: ),
-      home: AppCapture(cameraMode: 'app capture',cameraGallery: 'gallery'),
+      home: PageStates(),
     );
   }
 }

@@ -1,4 +1,8 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coolcoolcoffee_front/page/menu/menu_img_name_tile.dart';
+import 'package:coolcoolcoffee_front/page/menu/menu_toggle_btn.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,12 +18,42 @@ class MenuAddPage extends StatefulWidget {
 }
 
 class _MenuAddPageState extends State<MenuAddPage> {
+ /* late String _brand;
+  //final _brand = widget.brandName;
+  late DocumentSnapshot _menu;
+  //final _menu = widget.menuSnapshot;
+  late Map<String,dynamic> sortedSize;
+  late List<bool> shotSelected;
+  // List<MapEntry<String,dynamic>> sizeMap = _menu['caffeine_per_size'].entries.toList();
+  // sizeMap.sort((m1,m2) => m1.value.compareTo(m2.value));
+  // final Map<String,dynamic> sortedSize = Map.fromEntries(sizeMap);
+  // Map<String,bool> sizeSelected = {};
+  //final shotSelected = [false, false];
+
+  @override
+  void initState(){
+    super.initState();
+    _brand = widget.brandName;
+    _menu = widget.menuSnapshot;
+    List<MapEntry<String,dynamic>> sizeMap = _menu['caffeine_per_size'].entries.toList();
+    sizeMap.sort((m1,m2) => m1.value.compareTo(m2.value));
+    sortedSize = Map.fromEntries(sizeMap);
+    shotSelected = [false,false];
+  }*/
+
   @override
   Widget build(BuildContext context) {
-    print("addmenu start");
     final _brand = widget.brandName;
     final _menu = widget.menuSnapshot;
-    print("${_menu.id} add menu");
+    List<MapEntry<String,dynamic>> sizeMap = _menu['caffeine_per_size'].entries.toList();
+    sizeMap.sort((m1,m2) => m1.value.compareTo(m2.value));
+    final sortedSize = Map.fromEntries(sizeMap);
+    List<bool> sizeSelected = List<bool>.filled(sortedSize.length, false);
+    final shotControl = {'연하게':10,'샷 추가':20};
+    final shotSelected = List<bool>.filled(shotControl.length, false);
+    /*Map<String,bool>? sizeSelected = {};
+    sortedSize.forEach((key, value) {sizeSelected[key] = false;});*/
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -48,98 +82,26 @@ class _MenuAddPageState extends State<MenuAddPage> {
         children: [
           Expanded(
             flex: 3,
-            child: Container(
-              padding: EdgeInsets.only(top: 20),
-              child: Stack(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 50,right: 50),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(_menu['menu_img'])
-                        )
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      alignment: Alignment.bottomLeft,
-                      height: 80,
-                      margin: EdgeInsets.only(right: 50,left: 50),
-                      decoration: BoxDecoration(
-                        //border: Border.all(color: Colors.grey,width: 1),
-                        borderRadius: BorderRadius.only(bottomRight: Radius.circular(20)),
-                        color: Colors.white,
-                        boxShadow: [BoxShadow(
-                          color: Colors.grey.withOpacity(0.7),
-                          spreadRadius: 0,
-                          blurRadius: 5.0,
-                          offset: Offset(0,5)
-                        )]
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start ,
-                        children: [
-                          Container(height: 5,),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                                _brand,
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.grey
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                                _menu.id,
-                              style: TextStyle(
-                                fontSize: 20
-                              ),
-                            ),
-                          )],
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
+            child: MenuImgNameTile(brandName: _brand,menuSnapshot: _menu, ),
           ),
-          Container(height: 20,),
           Expanded(
-              child: Container(
-                width: double.infinity,
-                margin: EdgeInsets.all(10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(padding: EdgeInsets.only(left: 5,bottom: 10),child: Text('사이즈',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
-                    Row(
+              child: Column(
+                children: [
+                  Container(height: 20,),
+                  Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.all(10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        for(var key in _menu['caffeine_per_size'].keys)...[
-                          OutlinedButton(
-                              onPressed: (){},
-                              child: Text(key),
-                              style: OutlinedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(10))
-                                )
-                              )
-                          ),
-                          Container(width: 10,)
-                        ]
+                        Container(padding: EdgeInsets.only(left: 5,bottom: 10),child: Text('사이즈',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
+                        MenuToggleBtn(isSelected: sizeSelected ,map: sortedSize,),
                       ],
                     )
-                  ],
-
-              )
-            ),
+                  ),
+                ],
+              ),
           ),
           Expanded(
             child: Container(
@@ -150,7 +112,8 @@ class _MenuAddPageState extends State<MenuAddPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(padding: EdgeInsets.only(left: 5,bottom: 10),child: Text('샷 조절',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
-                    Row(
+                    MenuToggleBtn(isSelected: shotSelected ,map: shotControl,),
+                    /*Row(
                       children: [
                         OutlinedButton(
                             onPressed: (){},
@@ -172,7 +135,7 @@ class _MenuAddPageState extends State<MenuAddPage> {
                             )
                         ),
                       ],
-                    )
+                    )*/
                   ],
 
                 )
@@ -232,7 +195,6 @@ class _MenuAddPageState extends State<MenuAddPage> {
                 ),
               )
           ),
-
         ],
       ),
     );

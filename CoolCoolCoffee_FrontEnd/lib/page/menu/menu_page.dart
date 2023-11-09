@@ -36,11 +36,14 @@ class _MenuPageState extends State<MenuPage> {
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Image.asset(
-              "assets/star_unfilled_with_outer.png",
-              fit: BoxFit.fill,
+          FractionallySizedBox(
+            heightFactor: 0.7,
+            child: IconButton(
+              onPressed: () {},
+              icon: Image.asset(
+                "assets/star_unfilled_with_outer.png",
+                fit: BoxFit.fill,
+              ),
             ),
           )
         ],
@@ -50,7 +53,7 @@ class _MenuPageState extends State<MenuPage> {
           Container(height: 20,),
           Expanded(child: BrandListView()),
           Expanded(
-            flex: 7,
+            flex: 9,
             child: MenuListView(brandName: '스타벅스',)
           )
         ],

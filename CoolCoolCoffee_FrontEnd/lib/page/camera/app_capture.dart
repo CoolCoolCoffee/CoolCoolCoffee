@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
-import 'package:palette_generator/palette_generator.dart';
-//import 'package:google_ml_kit/google_ml_kit.dart';
 
 class AppCapture extends StatefulWidget {
   final String cameraMode;
@@ -18,7 +16,6 @@ class _AppCaptureState extends State<AppCapture> {
   XFile? _image; //이미지를 담을 변수 선언
   final ImagePicker picker = ImagePicker(); //ImagePicker 초기화
   String korScannedText = "";
-  List<PaletteColor> colors = [];
   //이미지를 가져오는 함수
   Future getImage(ImageSource imageSource) async {
     //pickedFile에 ImagePicker로 가져온 이미지가 담긴다.
@@ -44,15 +41,6 @@ class _AppCaptureState extends State<AppCapture> {
         korScannedText = korScannedText + line.text + "\n";
       }
     }
-    final PaletteGenerator generator = await
-    PaletteGenerator.fromImageProvider(
-      Image.file(File(_image!.path)).image,
-    );
-    colors.clear();
-    for (var color in generator.paletteColors) {
-      colors.add(color);
-      print(color.hashCode.toString());
-    }
     setState(() {});
   }
   @override
@@ -71,19 +59,7 @@ class _AppCaptureState extends State<AppCapture> {
               //_buildKorRecognizedText(),
               SizedBox(height: 20),
               _buildButton(),
-              ListView.builder(
-                  shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  itemCount: colors.length,
-                  itemBuilder: (context, index){
-                    return Container(
-                        height: 30,
-                        margin: EdgeInsets.all(10),
-                        color: colors[index].color,
-                        child: Text(colors[index].hashCode.toString()),
-                      );
-                  })
+
             ],
           ),
         ),

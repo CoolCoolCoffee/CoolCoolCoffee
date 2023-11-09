@@ -85,6 +85,12 @@ class _MenuListViewState extends State<MenuListView> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.only(bottomRight: Radius.circular(20)),
                                   color: Colors.white,
+                                  boxShadow: [BoxShadow(
+                                      color: Colors.grey.withOpacity(0.7),
+                                      spreadRadius: 0,
+                                      blurRadius: 5.0,
+                                      offset: Offset(0,5)
+                                  )]
                               ),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
