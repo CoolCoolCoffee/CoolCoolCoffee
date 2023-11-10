@@ -32,7 +32,7 @@ class _MenuListViewState extends State<MenuListView> {
                 crossAxisCount: 2,
                 childAspectRatio: 1,
                 mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
+                crossAxisSpacing: 5,
               ),
               itemBuilder: (context, index){
                 final DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[index];
@@ -51,6 +51,12 @@ class _MenuListViewState extends State<MenuListView> {
                             margin: EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
+                                boxShadow: [BoxShadow(
+                                    color: Colors.grey.withOpacity(0.7),
+                                    spreadRadius: 0,
+                                    blurRadius: 5.0,
+                                    offset: Offset(0,5)
+                                )],
                               //color: Colors.green,
                               image: DecorationImage(
                                 fit: BoxFit.cover,
@@ -65,11 +71,22 @@ class _MenuListViewState extends State<MenuListView> {
                               height: 50,
                               width: 50,
                               child: IconButton(
-                                icon: Image.asset(
-                                    "assets/star_unfilled_without_outer.png",
-                                  width: 20,
-                                  height: 20,
-                                  fit: BoxFit.fill,
+                                icon: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Image.asset(
+                                      "assets/star_unfilled_without_outer.png",
+                                      width: 20,
+                                      height: 20,
+                                      fit: BoxFit.fill,
+                                    ),
+                                    Image.asset(
+                                      "assets/star_unfilled_with_outer.png",
+                                      width: 20,
+                                      height: 20,
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ]
                                 ),
                                 onPressed: (){
 

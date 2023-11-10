@@ -8,12 +8,16 @@ import 'camera_button.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
-
   @override
   State<MenuPage> createState() => _MenuPageState();
 }
 
 class _MenuPageState extends State<MenuPage> {
+  String _brand = '메가커피';
+  _changeBrandCallback(String brand) => setState((){
+    _brand = brand;
+  });
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +34,7 @@ class _MenuPageState extends State<MenuPage> {
         ),
         centerTitle: true,
         title: Text(
-            "음료 검색하기",
+            _brand,
           style: TextStyle(
             color: Colors.black
           ),
@@ -51,10 +55,10 @@ class _MenuPageState extends State<MenuPage> {
       body:Column(
         children: [
           Container(height: 20,),
-          Expanded(child: BrandListView()),
+          Expanded(child: BrandListView(brandCallback: _changeBrandCallback,)),
           Expanded(
             flex: 9,
-            child: MenuListView(brandName: '스타벅스',)
+            child: MenuListView(brandName: _brand,)
           )
         ],
       ),

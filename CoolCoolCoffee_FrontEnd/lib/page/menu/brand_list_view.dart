@@ -4,15 +4,21 @@ import 'package:flutter/material.dart';
 
 
 class BrandListView extends StatefulWidget {
-  const BrandListView({super.key});
+  final Function brandCallback;
+  const BrandListView({super.key, required this.brandCallback});
 
   @override
   State<BrandListView> createState() => _BrandListViewState();
 }
 
 class _BrandListViewState extends State<BrandListView> {
+  late Function _brandCallback;
   final CollectionReference _brand = FirebaseFirestore.instance.collection('Cafe_brand');
-
+  @override
+  void initState() {
+    _brandCallback = widget.brandCallback;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -23,14 +29,20 @@ class _BrandListViewState extends State<BrandListView> {
                   scrollDirection: Axis.horizontal,
                   itemCount: streamSnapshot.data!.docs.length,
                   separatorBuilder: (context,index){
-                    return const SizedBox(width: 12);
+                    return Container(width: 5,);
                   },
                   itemBuilder: (context,index){
                     final DocumentSnapshot documentSnapshot =
                         streamSnapshot.data!.docs[index];
                     return GestureDetector(
-                      onTap: () {},
-                      child: SizedBox(
+                      onTap: () {
+                        _brandCallback(documentSnapshot.id);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey,width: 0.5),
+                          borderRadius: BorderRadius.all(Radius.circular(5))
+                        ),
                         width: 80,
                         height: 80,
                         child: Column(
