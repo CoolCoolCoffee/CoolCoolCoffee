@@ -26,34 +26,38 @@ class _ClockWidgetState extends State<ClockWidget>{
               textAlign: TextAlign.start,
               text: TextSpan(
                 children: [
-                  TextSpan(
-                    text: "카페인 섭취 제한 시작까지\n",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                    ),
-                  ),
-                  TextSpan(
-                    text: "n시간 m분",
-                    style: TextStyle(
-                      color: Colors.orange,
-                      fontSize: 20,
-                    ),
-                  ),
-                  TextSpan(
-                    text: " 남았어요!",
-                    style: TextStyle(
+                  if (sleepEnteredTime.isNotEmpty && wakeEnteredTime.isNotEmpty)
+                    TextSpan(
+                      text: "카페인 섭취 제한 시작까지\n",
+                      style: TextStyle(
                         color: Colors.black,
-                        fontSize: 20
+                        fontSize: 20,
+                      ),
                     ),
-                  ),
-                  // TextSpan(
-                  //   text: "목표 수면 시간을 설정해주세요.",
-                  //   style: TextStyle(
-                  //       color: Colors.black,
-                  //       fontSize: 20
-                  //   ),
-                  // ),
+                  if (sleepEnteredTime.isNotEmpty && wakeEnteredTime.isNotEmpty)
+                    TextSpan(
+                      text: "n시간 m분",
+                      style: TextStyle(
+                        color: Colors.orange,
+                        fontSize: 20,
+                      ),
+                    ),
+                  if (sleepEnteredTime.isNotEmpty && wakeEnteredTime.isNotEmpty)
+                    TextSpan(
+                      text: " 남았어요!",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
+                    ),
+                  if (sleepEnteredTime.isEmpty || wakeEnteredTime.isEmpty)
+                    TextSpan(
+                      text: "목표 수면 시간을 설정해주세요.",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -80,24 +84,26 @@ class _ClockWidgetState extends State<ClockWidget>{
 
                   ),
                   SizedBox(width: 3),
-                  Text(
-                    '수정',
-                    style: TextStyle(
-                      color: Colors.brown,
-                      fontSize: 17,
-                      decoration: TextDecoration.underline,
+                  if (sleepEnteredTime.isNotEmpty && wakeEnteredTime.isNotEmpty)
+                    Text(
+                      '수정',
+                      style: TextStyle(
+                        color: Colors.brown,
+                        fontSize: 17,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
-                  ),
+                  if (sleepEnteredTime.isEmpty || wakeEnteredTime.isEmpty)
+                    Text(
+                      '설정',
+                      style: TextStyle(
+                        color: Colors.brown,
+                        fontSize: 17,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
                 ],
               ),
-              // child: Text(
-              //   '설정',
-              //   style: TextStyle(
-              //     color: Colors.brown,
-              //     fontSize: 17,
-              //     decoration: TextDecoration.underline,
-              //   ),
-              // ),
             ),
           ],
         ),
