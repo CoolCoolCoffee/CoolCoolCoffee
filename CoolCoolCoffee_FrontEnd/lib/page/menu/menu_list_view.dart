@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_add_page.dart';
+import 'package:coolcoolcoffee_front/page/menu/menu_add_page_prov.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -37,7 +38,7 @@ class _MenuListViewState extends State<MenuListView> {
                 final DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[index];
                 return GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: documentSnapshot, brandName: brand_name,)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MenuAddPageProv(menuSnapshot: documentSnapshot, brandName: brand_name,)));
                   },
                   child: //SingleChildScrollView(
                     //scrollDirection: Axis.vertical,

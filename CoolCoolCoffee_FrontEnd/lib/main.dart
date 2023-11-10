@@ -14,7 +14,11 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
   );
-  runApp(ProviderScope(child: CoolCoolCoffee()));
+  runApp(
+      ProviderScope(
+          child: CoolCoolCoffee()
+      )
+  );
 }
 
 
@@ -31,6 +35,7 @@ class CoolCoolCoffee extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       //theme: ThemeData(primarySwatch: ),
       home: PageStates(),
     );

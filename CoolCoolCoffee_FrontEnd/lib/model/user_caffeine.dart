@@ -34,6 +34,18 @@ class UserCaffeine{
     };
   }
 
+  factory UserCaffeine.fromFireStore(QueryDocumentSnapshot map){
+    return UserCaffeine(
+      docID: map.id,
+      drinkTime: map['drink_time'],
+      menuId:  map['menu_id'],
+      brand:  map['brand'],
+      menuSize:  map['menu_size'],
+      shotAdded:  map['shot_added'],
+      caffeineContent:  map['caffeine_content']
+    );
+  }
+
   factory UserCaffeine.fromMap(Map<String,dynamic> map){
     return UserCaffeine(
         docID: map['docID'] != null ? map['docID'] as String : null,
