@@ -19,53 +19,84 @@ class _ClockWidgetState extends State<ClockWidget>{
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.ideographic,
           children: [
-            Expanded(
-              child: Text(
-                "카페인 섭취 제한 시작까지",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                ),
+            RichText(
+              textAlign: TextAlign.start,
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "카페인 섭취 제한 시작까지\n",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                    ),
+                  ),
+                  TextSpan(
+                    text: "n시간 m분",
+                    style: TextStyle(
+                      color: Colors.orange,
+                      fontSize: 20,
+                    ),
+                  ),
+                  TextSpan(
+                    text: " 남았어요!",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20
+                    ),
+                  ),
+                  // TextSpan(
+                  //   text: "목표 수면 시간을 설정해주세요.",
+                  //   style: TextStyle(
+                  //       color: Colors.black,
+                  //       fontSize: 20
+                  //   ),
+                  // ),
+                ],
               ),
             ),
-            SizedBox(width: 0), // Adjust the width as needed
+            SizedBox(width: 55),
             ElevatedButton(
               onPressed: () {
-                _showEditPopup(context); // Show the edit popup
+                _showEditPopup(context);
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.brown, // 버튼의 배경색
-                //minimumSize: Size(5, 10),
+                primary: null,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                elevation: 5, // 그림자 효과
+                elevation: 0,
+                backgroundColor: Colors.transparent,
               ),
-              child: Text('수정'),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.edit, // 연필 아이콘
+                    color: Colors.brown,
+                    size: 18,
+
+                  ),
+                  SizedBox(width: 3),
+                  Text(
+                    '수정',
+                    style: TextStyle(
+                      color: Colors.brown,
+                      fontSize: 17,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ],
+              ),
+              // child: Text(
+              //   '설정',
+              //   style: TextStyle(
+              //     color: Colors.brown,
+              //     fontSize: 17,
+              //     decoration: TextDecoration.underline,
+              //   ),
+              // ),
             ),
           ],
-        ),
-        // 두 번째 텍스트 표시
-        RichText(
-          textAlign: TextAlign.start,
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: "n시간 m분",
-                style: TextStyle(
-                    color: Colors.orange,
-                    fontSize: 20,
-                ),
-              ),
-              TextSpan(
-                text: " 남았어요!",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20
-                ),
-              ),
-            ],
-          ),
         ),
         SizedBox(height: 10),
         ClipRRect(
@@ -80,35 +111,65 @@ class _ClockWidgetState extends State<ClockWidget>{
     );
   }
 
-  void _showEditPopup(BuildContext context) {
-    showDialog(
+  void _showEditPopup(BuildContext context) async {
+    TimeOfDay? bedTime = TimeOfDay.now();
+    TimeOfDay? wakeUpTime = TimeOfDay.now();
+
+    await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('목표 수면 시간'),
-          content: Container(
-            constraints: BoxConstraints(maxHeight: 200), // Set maximum height
-            child: Column(
-              children: [
-                Text('취침 시간'),
-                TextField(
-                  decoration: InputDecoration(labelText: '취침 시간'),
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: Text('목표 수면 시간'),
+              content: Container(
+                constraints: BoxConstraints(maxHeight: 200),
+                child: Column(
+                  children: [
+                    Text('취침 시간'),
+                    ElevatedButton(
+                      onPressed: () async {
+                        TimeOfDay? selectedTime = await showTimePicker(
+                          context: context,
+                          initialTime: bedTime ?? TimeOfDay.now(),
+                        );
+                        if (selectedTime != null && selectedTime != bedTime) {
+                          setState(() {
+                            bedTime = selectedTime;
+                          });
+                        }
+                      },
+                      child: Text(bedTime?.format(context) ?? '취침 시간 선택'),
+                    ),
+                    SizedBox(height: 10),
+                    Text('기상 시간'),
+                    ElevatedButton(
+                      onPressed: () async {
+                        TimeOfDay? selectedTime = await showTimePicker(
+                          context: context,
+                          initialTime: wakeUpTime ?? TimeOfDay.now(),
+                        );
+                        if (selectedTime != null && selectedTime != wakeUpTime) {
+                          setState(() {
+                            wakeUpTime = selectedTime;
+                          });
+                        }
+                      },
+                      child: Text(wakeUpTime?.format(context) ?? '기상 시간 선택'),
+                    ),
+                  ],
                 ),
-                Text('기상 시간'),
-                TextField(
-                  decoration: InputDecoration(labelText: '기상 시간'),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('확인'),
                 ),
               ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the popup
-              },
-              child: Text('확인'),
-            ),
-          ],
+            );
+          },
         );
       },
     );
