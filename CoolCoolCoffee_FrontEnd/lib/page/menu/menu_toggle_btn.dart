@@ -15,6 +15,7 @@ class _MenuToggleBtnState extends State<MenuToggleBtn> {
   late List<bool> _isSelected;
   late Map<String,dynamic> _map;
   late Function _callback;
+  int current_index = -1;
   @override
   void initState(){
     _isSelected = widget.isSelected;
@@ -58,14 +59,21 @@ class _MenuToggleBtnState extends State<MenuToggleBtn> {
   void toggleSelect(value){
     List<bool> list = List<bool>.filled(_isSelected.length, false);
     int i = 0;
-    for(var key in _map.keys){
-      if(i == value){
-        _callback(key, _map[key]);
-        print("${key} ${_map[key]}");
-        list[i] = true;
+    if(current_index != value){
+      for(var key in _map.keys){
+        if(i == value){
+          _callback(key, _map[key]);
+          print("${key} ${_map[key]}");
+          list[i] = true;
+          break;
+        }
+        i++;
       }
-      i++;
+      current_index = value;
+    }else{
+      list[value] = true;
     }
+
     setState(() {
       _isSelected = list;
     });

@@ -11,7 +11,9 @@ import '../../model/brand.dart';
 class MenuAddPage extends StatefulWidget {
   final String brandName;
   final DocumentSnapshot menuSnapshot;
-  const MenuAddPage({super.key, required this.menuSnapshot, required this.brandName});
+  final String size;
+  final String shot;
+  const MenuAddPage({super.key, required this.menuSnapshot, required this.brandName, required this.size, required this.shot,});
 
   @override
   State<MenuAddPage> createState() => _MenuAddPageState();
@@ -29,17 +31,52 @@ class _MenuAddPageState extends State<MenuAddPage> {
     _shot = shot;
     _caffeine += caffeine;
   });
-
+  late String _brand;
+  late DocumentSnapshot _menu;
+  late List<MapEntry<String,dynamic>> sizeMap;
+  late Map<String,dynamic> sortedSize;
+  late List<bool> sizeSelected;
+  late Map<String,dynamic> shotControl;
+  late List<bool> shotSelected;
+  @override
+  void initState() {
+    _size = widget.size;
+    _shot = widget.shot;
+    _brand = widget.brandName;
+    _menu = widget.menuSnapshot;
+    sizeMap = _menu['caffeine_per_size'].entries.toList();
+    sizeMap.sort((m1,m2) => m1.value.compareTo(m2.value));
+    sortedSize = Map.fromEntries(sizeMap);
+    sizeSelected = List<bool>.filled(sortedSize.length, false);
+    shotControl = {'연하게':-10,'샷 추가':20};
+    shotSelected = List<bool>.filled(shotControl.length, false);
+    if(_size != ""){
+      int i = 0;
+      for(var key in sortedSize.keys){
+        if(_size == key){
+          _caffeine = sortedSize[key];
+          sizeSelected[i] = true;
+          break;
+        }
+        i++;
+      }
+    }
+    if(_shot != ""){
+      int i = 0;
+      for(var key in shotControl.keys){
+        if(_shot == key){
+          _caffeine += shotControl[key];
+          shotSelected[i] = true;
+          break;
+        }
+        i++;
+      }
+    }
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    final _brand = widget.brandName;
-    final _menu = widget.menuSnapshot;
-    List<MapEntry<String,dynamic>> sizeMap = _menu['caffeine_per_size'].entries.toList();
-    sizeMap.sort((m1,m2) => m1.value.compareTo(m2.value));
-    final sortedSize = Map.fromEntries(sizeMap);
-    List<bool> sizeSelected = List<bool>.filled(sortedSize.length, false);
-    final shotControl = {'연하게':10,'샷 추가':20};
-    final shotSelected = List<bool>.filled(shotControl.length, false);
+
 
     return Scaffold(
       appBar: AppBar(

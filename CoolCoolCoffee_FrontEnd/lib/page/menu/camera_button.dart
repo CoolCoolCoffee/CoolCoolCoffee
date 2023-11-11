@@ -92,7 +92,7 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
         .collection('menus')
         .doc(menuName)
         .get();
-    await Navigator.push(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: wait, brandName: '스타벅스')));
+    await Navigator.push(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: wait, brandName: '스타벅스', size: "",shot: "",)));
   }
 
   @override
