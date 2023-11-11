@@ -1,18 +1,27 @@
-
-import 'package:coolcoolcoffee_front/page/login/login_page.dart';
-import 'package:coolcoolcoffee_front/page_state/page_state.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
-
 import 'firebase_options.dart';
+
+import 'package:coolcoolcoffee_front/page/login/user_form_first_page.dart';
+import 'package:coolcoolcoffee_front/page_state/page_state.dart';
+import 'package:coolcoolcoffee_front/provider/user_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
   );
-  runApp(const CoolCoolCoffee());
+  runApp(
+      MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (context) => UserProvider(),),
+          // 다른 provider 추가하기
+          ],
+          child: const CoolCoolCoffee()
+      ),
+  );
 }
 
 /*Future<void> main() async{
@@ -29,7 +38,7 @@ class CoolCoolCoffee extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       //theme: ThemeData(primarySwatch: ),
-      home: LoginPage(),
+      home: UserFormFirstPage(),
     );
   }
 }
