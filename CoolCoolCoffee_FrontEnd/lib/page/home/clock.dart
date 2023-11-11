@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:analog_clock/analog_clock.dart';
 
 class ClockWidget extends StatefulWidget {
   const ClockWidget({Key? key}) : super(key: key);
@@ -84,59 +85,73 @@ class _ClockWidgetState extends State<ClockWidget>{
 
                   ),
                   SizedBox(width: 3),
-                  if (sleepEnteredTime.isNotEmpty && wakeEnteredTime.isNotEmpty)
-                    Text(
-                      '수정',
-                      style: TextStyle(
-                        color: Colors.brown,
-                        fontSize: 17,
-                        decoration: TextDecoration.underline,
-                      ),
+                  Text(
+                    sleepEnteredTime.isNotEmpty && wakeEnteredTime.isNotEmpty
+                        ? '수정'
+                        : '설정',
+                    style: TextStyle(
+                      color: Colors.brown,
+                      fontSize: 17,
+                      decoration: TextDecoration.underline,
                     ),
-                  if (sleepEnteredTime.isEmpty || wakeEnteredTime.isEmpty)
-                    Text(
-                      '설정',
-                      style: TextStyle(
-                        color: Colors.brown,
-                        fontSize: 17,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
+                  ),
                 ],
               ),
             ),
           ],
         ),
         SizedBox(height: 10),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(150),
-          child: Container(
-            width: 250,
-            height: 250,
-            color: Colors.brown.withOpacity(0.6),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Sleep: $sleepEnteredTime',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
-                  ),
-                  Text(
-                    'Wake: $wakeEnteredTime',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
-              ),
+        Container(
+          height: 250,
+          child: AnalogClock(
+            decoration: BoxDecoration(
+                border: Border.all(width: 2.0, color: Colors.black),
+                color: Colors.transparent,
+                shape: BoxShape.circle
             ),
+            width: 250,
+            isLive: true,
+            hourHandColor: Colors.black,
+            minuteHandColor: Colors.black,
+            showSecondHand: true,
+            numberColor: Colors.black87,
+            showNumbers: true,
+            showAllNumbers: true,
+            textScaleFactor: 1.4,
+            showTicks: true,
+            showDigitalClock: false,
+            datetime: DateTime.now(),
           ),
         ),
+        // ClipRRect(
+        //   borderRadius: BorderRadius.circular(150),
+        //   child: Container(
+        //     width: 250,
+        //     height: 250,
+        //     color: Colors.brown.withOpacity(0.6),
+        //     child: Center(
+        //       child: Column(
+        //         mainAxisAlignment: MainAxisAlignment.center,
+        //         children: [
+        //           Text(
+        //             'Sleep: $sleepEnteredTime',
+        //             style: TextStyle(
+        //               color: Colors.white,
+        //               fontSize: 18,
+        //             ),
+        //           ),
+        //           Text(
+        //             'Wake: $wakeEnteredTime',
+        //             style: TextStyle(
+        //               color: Colors.white,
+        //               fontSize: 18,
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
@@ -150,6 +165,7 @@ class _ClockWidgetState extends State<ClockWidget>{
     TextEditingController wakeMinutesController = TextEditingController();
     bool sleepIsAM = true;
     bool wakeIsAM = true;
+    bool isCancelled = false;
 
     if (sleepEnteredTime.isNotEmpty) {
       List<String> sleepTimeParts = sleepEnteredTime.split(' ');
@@ -173,7 +189,7 @@ class _ClockWidgetState extends State<ClockWidget>{
         return AlertDialog(
           title: Text('목표 수면 시간'),
           content: Container(
-            constraints: BoxConstraints(maxHeight: 230, maxWidth: 400),
+            constraints: BoxConstraints(maxHeight: 200, maxWidth: 400),
             child: Column(
               children: [
                 Text(
@@ -183,8 +199,9 @@ class _ClockWidgetState extends State<ClockWidget>{
                 SizedBox(height: 5),
                 Row(
                   children: [
-                    // Hours TextField
-                    Flexible(
+                    Container(
+                      width: 70,
+                      height: 40,
                       child: TextField(
                         controller: sleepHoursController,
                         keyboardType: TextInputType.number,
@@ -195,10 +212,12 @@ class _ClockWidgetState extends State<ClockWidget>{
                       ),
                     ),
                     Text(
-                      ' : ',
+                      '  :  ',
                       style: TextStyle(fontSize: 20),
                     ),
-                    Flexible(
+                    Container(
+                      width: 70,
+                      height: 40,
                       child: TextField(
                         controller: sleepMinutesController,
                         keyboardType: TextInputType.number,
@@ -208,7 +227,7 @@ class _ClockWidgetState extends State<ClockWidget>{
                         ),
                       ),
                     ),
-                    SizedBox(width: 5),
+                    SizedBox(width: 10),
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
@@ -217,7 +236,7 @@ class _ClockWidgetState extends State<ClockWidget>{
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.brown.withOpacity(0.2),
-                        minimumSize: Size(40, 30),
+                        minimumSize: Size(40, 40),
                       ),
                       child: Text('AM'),
                     ),
@@ -229,7 +248,7 @@ class _ClockWidgetState extends State<ClockWidget>{
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.brown.withOpacity(0.2),
-                        minimumSize: Size(40, 30),
+                        minimumSize: Size(40, 40),
                       ),
                       child: Text('PM'),
                     ),
@@ -244,7 +263,9 @@ class _ClockWidgetState extends State<ClockWidget>{
                 Row(
                   children: [
                     // Hours TextField
-                    Flexible(
+                    Container(
+                      width: 70,
+                      height: 40,
                       child: TextField(
                         controller: wakeHoursController,
                         keyboardType: TextInputType.number,
@@ -254,13 +275,14 @@ class _ClockWidgetState extends State<ClockWidget>{
                         ),
                       ),
                     ),
-                    // ":" Text
                     Text(
-                      ' : ',
+                      '  :  ',
                       style: TextStyle(fontSize: 20),
                     ),
                     // Minutes TextField
-                    Flexible(
+                    Container(
+                      width: 70,
+                      height: 40,
                       child: TextField(
                         controller: wakeMinutesController,
                         keyboardType: TextInputType.number,
@@ -270,7 +292,7 @@ class _ClockWidgetState extends State<ClockWidget>{
                         ),
                       ),
                     ),
-                    SizedBox(width: 5),
+                    SizedBox(width: 10),
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
@@ -279,7 +301,7 @@ class _ClockWidgetState extends State<ClockWidget>{
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.brown.withOpacity(0.2),
-                        minimumSize: Size(40, 30),
+                        minimumSize: Size(40, 40),
                       ),
                       child: Text('AM'),
                     ),
@@ -291,7 +313,7 @@ class _ClockWidgetState extends State<ClockWidget>{
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.brown.withOpacity(0.2),
-                        minimumSize: Size(40, 30),
+                        minimumSize: Size(40, 40),
                       ),
                       child: Text('PM'),
                     ),
@@ -301,6 +323,26 @@ class _ClockWidgetState extends State<ClockWidget>{
             ),
           ),
           actions: [
+            TextButton(
+              onPressed: () {
+                // Set the flag to indicate changes were cancelled
+                isCancelled = true;
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                '취소',
+                style: TextStyle(
+                  color: Colors.black, // Change this color to your desired text color
+                ),
+              ),
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.grey[300], // Change this color to your desired background color
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                minimumSize: Size(60, 30),
+              ),
+            ),
             TextButton(
               onPressed: () {
                 String sleepEnteredTime =
@@ -313,14 +355,33 @@ class _ClockWidgetState extends State<ClockWidget>{
                 });
                 //print('취침 시간 : $sleepEnteredTime');
                 //print('기상 시간 : $wakeEnteredTime');
+                if (!isCancelled) {
+                  setState(() {
+                    this.sleepEnteredTime = sleepEnteredTime;
+                    this.wakeEnteredTime = wakeEnteredTime;
+                  });
+                  //print('취침 시간 : $sleepEnteredTime');
+                  //print('기상 시간 : $wakeEnteredTime');
+                }
                 Navigator.of(context).pop();
               },
-              child: Text('확인'),
+              child: Text(
+                  '확인',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+              ),
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.brown,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10), // Adjust the value to change the roundness
+                ),
+                minimumSize: Size(60, 30),// Change this color to your desired background color
+              ),
             ),
           ],
         );
       },
     );
   }
-
 }

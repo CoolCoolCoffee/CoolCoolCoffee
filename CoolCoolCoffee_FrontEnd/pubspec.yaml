@@ -43,6 +43,7 @@ dependencies:
   flutter_health_connect: ^1.2.3
   timezone: ^0.9.2
   #flutter_sparkline : ^0.1.0
+  analog_clock: ^0.1.0
 
 dev_dependencies:
   flutter_test:
