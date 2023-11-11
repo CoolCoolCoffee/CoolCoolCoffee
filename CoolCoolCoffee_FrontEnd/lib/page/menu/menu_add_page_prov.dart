@@ -5,45 +5,78 @@ import 'package:coolcoolcoffee_front/page/menu/menu_img_name_tile.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_toggle_btn.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../model/brand.dart';
 
-class MenuAddPageProv extends StatefulWidget {
+class MenuAddPageProv extends ConsumerStatefulWidget {
   final String brandName;
   final DocumentSnapshot menuSnapshot;
-  const MenuAddPageProv({super.key, required this.menuSnapshot, required this.brandName});
+  final String size;
+  final String shot;
+  const MenuAddPageProv({super.key, required this.menuSnapshot, required this.brandName, required this.size, required this.shot,});
 
   @override
-  State<MenuAddPageProv> createState() => _MenuAddPageProvState();
+  ConsumerState<MenuAddPageProv> createState() => _MenuAddPageProvState();
 }
 
-class _MenuAddPageProvState extends State<MenuAddPageProv> {
+class _MenuAddPageProvState extends ConsumerState<MenuAddPageProv> {
   num _caffeine = 0;
   String _size = "";
   _changeSizeCallback(String size, num caffeine) => setState((){
     _size = size;
     _caffeine = caffeine;
-    print("size : ${_size}");
-    print("caffeine : ${_caffeine}");
   });
   String _shot = "";
   _changeShotCallback(String shot, num caffeine) => setState((){
     _shot = shot;
     _caffeine += caffeine;
-    print("size : ${_shot}");
-    print("caffeine : ${_caffeine}");
   });
-
+  late String _brand;
+  late DocumentSnapshot _menu;
+  late List<MapEntry<String,dynamic>> sizeMap;
+  late Map<String,dynamic> sortedSize;
+  late List<bool> sizeSelected;
+  late Map<String,dynamic> shotControl;
+  late List<bool> shotSelected;
+  @override
+  void initState() {
+    _size = widget.size;
+    _shot = widget.shot;
+    _brand = widget.brandName;
+    _menu = widget.menuSnapshot;
+    sizeMap = _menu['caffeine_per_size'].entries.toList();
+    sizeMap.sort((m1,m2) => m1.value.compareTo(m2.value));
+    sortedSize = Map.fromEntries(sizeMap);
+    sizeSelected = List<bool>.filled(sortedSize.length, false);
+    shotControl = {'연하게':-10,'샷 추가':20};
+    shotSelected = List<bool>.filled(shotControl.length, false);
+    if(_size != ""){
+      int i = 0;
+      for(var key in sortedSize.keys){
+        if(_size == key){
+          _caffeine = sortedSize[key];
+          sizeSelected[i] = true;
+          break;
+        }
+        i++;
+      }
+    }
+    if(_shot != ""){
+      int i = 0;
+      for(var key in shotControl.keys){
+        if(_shot == key){
+          _caffeine += shotControl[key];
+          shotSelected[i] = true;
+          break;
+        }
+        i++;
+      }
+    }
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    final _brand = widget.brandName;
-    final _menu = widget.menuSnapshot;
-    List<MapEntry<String,dynamic>> sizeMap = _menu['caffeine_per_size'].entries.toList();
-    sizeMap.sort((m1,m2) => m1.value.compareTo(m2.value));
-    final sortedSize = Map.fromEntries(sizeMap);
-    List<bool> sizeSelected = List<bool>.filled(sortedSize.length, false);
-    final shotControl = {'연하게':(10.isNegative),'샷 추가':20};
-    final shotSelected = List<bool>.filled(shotControl.length, false);
 
     return Scaffold(
       appBar: AppBar(

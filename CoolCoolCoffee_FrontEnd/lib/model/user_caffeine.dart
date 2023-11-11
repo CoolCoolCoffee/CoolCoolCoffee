@@ -24,7 +24,6 @@ class UserCaffeine{
 
   Map<String, dynamic> toMap(){
     return <String,dynamic>{
-      'docID':docID,
       'drink_time':drinkTime,
       'menu_id':menuId,
       'brand':brand,

@@ -1,17 +1,37 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/model/user_caffeine.dart';
+import 'package:intl/intl.dart';
 
 import '../provider/user_provider.dart';
 
 class UserCaffeineService {
   final userCaffeineCollection = FirebaseFirestore.instance.collection('Users').doc('ZZDgEPAMHTeb57Ox1aSgtqOXpMB2').collection('user_caffeine');
-  //CREATE
-  void addNewUserCaffeine(UserCaffeine userCaffeine){
-    userCaffeineCollection.add(userCaffeine.toMap());
+  //없으면 CREATE 있으면 UPDATE
+  Future<void> addNewUserCaffeine(String date, UserCaffeine userCaffeine) async{
+    var wait = await userCaffeineCollection.doc(date).get();
+    if(wait ==null){
+      List<Map<String,dynamic>> lists = [userCaffeine.toMap()];
+      userCaffeineCollection.doc(date).set({'caffeine_list': lists});
+    }else{
+      List<Map<String,dynamic>> lists = wait['caffeine_list'];
+      lists.add(userCaffeine.toMap());
+      userCaffeineCollection.doc(date).update({'caffeine_list': lists});
+    }
   }
   //READ
-
-  //UPDATE
-
+  Future<DocumentSnapshot<Map<String, dynamic>>> getUserCaffeine(String date, UserCaffeine userCaffeine) async{
+      var wait = await userCaffeineCollection.doc(date).get();
+      return wait;
+  }
   //Delete
+  Future<void> deleteUserCaffeine(String date, UserCaffeine userCaffeine) async{
+    var wait = await userCaffeineCollection.doc(date).get();
+    List<Map<String,dynamic>> lists = wait['caffeine_list'];
+    for(var list in lists){
+      if(list['drink_time'] == userCaffeine.drinkTime){
+        lists.remove(list);
+        break;
+      }
+    }
+  }
 }

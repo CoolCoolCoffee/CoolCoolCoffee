@@ -40,7 +40,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_core: ^2.18.0
   flutter_riverpod: ^1.0.1
-
+  intl: ^0.18.1
+  timer_builder: ^2.0.0
 
 dev_dependencies:
   flutter_test:
