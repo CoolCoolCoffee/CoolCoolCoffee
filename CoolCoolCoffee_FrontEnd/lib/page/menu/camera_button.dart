@@ -80,11 +80,11 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
 
   Future<void> starbucksLabel(RecognizedText recText) async{
     var getList = await CameraFunc().fetchMenuFromStarbucksLabel(recText);
-    if(getList.length == 2){
-      await pushMenuAddPage(getList[0], getList[1]);
+    if(getList.length == 4){
+      await pushMenuAddPage(getList[0], getList[1],getList[2],getList[3]);
     }
   }
-  Future<void> pushMenuAddPage(String brand, String menuName) async{
+  Future<void> pushMenuAddPage(String brand, String menuName, String size, String shot) async{
     print("push start $brand $menuName");
     var wait = await FirebaseFirestore.instance
         .collection('Cafe_brand')
@@ -92,7 +92,7 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
         .collection('menus')
         .doc(menuName)
         .get();
-    await Navigator.push(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: wait, brandName: '스타벅스', size: "",shot: "",)));
+    await Navigator.push(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: wait, brandName: '스타벅스', size: size,shot: shot,)));
   }
 
   @override

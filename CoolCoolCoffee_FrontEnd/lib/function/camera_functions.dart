@@ -11,6 +11,7 @@ class CameraFunc{
     String menu = "";
     String korScannedText = "";
     String size = "";
+    String shot = "";
     for (TextBlock block in recText.blocks) {
       for (TextLine line in block.lines) {
         if(line.text.contains(RegExp(r'S\)|T\)|G\)|V\)'))) {
@@ -46,6 +47,9 @@ class CameraFunc{
         }
       });
     });
+    ret.add(size);
+    ret.add(shot);
+
     print("menu: $menu");
     print("size: $size");
     print("ice: $ice");
