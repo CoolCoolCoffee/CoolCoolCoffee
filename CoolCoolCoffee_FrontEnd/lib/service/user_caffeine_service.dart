@@ -9,13 +9,13 @@ class UserCaffeineService {
   //없으면 CREATE 있으면 UPDATE
   Future<void> addNewUserCaffeine(String date, UserCaffeine userCaffeine) async{
     var wait = await userCaffeineCollection.doc(date).get();
-    if(wait ==null){
-      List<Map<String,dynamic>> lists = [userCaffeine.toMap()];
-      userCaffeineCollection.doc(date).set({'caffeine_list': lists});
+    if(!wait.exists){
+      List<dynamic> lists = [userCaffeine.toMap()];
+      await userCaffeineCollection.doc(date).set({'caffeine_list': lists});
     }else{
-      List<Map<String,dynamic>> lists = wait['caffeine_list'];
+      List<dynamic> lists = wait['caffeine_list'];
       lists.add(userCaffeine.toMap());
-      userCaffeineCollection.doc(date).update({'caffeine_list': lists});
+      await userCaffeineCollection.doc(date).update({'caffeine_list': lists});
     }
   }
   //READ
@@ -26,12 +26,13 @@ class UserCaffeineService {
   //Delete
   Future<void> deleteUserCaffeine(String date, UserCaffeine userCaffeine) async{
     var wait = await userCaffeineCollection.doc(date).get();
-    List<Map<String,dynamic>> lists = wait['caffeine_list'];
+    List<dynamic> lists = wait['caffeine_list'];
     for(var list in lists){
       if(list['drink_time'] == userCaffeine.drinkTime){
         lists.remove(list);
         break;
       }
     }
+    await userCaffeineCollection.doc(date).update({'caffeine_list': lists});
   }
 }

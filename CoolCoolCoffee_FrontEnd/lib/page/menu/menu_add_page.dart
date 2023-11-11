@@ -3,10 +3,13 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_img_name_tile.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_toggle_btn.dart';
+import 'package:coolcoolcoffee_front/service/user_caffeine_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../model/brand.dart';
+import '../../model/user_caffeine.dart';
 
 class MenuAddPage extends StatefulWidget {
   final String brandName;
@@ -38,8 +41,10 @@ class _MenuAddPageState extends State<MenuAddPage> {
   late List<bool> sizeSelected;
   late Map<String,dynamic> shotControl;
   late List<bool> shotSelected;
+  late UserCaffeineService userCaffeineService;
   @override
   void initState() {
+    userCaffeineService = UserCaffeineService();
     _size = widget.size;
     _shot = widget.shot;
     _brand = widget.brandName;
@@ -184,7 +189,15 @@ class _MenuAddPageState extends State<MenuAddPage> {
                         child: Container(
                           padding: const EdgeInsets.only(left: 10,top: 5,bottom: 5,),
                           child: ElevatedButton(
-                            onPressed: (){},
+                            onPressed: (){
+                              DateTime now = DateTime.now();
+                              DateFormat dayFormatter = DateFormat('yyyy-MM-dd');
+                              DateFormat timeFormatter = DateFormat('HH:mm:ss');
+                              String today = dayFormatter.format(now);
+                              String time = timeFormatter.format(now);
+                              userCaffeineService.addNewUserCaffeine(today, UserCaffeine(drinkTime: time, menuId: _menu.id, brand: _brand, menuSize: _size, shotAdded: 0, caffeineContent: _caffeine));
+                              Navigator.popUntil(context, (route) => route.isFirst);
+                            },
                             child: Text(
                                 '기록하기',
                               style: TextStyle(fontSize: 15),

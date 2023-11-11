@@ -1,11 +1,14 @@
 import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coolcoolcoffee_front/model/user_caffeine.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_img_name_tile.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_toggle_btn.dart';
+import 'package:coolcoolcoffee_front/provider/user_caffeine_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../model/brand.dart';
 
@@ -184,7 +187,14 @@ class _MenuAddPageProvState extends ConsumerState<MenuAddPageProv> {
                         child: Container(
                           padding: const EdgeInsets.only(left: 10,top: 5,bottom: 5,),
                           child: ElevatedButton(
-                            onPressed: (){},
+                            onPressed: (){
+                              DateTime now = DateTime.now();
+                              DateFormat dayFormatter = DateFormat('yyyy-MM-dd');
+                              DateFormat timeFormatter = DateFormat('HH:mm:ss');
+                              String today = dayFormatter.format(now);
+                              String time = timeFormatter.format(now);
+                              ref.watch(userCaffeineProvider).addNewUserCaffeine(today, UserCaffeine(drinkTime: time, menuId: _menu.id, brand: _brand, menuSize: _size, shotAdded: 0, caffeineContent: _caffeine));
+                            },
                             child: Text(
                               '기록하기',
                               style: TextStyle(fontSize: 15),

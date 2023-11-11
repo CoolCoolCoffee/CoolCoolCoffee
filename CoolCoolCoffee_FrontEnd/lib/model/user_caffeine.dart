@@ -1,16 +1,14 @@
-import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 class UserCaffeine{
   String? docID;
-  final Timestamp drinkTime;
+  final String drinkTime;
   final String menuId;
   final String brand;
   final String menuSize;
-  final int shotAdded;
-  final int caffeineContent;
+  final num shotAdded;
+  final num caffeineContent;
 
   UserCaffeine({
     this.docID,
