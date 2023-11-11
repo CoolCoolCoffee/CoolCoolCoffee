@@ -18,6 +18,21 @@ class MenuAddPageProv extends StatefulWidget {
 }
 
 class _MenuAddPageProvState extends State<MenuAddPageProv> {
+  num _caffeine = 0;
+  String _size = "";
+  _changeSizeCallback(String size, num caffeine) => setState((){
+    _size = size;
+    _caffeine = caffeine;
+    print("size : ${_size}");
+    print("caffeine : ${_caffeine}");
+  });
+  String _shot = "";
+  _changeShotCallback(String shot, num caffeine) => setState((){
+    _shot = shot;
+    _caffeine += caffeine;
+    print("size : ${_shot}");
+    print("caffeine : ${_caffeine}");
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,40 +42,40 @@ class _MenuAddPageProvState extends State<MenuAddPageProv> {
     sizeMap.sort((m1,m2) => m1.value.compareTo(m2.value));
     final sortedSize = Map.fromEntries(sizeMap);
     List<bool> sizeSelected = List<bool>.filled(sortedSize.length, false);
-    final shotControl = {'연하게':10,'샷 추가':20};
+    final shotControl = {'연하게':(10.isNegative),'샷 추가':20};
     final shotSelected = List<bool>.filled(shotControl.length, false);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: (){
-            Navigator.pop(context);
-          },
-          icon: Icon(
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            onPressed: (){
+              Navigator.pop(context);
+            },
+            icon: Icon(
               Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-        ),
-        centerTitle: true,
-        title: Text(
-            "음료 추가하기",
-          style: TextStyle(
-            color: Colors.black
-          ),
-        ),
-        actions: [
-          FractionallySizedBox(
-            heightFactor: 0.7,
-            child: IconButton(
-              onPressed: () {},
-              icon: Image.asset(
-                "assets/star_unfilled_with_outer.png",
-                fit: BoxFit.fill,
-              ),
+              color: Colors.black,
             ),
-          )
-        ]
+          ),
+          centerTitle: true,
+          title: Text(
+            "음료 추가하기",
+            style: TextStyle(
+                color: Colors.black
+            ),
+          ),
+          actions: [
+            FractionallySizedBox(
+              heightFactor: 0.7,
+              child: IconButton(
+                onPressed: () {},
+                icon: Image.asset(
+                  "assets/star_unfilled_with_outer.png",
+                  fit: BoxFit.fill,
+                ),
+              ),
+            )
+          ]
       ),
       body: Column(
         children: [
@@ -69,10 +84,10 @@ class _MenuAddPageProvState extends State<MenuAddPageProv> {
             child: MenuImgNameTile(brandName: _brand,menuSnapshot: _menu, ),
           ),
           Expanded(
-              child: Column(
-                children: [
-                  Container(height: 20,),
-                  Container(
+            child: Column(
+              children: [
+                Container(height: 20,),
+                Container(
                     width: double.infinity,
                     margin: EdgeInsets.all(10),
                     child: Column(
@@ -80,12 +95,12 @@ class _MenuAddPageProvState extends State<MenuAddPageProv> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(padding: EdgeInsets.only(left: 5,bottom: 10),child: Text('사이즈',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
-                        MenuToggleBtn(isSelected: sizeSelected ,map: sortedSize,),
+                        MenuToggleBtn(isSelected: sizeSelected ,map: sortedSize, callback: _changeSizeCallback,),
                       ],
                     )
-                  ),
-                ],
-              ),
+                ),
+              ],
+            ),
           ),
           Expanded(
             child: Container(
@@ -96,7 +111,7 @@ class _MenuAddPageProvState extends State<MenuAddPageProv> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(padding: EdgeInsets.only(left: 5,bottom: 10),child: Text('샷 조절',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
-                    MenuToggleBtn(isSelected: shotSelected ,map: shotControl,),
+                    MenuToggleBtn(isSelected: shotSelected ,map: shotControl, callback: _changeShotCallback,),
                   ],
                 )
             ),
@@ -117,20 +132,19 @@ class _MenuAddPageProvState extends State<MenuAddPageProv> {
                               Text(
                                 '카페인 함량',
                                 style: TextStyle(
-                                  fontSize: 10
+                                    fontSize: 10
                                 ),
                               ),
                               Container(height: 5,),
-                              Text(
-                                _menu['caffeine_per_size']['Tall'].toString(),
+                              Text(_caffeine.toString(),
                                 style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold
                                 ),
                               )
                             ],
                           ),
-                        ) 
+                        )
                     ),
                     Expanded(
                         flex: 4,
@@ -139,14 +153,14 @@ class _MenuAddPageProvState extends State<MenuAddPageProv> {
                           child: ElevatedButton(
                             onPressed: (){},
                             child: Text(
-                                '기록하기',
+                              '기록하기',
                               style: TextStyle(fontSize: 15),
                             ),
                             style: ElevatedButton.styleFrom(
-                              minimumSize: const Size.fromHeight(50),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)
-                              )
+                                minimumSize: const Size.fromHeight(50),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                )
                             ),
                           ),
                         )

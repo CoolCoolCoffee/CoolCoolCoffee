@@ -38,7 +38,7 @@ class _MenuListViewState extends State<MenuListView> {
                 final DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[index];
                 return GestureDetector(
                   onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => MenuAddPageProv(menuSnapshot: documentSnapshot, brandName: brand_name,)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: documentSnapshot, brandName: brand_name,)));
                   },
                   child: //SingleChildScrollView(
                     //scrollDirection: Axis.vertical,

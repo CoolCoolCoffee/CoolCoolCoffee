@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class MenuToggleBtn extends StatefulWidget {
   final Map<String,dynamic> map;
   final List<bool> isSelected;
-  const MenuToggleBtn({super.key, required this.isSelected, required this.map});
+  final Function callback;
+  const MenuToggleBtn({super.key, required this.isSelected, required this.map, required this.callback});
 
   @override
   State<MenuToggleBtn> createState() => _MenuToggleBtnState();
@@ -13,11 +14,13 @@ class MenuToggleBtn extends StatefulWidget {
 class _MenuToggleBtnState extends State<MenuToggleBtn> {
   late List<bool> _isSelected;
   late Map<String,dynamic> _map;
+  late Function _callback;
   @override
   void initState(){
-    super.initState();
     _isSelected = widget.isSelected;
     _map = widget.map;
+    _callback = widget.callback;
+    super.initState();
   }
 
   @override
@@ -51,69 +54,17 @@ class _MenuToggleBtnState extends State<MenuToggleBtn> {
         Container(width: 10,)
       ],
     );
-    /*Row(
-      children: [
-        for(var key in sizeSelected.keys)...[
-          sizeSelected[key]!
-              ? OutlinedButton(
-              onPressed: (){
-                setState(() {
-                  for (var k in sizeSelected.keys) {
-                    if (k == key) {
-                      sizeSelected[k] = true;
-                    } else {
-                      sizeSelected[k] = false;
-                    }
-                    print('$k ${sizeSelected[k]}');
-                  }
-                });
-              },
-              child: Text(key,
-                style: TextStyle(
-                  color: Colors.greenAccent,
-                ),
-              ),
-              style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10))
-                  )
-              )
-          )
-              :OutlinedButton(
-              onPressed: (){
-                setState(() {
-                  for (var k in sizeSelected.keys) {
-                    if (k == key) {
-                      sizeSelected[k] = true;
-                    } else {
-                      sizeSelected[k] = false;
-                    }
-                    print('$k ${sizeSelected[k]}');
-                  }
-                });
-              },
-              child: Text(key,
-                style: TextStyle(
-                  color: Colors.blue,
-                ),
-              ),
-              style: OutlinedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10))
-                  )
-              )
-          ),
-          Container(width: 10,)
-        ]
-      ],
-    );*/
   }
   void toggleSelect(value){
     List<bool> list = List<bool>.filled(_isSelected.length, false);
-    for(int i = 0;i<_isSelected.length;i++){
+    int i = 0;
+    for(var key in _map.keys){
       if(i == value){
+        _callback(key, _map[key]);
+        print("${key} ${_map[key]}");
         list[i] = true;
       }
+      i++;
     }
     setState(() {
       _isSelected = list;

@@ -60,15 +60,6 @@ class _BrandListViewState extends State<BrandListView> {
                                 documentSnapshot.id,
                               style: TextStyle(fontSize: 10),
                             )
-                            /*Card(
-                              margin: const EdgeInsets.all(10),
-                              child: ListTile(
-                                visualDensity: VisualDensity(vertical: -4, horizontal: 0),
-                                title: Text(documentSnapshot.id),
-                                leading: CircleAvatar(backgroundImage: NetworkImage(documentSnapshot['logo_img'])),
-                                subtitle: Text(size_map_to_string(documentSnapshot['sizes'])),
-                              ),
-                            ),*/
                           ],
                         ),
                       ),
