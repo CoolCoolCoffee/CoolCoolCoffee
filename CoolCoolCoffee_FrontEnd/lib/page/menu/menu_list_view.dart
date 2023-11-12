@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coolcoolcoffee_front/model/user_favorite_drink.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_add_page.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_add_page_prov.dart';
+import 'package:coolcoolcoffee_front/page/menu/star_icon_button.dart';
+import 'package:coolcoolcoffee_front/service/user_favorite_drink_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +17,12 @@ class MenuListView extends StatefulWidget {
 }
 
 class _MenuListViewState extends State<MenuListView> {
+  late UserFavoriteDrinkService userFavoriteDrinkService;
+  @override
+  void initState() {
+    userFavoriteDrinkService = UserFavoriteDrinkService();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +45,16 @@ class _MenuListViewState extends State<MenuListView> {
               ),
               itemBuilder: (context, index){
                 final DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[index];
+                bool isStared = false;
+                Future<bool> checkStar = userFavoriteDrinkService.checkFavoriteDrinkExists(UserFavoriteDrink(menuId: documentSnapshot.id, brand: brand_name), );
+                checkStar.then((value) {isStared = value; print("${documentSnapshot.id} $isStared");});
+
                 return GestureDetector(
                   onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: documentSnapshot, brandName: brand_name, size: '', shot: '',)));
                   },
                   child: //SingleChildScrollView(
-                    //scrollDirection: Axis.vertical,
-                    //child:
                     Container(
-                      //color: Colors.blue,
                       child: Stack(
                         children: [
                           Container(
@@ -57,7 +67,6 @@ class _MenuListViewState extends State<MenuListView> {
                                     blurRadius: 5.0,
                                     offset: Offset(0,5)
                                 )],
-                              //color: Colors.green,
                               image: DecorationImage(
                                 fit: BoxFit.cover,
                                 image: NetworkImage(documentSnapshot['menu_img'])
@@ -72,26 +81,32 @@ class _MenuListViewState extends State<MenuListView> {
                               width: 50,
                               child: IconButton(
                                 icon: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    Image.asset(
-                                      "assets/star_unfilled_without_outer.png",
-                                      width: 20,
-                                      height: 20,
-                                      fit: BoxFit.fill,
-                                    ),
-                                    Image.asset(
-                                      "assets/star_unfilled_with_outer.png",
-                                      width: 20,
-                                      height: 20,
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ]
+                                    alignment: Alignment.center,
+                                    children: [
+                                      if(isStared) Image.asset(
+                                        "assets/filled_star.png",
+                                        width: 20,
+                                        height: 20,
+                                        fit: BoxFit.fill,
+                                      )
+                                      else Image.asset(
+                                        "assets/star_unfilled_without_outer.png",
+                                        width: 20,
+                                        height: 20,
+                                        fit: BoxFit.fill,
+                                      ),
+                                      Image.asset(
+                                        "assets/star_unfilled_with_outer.png",
+                                        width: 20,
+                                        height: 20,
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ]
                                 ),
                                 onPressed: (){
-
                                 },
                               ),
+                              //StarIconButton(isStared: isStared,)
                             ),
                           ),
                           Align(
