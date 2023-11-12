@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_add_page.dart';
-import 'package:coolcoolcoffee_front/page/menu/menu_add_page_prov.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 
 class MenuListView extends StatefulWidget {
   final String brandName;
@@ -41,37 +39,37 @@ class _MenuListViewState extends State<MenuListView> {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: documentSnapshot, brandName: brand_name, size: '', shot: '',)));
                   },
                   child: //SingleChildScrollView(
-                    //scrollDirection: Axis.vertical,
-                    //child:
-                    Container(
-                      //color: Colors.blue,
-                      child: Stack(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
+                  //scrollDirection: Axis.vertical,
+                  //child:
+                  Container(
+                    //color: Colors.blue,
+                    child: Stack(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
-                                boxShadow: [BoxShadow(
-                                    color: Colors.grey.withOpacity(0.7),
-                                    spreadRadius: 0,
-                                    blurRadius: 5.0,
-                                    offset: Offset(0,5)
-                                )],
+                              boxShadow: [BoxShadow(
+                                  color: Colors.grey.withOpacity(0.7),
+                                  spreadRadius: 0,
+                                  blurRadius: 5.0,
+                                  offset: Offset(0,5)
+                              )],
                               //color: Colors.green,
                               image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(documentSnapshot['menu_img'])
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(documentSnapshot['menu_img'])
                               )
-                            ),
                           ),
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: Container(
-                              margin: EdgeInsets.only(top: 5,right: 5),
-                              height: 50,
-                              width: 50,
-                              child: IconButton(
-                                icon: Stack(
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 5,right: 5),
+                            height: 50,
+                            width: 50,
+                            child: IconButton(
+                              icon: Stack(
                                   alignment: Alignment.center,
                                   children: [
                                     Image.asset(
@@ -87,47 +85,47 @@ class _MenuListViewState extends State<MenuListView> {
                                       fit: BoxFit.fill,
                                     ),
                                   ]
-                                ),
-                                onPressed: (){
-
-                                },
                               ),
+                              onPressed: (){
+
+                              },
                             ),
                           ),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Container(
-                               alignment: Alignment.bottomLeft,
-                              height: 50,
-                              margin: EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.only(bottomRight: Radius.circular(20)),
-                                  color: Colors.white,
-                                  boxShadow: [BoxShadow(
-                                      color: Colors.grey.withOpacity(0.7),
-                                      spreadRadius: 0,
-                                      blurRadius: 5.0,
-                                      offset: Offset(0,5)
-                                  )]
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Text(
-                                      brand_name,
-                                    style: TextStyle(
+                        ),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            alignment: Alignment.bottomLeft,
+                            height: 50,
+                            margin: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(bottomRight: Radius.circular(20)),
+                                color: Colors.white,
+                                boxShadow: [BoxShadow(
+                                    color: Colors.grey.withOpacity(0.7),
+                                    spreadRadius: 0,
+                                    blurRadius: 5.0,
+                                    offset: Offset(0,5)
+                                )]
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Text(
+                                  brand_name,
+                                  style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.grey
-                                    ),
                                   ),
-                                  Text(documentSnapshot.id)],
-                              ),
+                                ),
+                                Text(documentSnapshot.id)],
                             ),
-                          )
-                        ],
-                      ),
+                          ),
+                        )
+                      ],
                     ),
+                  ),
                 );
               },
 
@@ -139,5 +137,4 @@ class _MenuListViewState extends State<MenuListView> {
       },
     );
   }
-
 }

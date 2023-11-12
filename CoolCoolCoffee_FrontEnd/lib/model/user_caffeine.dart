@@ -6,6 +6,7 @@ class UserCaffeine{
   final String drinkTime;
   final String menuId;
   final String brand;
+  final String menuImg;
   final String menuSize;
   final num shotAdded;
   final num caffeineContent;
@@ -15,6 +16,7 @@ class UserCaffeine{
     required this.drinkTime,
     required this.menuId,
     required this.brand,
+    required this.menuImg,
     required this.menuSize,
     required this.shotAdded,
     required this.caffeineContent,
@@ -25,6 +27,7 @@ class UserCaffeine{
       'drink_time':drinkTime,
       'menu_id':menuId,
       'brand':brand,
+      'menu_img':menuImg,
       'menu_size':menuSize,
       'shot_added':shotAdded,
       'caffeine_content':caffeineContent,
@@ -37,6 +40,7 @@ class UserCaffeine{
       drinkTime: map['drink_time'],
       menuId:  map['menu_id'],
       brand:  map['brand'],
+      menuImg: map['menu_img'],
       menuSize:  map['menu_size'],
       shotAdded:  map['shot_added'],
       caffeineContent:  map['caffeine_content']
@@ -49,6 +53,7 @@ class UserCaffeine{
         drinkTime: map['drink_time'],
         menuId: map['menu_id'],
         brand: map['brand'],
+        menuImg: map['menu_img'],
         menuSize: map['menu_size'],
         shotAdded: map['shot_added'],
         caffeineContent: map['caffeine_content']
@@ -60,6 +65,7 @@ class UserCaffeine{
         drinkTime: doc['drink_time'],
         menuId: doc['menu_id'],
         brand: doc['brand'],
+        menuImg: doc['menu_img'],
         menuSize: doc['menu_size'],
         shotAdded: doc['shot_added'],
         caffeineContent: doc['caffeine_content']

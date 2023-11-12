@@ -19,8 +19,8 @@ class UserCaffeineService {
     }
   }
   //READ
-  Future<DocumentSnapshot<Map<String, dynamic>>> getUserCaffeine(String date, UserCaffeine userCaffeine) async{
-      var wait = await userCaffeineCollection.doc(date).get();
+  Future<DocumentReference<Map<String, dynamic>>> getUserCaffeine(String date) async{
+      var wait = await userCaffeineCollection.doc(date);
       return wait;
   }
   //Delete

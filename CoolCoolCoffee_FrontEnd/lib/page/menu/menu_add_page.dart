@@ -195,7 +195,7 @@ class _MenuAddPageState extends State<MenuAddPage> {
                               DateFormat timeFormatter = DateFormat('HH:mm:ss');
                               String today = dayFormatter.format(now);
                               String time = timeFormatter.format(now);
-                              userCaffeineService.addNewUserCaffeine(today, UserCaffeine(drinkTime: time, menuId: _menu.id, brand: _brand, menuSize: _size, shotAdded: 0, caffeineContent: _caffeine));
+                              userCaffeineService.addNewUserCaffeine(today, UserCaffeine(drinkTime: time, menuId: _menu.id, brand: _brand, menuSize: _size, shotAdded: 0, caffeineContent: _caffeine, menuImg: _menu['menu_img']));
                               Navigator.popUntil(context, (route) => route.isFirst);
                             },
                             child: Text(
