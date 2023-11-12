@@ -12,8 +12,6 @@ class DrinkListWidget extends StatefulWidget {
 
 class _DrinkListWidgetState extends State<DrinkListWidget> {
 
-  String resultText = '';
-
   @override
   Widget build(BuildContext context){
     return Column(
@@ -70,53 +68,9 @@ class _DrinkListWidgetState extends State<DrinkListWidget> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Column(
-              children: [
-                SizedBox(height: 20,),
-                ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      await HealthConnectFactory.installHealthConnect();
-                      resultText = 'Install activity started';
-                    } catch (e) {
-                      resultText = e.toString();
-                    }
-                    _updateResultText();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.brown[300],
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: const Text('헬스 커넥트 다운'),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      await HealthConnectFactory.openHealthConnectSettings();
-                      resultText = 'Settings activity started';
-                    } catch (e) {
-                      resultText = e.toString();
-                    }
-                    _updateResultText();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.brown[300],
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: const Text('설정'),
-                ),
-              ],
-            ),
           ),
         ),
       ],
     );
-  }
-  void _updateResultText() {
-    setState(() {});
   }
 }

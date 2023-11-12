@@ -4,6 +4,7 @@ import 'package:coolcoolcoffee_front/page/login/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_health_connect/flutter_health_connect.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
@@ -14,7 +15,7 @@ class MyPage extends StatefulWidget {
 
 class _MyPageState extends State<MyPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
+  String resultText = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,11 +40,50 @@ class _MyPageState extends State<MyPage> {
                         ));
                     },
                     child: Text('로그아웃')),
+                SizedBox(height: 20,),
+                ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      await HealthConnectFactory.installHealthConnect();
+                      resultText = 'Install activity started';
+                    } catch (e) {
+                      resultText = e.toString();
+                    }
+                    _updateResultText();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.brown[300],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text('헬스 커넥트 다운'),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      await HealthConnectFactory.openHealthConnectSettings();
+                      resultText = 'Settings activity started';
+                    } catch (e) {
+                      resultText = e.toString();
+                    }
+                    _updateResultText();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.brown[300],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text('설정'),
+                ),
               ],
             ),
           ),
         )
     );
-
+  }
+  void _updateResultText() {
+    setState(() {});
   }
 }
