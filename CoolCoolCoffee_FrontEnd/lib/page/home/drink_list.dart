@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_health_connect/flutter_health_connect.dart';
 
+import '../menu/menu_page.dart';
+
 class DrinkListWidget extends StatefulWidget {
   const DrinkListWidget({Key? key}) : super(key: key);
 
@@ -25,7 +27,9 @@ class _DrinkListWidgetState extends State<DrinkListWidget> {
               ),
             ),
             ElevatedButton(
-              onPressed: (){},
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPage()));
+              },
                 style: ElevatedButton.styleFrom(
                   primary: Colors.brown.withOpacity(0.2),
                   minimumSize: Size(20, 20),

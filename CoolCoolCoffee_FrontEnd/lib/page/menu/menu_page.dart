@@ -1,4 +1,5 @@
 
+import 'package:coolcoolcoffee_front/page/menu/menu_list_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -7,31 +8,60 @@ import 'camera_button.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
-
   @override
   State<MenuPage> createState() => _MenuPageState();
 }
 
 class _MenuPageState extends State<MenuPage> {
+  String _brand = '메가커피';
+  _changeBrandCallback(String brand) => setState((){
+    _brand = brand;
+  });
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         leading: IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+              Icons.arrow_back,
+            color: Colors.black,
+          ),
         ),
         centerTitle: true,
-        title: Text("음료 검색하기"),
+        title: Text(
+            _brand,
+          style: TextStyle(
+            color: Colors.black
+          ),
+        ),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.star))
+          FractionallySizedBox(
+            heightFactor: 0.7,
+            child: IconButton(
+              onPressed: () {},
+              icon: Image.asset(
+                "assets/star_unfilled_with_outer.png",
+                fit: BoxFit.fill,
+              ),
+            ),
+          )
         ],
-        /*bottom: IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.star),
-        ),*/
       ),
-      body:BrandListView(),
+      body:Column(
+        children: [
+          Container(height: 20,),
+          Expanded(child: BrandListView(brandCallback: _changeBrandCallback,)),
+          Expanded(
+            flex: 9,
+            child: MenuListView(brandName: _brand,)
+          )
+        ],
+      ),
       floatingActionButton: CameraButton(),
     );
   }

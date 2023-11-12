@@ -4,6 +4,8 @@ import 'caffeine_left.dart';
 import 'drink_list.dart';
 import 'clock.dart';
 
+import '../menu/menu_page.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -30,16 +32,16 @@ class _HomePageState extends State<HomePage> {
         toolbarHeight: 50,
         iconTheme: IconThemeData(color: Colors.white),
     ),
-    body: Column(
-      children: [
-        SizedBox(height: 10),
-        ClockWidget(),
-        SizedBox(height: 30),
-        CaffeineLeftWidget(),
-        SizedBox(height: 20),
-        DrinkListWidget()
-      ],
-    )
+      body: Column(
+        children: [
+          SizedBox(height: 10),
+          ClockWidget(),
+          SizedBox(height: 30),
+          CaffeineLeftWidget(),
+          SizedBox(height: 20),
+          DrinkListWidget()
+        ],
+      )
     );
   }
 }

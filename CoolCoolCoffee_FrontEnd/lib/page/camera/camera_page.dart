@@ -55,13 +55,13 @@ class _CameraPageState extends State<CameraPage> {
     engScannedText = "";
     for (TextBlock block in engRecognizedText.blocks) {
       for (TextLine line in block.lines) {
-        engScannedText = engScannedText + line.text + "\n";
+          engScannedText = engScannedText + line.text + "\n";
       }
     }
     korScannedText = "";
     for (TextBlock block in korRecognizedText.blocks) {
       for (TextLine line in block.lines) {
-        korScannedText = korScannedText + line.text + "\n";
+          korScannedText = korScannedText + line.text + "\n";
       }
     }
 
@@ -73,16 +73,19 @@ class _CameraPageState extends State<CameraPage> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(title: Text("${widget.cameraMode}")),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text("${widget.cameraGallery}"),
-            SizedBox(height: 30, width: double.infinity),
-            _buildPhotoArea(),
-            _buildKorRecognizedText(),
-            SizedBox(height: 20),
-            _buildButton(),
-          ],
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("${widget.cameraGallery}"),
+              SizedBox(height: 30, width: double.infinity),
+              _buildPhotoArea(),
+              _buildKorRecognizedText(),
+              SizedBox(height: 20),
+              _buildButton(),
+            ],
+          ),
         ),
       ),
     );
