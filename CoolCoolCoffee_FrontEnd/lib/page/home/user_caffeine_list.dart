@@ -88,7 +88,14 @@ class _UserCaffeineListState extends State<UserCaffeineList> {
                                         color: Colors.grey
                                     ),
                                   ),
-                                  Text(userCaffeine.menuId)],
+                                  Text(
+                                      userCaffeine.menuId,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                      ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  )],
                               ),
                             ),
                           ),
