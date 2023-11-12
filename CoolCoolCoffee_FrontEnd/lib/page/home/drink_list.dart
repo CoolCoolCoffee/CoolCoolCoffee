@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_health_connect/flutter_health_connect.dart';
 
 class DrinkListWidget extends StatefulWidget {
   const DrinkListWidget({Key? key}) : super(key: key);
@@ -8,15 +9,29 @@ class DrinkListWidget extends StatefulWidget {
 }
 
 class _DrinkListWidgetState extends State<DrinkListWidget> {
+
+  String resultText = '';
+
   @override
   Widget build(BuildContext context){
     return Column(
       children: [
-        Text(
-          "오늘 000님이 마신 카페인 음료",
-          style: TextStyle(
-            fontSize: 20
-          ),
+        Row(
+          children: [
+            Text(
+              "    오늘 000님이 마신 카페인 음료",
+              style: TextStyle(
+                  fontSize: 20
+              ),
+            ),
+            ElevatedButton(
+              onPressed: (){},
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.brown.withOpacity(0.2),
+                  minimumSize: Size(20, 20),
+                ),
+                child: Text('+')),
+          ],
         ),
         RichText(
             text : TextSpan(
@@ -51,9 +66,53 @@ class _DrinkListWidgetState extends State<DrinkListWidget> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
             ),
+            child: Column(
+              children: [
+                SizedBox(height: 20,),
+                ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      await HealthConnectFactory.installHealthConnect();
+                      resultText = 'Install activity started';
+                    } catch (e) {
+                      resultText = e.toString();
+                    }
+                    _updateResultText();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.brown[300],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text('헬스 커넥트 다운'),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      await HealthConnectFactory.openHealthConnectSettings();
+                      resultText = 'Settings activity started';
+                    } catch (e) {
+                      resultText = e.toString();
+                    }
+                    _updateResultText();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.brown[300],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text('설정'),
+                ),
+              ],
+            ),
           ),
         ),
       ],
     );
+  }
+  void _updateResultText() {
+    setState(() {});
   }
 }

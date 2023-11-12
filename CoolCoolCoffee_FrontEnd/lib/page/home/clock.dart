@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:analog_clock/analog_clock.dart';
+import 'package:flutter_health_connect/flutter_health_connect.dart';
 
 class ClockWidget extends StatefulWidget {
   const ClockWidget({Key? key}) : super(key: key);
@@ -12,6 +13,8 @@ class _ClockWidgetState extends State<ClockWidget>{
 
   String sleepEnteredTime = '';
   String wakeEnteredTime = '';
+
+  String resultText = '';
 
   @override
   Widget build(BuildContext context){
@@ -101,59 +104,64 @@ class _ClockWidgetState extends State<ClockWidget>{
           ],
         ),
         SizedBox(height: 10),
-        Container(
-          height: 250,
-          child: AnalogClock(
-            decoration: BoxDecoration(
-                border: Border.all(width: 2.0, color: Colors.black),
-                color: Colors.transparent,
-                shape: BoxShape.circle
-            ),
-            width: 250,
-            isLive: true,
-            hourHandColor: Colors.black,
-            minuteHandColor: Colors.black,
-            showSecondHand: true,
-            numberColor: Colors.black87,
-            showNumbers: true,
-            showAllNumbers: true,
-            textScaleFactor: 1.4,
-            showTicks: true,
-            showDigitalClock: false,
-            datetime: DateTime.now(),
-          ),
-        ),
-        // ClipRRect(
-        //   borderRadius: BorderRadius.circular(150),
-        //   child: Container(
-        //     width: 250,
-        //     height: 250,
-        //     color: Colors.brown.withOpacity(0.6),
-        //     child: Center(
-        //       child: Column(
-        //         mainAxisAlignment: MainAxisAlignment.center,
-        //         children: [
-        //           Text(
-        //             'Sleep: $sleepEnteredTime',
-        //             style: TextStyle(
-        //               color: Colors.white,
-        //               fontSize: 18,
-        //             ),
-        //           ),
-        //           Text(
-        //             'Wake: $wakeEnteredTime',
-        //             style: TextStyle(
-        //               color: Colors.white,
-        //               fontSize: 18,
-        //             ),
-        //           ),
-        //         ],
-        //       ),
+        // Container(
+        //   height: 250,
+        //   child: AnalogClock(
+        //     decoration: BoxDecoration(
+        //         border: Border.all(width: 2.0, color: Colors.black),
+        //         color: Colors.transparent,
+        //         shape: BoxShape.circle
         //     ),
+        //     width: 250,
+        //     isLive: true,
+        //     hourHandColor: Colors.black,
+        //     minuteHandColor: Colors.black,
+        //     showSecondHand: true,
+        //     numberColor: Colors.black87,
+        //     showNumbers: true,
+        //     showAllNumbers: true,
+        //     textScaleFactor: 1.4,
+        //     showTicks: true,
+        //     showDigitalClock: false,
+        //     datetime: DateTime.now(),
         //   ),
         // ),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(150),
+          child: Container(
+            width: 250,
+            height: 250,
+            color: Colors.brown.withOpacity(0.6),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '취침 시간\n $sleepEnteredTime',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                  ),
+                  SizedBox(height: 10,),
+                  Text(
+                    '기상 시간\n $wakeEnteredTime',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ],
     );
+  }
+
+  void _updateResultText() {
+    setState(() {});
   }
 
 
@@ -212,7 +220,7 @@ class _ClockWidgetState extends State<ClockWidget>{
                       ),
                     ),
                     Text(
-                      '  :  ',
+                      ' : ',
                       style: TextStyle(fontSize: 20),
                     ),
                     Container(
@@ -276,7 +284,7 @@ class _ClockWidgetState extends State<ClockWidget>{
                       ),
                     ),
                     Text(
-                      '  :  ',
+                      ' : ',
                       style: TextStyle(fontSize: 20),
                     ),
                     // Minutes TextField
@@ -340,7 +348,7 @@ class _ClockWidgetState extends State<ClockWidget>{
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                minimumSize: Size(60, 30),
+                minimumSize: Size(60, 40),
               ),
             ),
             TextButton(
@@ -376,7 +384,7 @@ class _ClockWidgetState extends State<ClockWidget>{
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10), // Adjust the value to change the roundness
                 ),
-                minimumSize: Size(60, 30),// Change this color to your desired background color
+                minimumSize: Size(60, 40),// Change this color to your desired background color
               ),
             ),
           ],
