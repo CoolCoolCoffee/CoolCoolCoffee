@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 
 
 class SignUpThirdPage extends StatefulWidget {
-  const SignUpThirdPage({Key? key,}) : super(key: key);
+  final String userName;
+  final int userAge;
+  final String bedTime;
+  final String wakeTime;
+  final String goodSleepTime;
+
+  const SignUpThirdPage({Key? key, required this.userName, required this.userAge, required this.bedTime, required this.wakeTime, required this.goodSleepTime,}) : super(key: key);
 
   @override
   State<SignUpThirdPage> createState() => _UserFormState();
@@ -64,10 +70,13 @@ class _UserFormState extends State<SignUpThirdPage> {
         title: Text('마지막 페이지'),
       ),
       body: Center(
-        child: Row(
+        child: Column(
           children: [
-            Text('사용자 이름 : '),
-            Text('사용자 나이 : '),
+            Text('사용자 이름 : ${widget.userName}'),
+            Text('사용자 나이 : ${widget.userAge}'),
+            Text('취침 시간 : ${widget.bedTime}'),
+            Text('기상 시간 : ${widget.wakeTime}'),
+            Text('적정 수면 시간 : ${widget.goodSleepTime}'),
           ],
         ),
       ),
