@@ -1,6 +1,7 @@
 import 'package:coolcoolcoffee_front/page/camera/app_capture.dart';
 import 'package:coolcoolcoffee_front/page/login/login_page.dart';
 import 'package:coolcoolcoffee_front/page_state/page_state.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'firebase_options.dart';
@@ -34,7 +35,16 @@ class CoolCoolCoffee extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       //theme: ThemeData(primarySwatch: ),
-      home: PageStates(),
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (ctx, userSnapshot) {
+          if(userSnapshot.hasData && userSnapshot.data != null ){
+            return PageStates();
+          } else{
+            return LoginPage();
+          }
+        },
+      ),
     );
   }
 }

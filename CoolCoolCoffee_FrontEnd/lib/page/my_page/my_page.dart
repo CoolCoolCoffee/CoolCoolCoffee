@@ -33,11 +33,11 @@ class _MyPageState extends State<MyPage> {
                 ElevatedButton(
                     onPressed: (){
                       _auth.signOut();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => LoginPage(),
-                        ));
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //       builder: (context) => LoginPage(),
+                      //   ));
                     },
                     child: Text('로그아웃')),
                 SizedBox(height: 20,),
