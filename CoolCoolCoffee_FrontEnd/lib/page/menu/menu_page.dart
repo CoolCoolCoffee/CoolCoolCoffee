@@ -1,5 +1,6 @@
 
 import 'package:coolcoolcoffee_front/page/menu/menu_list_view.dart';
+import 'package:coolcoolcoffee_front/page/menu/star_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -43,7 +44,10 @@ class _MenuPageState extends State<MenuPage> {
           FractionallySizedBox(
             heightFactor: 0.7,
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (
+                    context) =>StarPage()));
+              },
               icon: Image.asset(
                 "assets/star_unfilled_with_outer.png",
                 fit: BoxFit.fill,
@@ -58,7 +62,7 @@ class _MenuPageState extends State<MenuPage> {
           Expanded(child: BrandListView(brandCallback: _changeBrandCallback,)),
           Expanded(
             flex: 9,
-            child: MenuListView(brandName: _brand,)
+            child: MenuListView(brandName: _brand, callback: _changeBrandCallback,)
           )
         ],
       ),

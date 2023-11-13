@@ -1,30 +1,22 @@
+import 'package:coolcoolcoffee_front/model/user_favorite_drink.dart';
+import 'package:coolcoolcoffee_front/service/user_favorite_drink_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class StarIconButton extends StatelessWidget {
   final bool isStared;
-  const StarIconButton({super.key, required this.isStared});
+  final int index;
+  final Function callback;
+  final UserFavoriteDrink userFavoriteDrink;
+  const StarIconButton({super.key, required this.isStared, required this.callback, required this.index, required this.userFavoriteDrink});
 
   @override
   Widget build(BuildContext context) {
-    print("$isStared");
     return IconButton(
       icon: Stack(
           alignment: Alignment.center,
           children: [
-            isStared?
-            Image.asset(
-              "assets/filled_star.png",
-              width: 20,
-              height: 20,
-              fit: BoxFit.fill,
-            ):
-            Image.asset(
-              "assets/star_unfilled_without_outer.png",
-              width: 20,
-              height: 20,
-              fit: BoxFit.fill,
-            ),
+            isStared? _filledStarImg():_unfilledStarImg(),
             Image.asset(
               "assets/star_unfilled_with_outer.png",
               width: 20,
@@ -34,7 +26,31 @@ class StarIconButton extends StatelessWidget {
           ]
       ),
       onPressed: (){
+        if(isStared){
+          UserFavoriteDrinkService().deleteUserFavoriteDrink(userFavoriteDrink);
+        }else{
+          UserFavoriteDrinkService().addNewUserFavoriteDrink(userFavoriteDrink);
+        }
+        Future.delayed(Duration(seconds: 1));
+        callback(!isStared, index);
       },
+    );
+  }
+
+  Widget _filledStarImg(){
+    return Image.asset(
+      "assets/filled_star.png",
+      width: 20,
+      height: 20,
+      fit: BoxFit.fill,
+    );
+  }
+  Widget _unfilledStarImg(){
+    return Image.asset(
+      "assets/star_unfilled_without_outer.png",
+      width: 20,
+      height: 20,
+      fit: BoxFit.fill,
     );
   }
 }
