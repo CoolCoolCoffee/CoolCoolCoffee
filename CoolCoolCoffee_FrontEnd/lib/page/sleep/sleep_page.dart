@@ -1,3 +1,4 @@
+import 'package:coolcoolcoffee_front/page/sleep/calendar_drink_list.dart';
 import 'package:flutter/material.dart';
 import 'calendar.dart';
 import 'sleep_condition.dart';
@@ -17,12 +18,16 @@ class _SleepPageState extends State<SleepPage> {
   DateTime? selectedDay;
   String? _sleepTime;
   String? _wakeTime;
+  DateTime today = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     if (selectedDay == null) {
       selectedDay = DateTime.now();
     }
+    print(today);
+    String selecteddate = selectedDay!.toLocal().toIso8601String().split('T')[0];
+    String todaydate = today.toLocal().toIso8601String().split('T')[0];
 
     return Scaffold(
       appBar: AppBar(
@@ -77,7 +82,6 @@ class _SleepPageState extends State<SleepPage> {
             },
           ),
           Container(
-            //color: Color(0xFFD0B89E),
             color: Colors.white,
             child: Column(
               children: [
@@ -86,14 +90,18 @@ class _SleepPageState extends State<SleepPage> {
                   sleepTime: _sleepTime,
                   wakeTime: _wakeTime,
                 ),
-                //SizedBox(height: 15),
-                SleepConditionWidget(
-                  onConditionSelected: (int sleepLevel) {
-                    setState(() {
-                      sleepCondition = sleepLevel;
-                    });
-                  },
-                ),
+                if (selecteddate == todaydate)
+                  SleepConditionWidget(
+                    onConditionSelected: (int sleepLevel) {
+                      setState(() {
+                        sleepCondition = sleepLevel;
+                      });
+                    },
+                  )
+                else
+                  CalendarDrinkListWidget(
+                    selectedDay: selectedDay!,
+                  ),
               ],
             ),
           ),
