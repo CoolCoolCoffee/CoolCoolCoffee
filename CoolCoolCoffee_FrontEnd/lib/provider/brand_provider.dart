@@ -1,1 +1,1 @@
-class BrandProvider extends
+//class BrandProvider extends

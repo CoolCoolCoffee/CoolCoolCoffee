@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_health_connect/flutter_health_connect.dart';
+import 'package:flutter_health_connect/flutter_health_connect.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
@@ -14,8 +15,25 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  List<HealthConnectDataType> types = [
+    // HealthConnectDataType.Steps,
+    // HealthConnectDataType.ExerciseSession,
+    // HealthConnectDataType.HeartRate,
+    HealthConnectDataType.SleepSession,
+    // HealthConnectDataType.OxygenSaturation,
+    // HealthConnectDataType.RespiratoryRate,
+  ];
+
+  bool readOnly = true;
   String resultText = '';
+  String resultText_start = '';
+  String resultText_end = '';
+  String resultText_start_real = '';
+  String resultText_end_real = '';
+
+  String token = "";
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,6 +59,21 @@ class _MyPageState extends State<MyPage> {
                     },
                     child: Text('로그아웃')),
                 SizedBox(height: 20,),
+                ElevatedButton(
+                  onPressed: () async {
+                    try {
+                      var result = await HealthConnectFactory.requestPermissions(
+                        types,
+                        readOnly: readOnly,
+                      );
+                      resultText = 'requestPermissions: $result';
+                    } catch (e) {
+                      resultText = e.toString();
+                    }
+                    _updateResultText();
+                  },
+                  child: const Text('Request Permissions'),
+                ),
                 ElevatedButton(
                   onPressed: () async {
                     try {

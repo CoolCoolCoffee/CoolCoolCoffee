@@ -89,6 +89,7 @@ class _MyAppState extends State<MyApp> {
                 var result = await HealthConnectFactory.isApiSupported();
                 resultText = 'isApiSupported: $result';
                 _updateResultText();
+                print(resultText);
               },
               child: const Text('isApiSupported'),
             ),
@@ -192,6 +193,7 @@ class _MyAppState extends State<MyApp> {
                   }
                   await Future.wait(requests);
                   resultText = '$typePoints';
+                  print(resultText);
                   // Extract epochSecond from startTime
                   var startTimeEpochSecond_start = typePoints['SleepSession']['records'][0]['startTime']['epochSecond'];
                   resultText_start = startTimeEpochSecond_start.toString();
@@ -205,7 +207,7 @@ class _MyAppState extends State<MyApp> {
                   resultText = e.toString();
                 }
                 _updateResultText();
-                //print(resultText);
+                print(resultText);
                 print(resultText_start_real);
                 print(resultText_end_real);
 
@@ -214,7 +216,7 @@ class _MyAppState extends State<MyApp> {
               },
               child: const Text('Get Record'),
             ),
-            //Text(resultText),
+            Text(resultText),
             Text(resultText_start_real),
             Text(resultText_end_real),
           ],

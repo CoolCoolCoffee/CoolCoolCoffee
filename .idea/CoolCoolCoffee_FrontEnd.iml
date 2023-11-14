@@ -33,6 +33,9 @@
       <excludeFolder url="file://$MODULE_DIR$/coolcoolcoffee_frontend/ios/.symlinks/plugins/cloud_firestore/example/build" />
       <excludeFolder url="file://$MODULE_DIR$/coolcoolcoffee_frontend/ios/.symlinks/plugins/cloud_firestore/example/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/coolcoolcoffee_frontend/ios/.symlinks/plugins/cloud_firestore/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/CoolCoolCoffee_FrontEnd/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/CoolCoolCoffee_FrontEnd/build" />
+      <excludeFolder url="file://$MODULE_DIR$/CoolCoolCoffee_FrontEnd/.dart_tool" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
