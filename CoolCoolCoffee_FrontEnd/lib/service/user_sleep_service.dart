@@ -33,6 +33,50 @@ class UserSleepService{
     }
   }
 
+  Future<String?> getSleepTime(String date) async {
+    try {
+      DocumentSnapshot<
+          Map<String, dynamic>> snapshot = await userSleepCollection.doc(date)
+          .get();
+      if (snapshot.exists) {
+        //print("tlqkf : $snapshot");
+        var sleepTime = snapshot.data()?['sleep_time'];
+        if (sleepTime is String) {
+          return sleepTime;
+        } else {
+          return null;
+        }
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error getting sleep time: $e');
+      return null;
+    }
+  }
+
+  Future<String?> getWakeTime(String date) async {
+    try {
+      DocumentSnapshot<
+          Map<String, dynamic>> snapshot = await userSleepCollection.doc(date)
+          .get();
+      if (snapshot.exists) {
+        //print("tlqkf : $snapshot");
+        var wakeTime = snapshot.data()?['wake_time'];
+        if (wakeTime is String) {
+          return wakeTime;
+        } else {
+          return null;
+        }
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Error getting wake time: $e');
+      return null;
+    }
+  }
+
   // void printAllDocumentIds() async {
   //   try {
   //     QuerySnapshot<Map<String, dynamic>> querySnapshot =

@@ -1,29 +1,35 @@
+// sleep_info.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_health_connect/flutter_health_connect.dart';
 import 'package:timezone/timezone.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:intl/intl.dart';
+import 'package:coolcoolcoffee_front/service/user_sleep_service.dart';
 
 class SleepInfoWidget extends StatefulWidget {
-  const SleepInfoWidget({Key? key}) : super(key: key);
+  final DateTime selectedDay;
+  final String? sleepTime;
+  final String? wakeTime;
+  const SleepInfoWidget({Key? key, required this.selectedDay,this.sleepTime, this.wakeTime,}) : super(key: key);
 
   @override
   _SleepInfoWidgetState createState() => _SleepInfoWidgetState();
 }
 
 class _SleepInfoWidgetState extends State<SleepInfoWidget> {
-  List<HealthConnectDataType> types = [
-    HealthConnectDataType.SleepSession,
-  ];
-  bool readOnly = true;
-  String resultText = '';
+  final UserSleepService _userSleepService = UserSleepService();
   String resultText_start_real = '';
   String resultText_end_real = '';
 
-  String token = "";
+  List<HealthConnectDataType> types = [HealthConnectDataType.SleepSession];
 
   @override
   Widget build(BuildContext context) {
+    print('Selected Day: ${widget.selectedDay}');
+    print('SleepTime in initState: ${widget.sleepTime}');
+    print('Wake in initState: ${widget.wakeTime}');
+    resultText_start_real = widget.sleepTime ?? '';
+    resultText_end_real = widget.wakeTime ?? '';
     return Container(
       color: Colors.white,
       child: Center(
@@ -42,40 +48,47 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
                 SizedBox(width: 10),
                 ElevatedButton(
                   onPressed: () async {
+                    //_fetchSleepTimeAndUpdateState();
                     tz.initializeTimeZones();
-                    var startTime = DateTime.now().subtract(const Duration(days: 1));
-                    var endTime = DateTime.now();
+                    var startTime = widget.selectedDay.subtract(const Duration(days: 1));
+                    var endTime = widget.selectedDay;
                     try {
                       final requests = <Future>[];
                       Map<String, dynamic> typePoints = {};
                       for (var type in types) {
-                        requests.add(HealthConnectFactory.getRecord(
-                          type: type,
-                          startTime: startTime,
-                          endTime: endTime,
-                        ).then((value) => typePoints.addAll({type.name: value})));
+                        requests.add(
+                          HealthConnectFactory.getRecord(
+                            type: type,
+                            startTime: startTime,
+                            endTime: endTime,
+                          ).then(
+                                (value) => typePoints.addAll({type.name: value}),
+                          ),
+                        );
                       }
                       await Future.wait(requests);
-                      resultText = '$typePoints';
+                      final resultText = '$typePoints';
 
-                      var startTimeEpochSecond_start =
+                      final startTimeEpochSecond_start =
                       typePoints['SleepSession']['records'][0]['startTime']['epochSecond'];
-                      //resultText_start = startTimeEpochSecond_start.toString();
-                      var seoul = getLocation('Asia/Seoul');
-                      var resultText_start = TZDateTime.fromMillisecondsSinceEpoch(
-                          seoul, startTimeEpochSecond_start * 1000);
+                      final seoul = getLocation('Asia/Seoul');
+                      final resultText_start = TZDateTime.fromMillisecondsSinceEpoch(
+                        seoul,
+                        startTimeEpochSecond_start * 1000,
+                      );
 
-                      var startTimeEpochSecond_end =
+                      final startTimeEpochSecond_end =
                       typePoints['SleepSession']['records'][0]['endTime']['epochSecond'];
-                      //resultText_end = startTimeEpochSecond_end.toString();
-                      var resultText_end = TZDateTime.fromMillisecondsSinceEpoch(
-                          seoul, startTimeEpochSecond_end * 1000);
+                      final resultText_end = TZDateTime.fromMillisecondsSinceEpoch(
+                        seoul,
+                        startTimeEpochSecond_end * 1000,
+                      );
 
-                      var formatter = DateFormat('h:mm a');
+                      final formatter = DateFormat('h:mm a');
                       resultText_start_real = formatter.format(resultText_start);
                       resultText_end_real = formatter.format(resultText_end);
                     } catch (e) {
-                      resultText = e.toString();
+                      print(e.toString());
                     }
                     _updateResultText();
                     print(resultText_start_real);
@@ -84,17 +97,16 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
                     setState(() {});
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.brown, // Change the button color here
+                    primary: Colors.brown,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0), // Change the button border radius here
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
-                    elevation: 5, // Change the button elevation (shadow) here
+                    elevation: 5,
                   ),
                   child: const Text('가져오기'),
                 ),
               ],
             ),
-            //SizedBox(height: 7),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -166,7 +178,7 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
                 ),
               ],
             ),
-          ], // Closing bracket for Column children
+          ],
         ),
       ),
     );

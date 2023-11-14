@@ -10,7 +10,9 @@ class Event {
 }
 
 class CalendarWidget extends StatefulWidget {
-  const CalendarWidget({Key? key}) : super(key: key);
+  final Function(DateTime) onDaySelected;
+
+  const CalendarWidget({Key? key, required this.onDaySelected}) : super(key: key);
 
   @override
   _CalendarWidgetState createState() => _CalendarWidgetState();
@@ -23,6 +25,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   final UserSleepService _userSleepService = UserSleepService();
   int? _sleepQualityScore;
+  String? _sleepTime;
+  String? _wakeTime;
 
   @override
   void initState() {
@@ -54,6 +58,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             setState(() {
               _selectedDay = selectedDay;
               _focusedDay = focusedDay;
+              widget.onDaySelected(selectedDay); // Callback function
             });
           },
           onPageChanged: (focusedDay) {
@@ -95,14 +100,44 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                 future: _userSleepService.getSleepQualityScore(_selectedDay!.toLocal().toIso8601String().split('T')[0]),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator(); // 로딩 중일 때 표시할 위젯
+                    return Container(); // 로딩 중일 때 표시할 위젯
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
                     _sleepQualityScore = snapshot.data;
                     //_userSleepService.printAllDocumentIds();
-                    print(_selectedDay!.toLocal().toIso8601String().split('T')[0]);
-                    return Text('피곤도: $_sleepQualityScore'); // 피곤도를 표시하는 위젯
+                    //print(_selectedDay!.toLocal().toIso8601String().split('T')[0]);
+                    return Container(); // 피곤도를 표시하는 위젯
+                  }
+                },
+              ),
+              FutureBuilder<String?>(
+                future: _userSleepService.getSleepTime(_selectedDay!.toLocal().toIso8601String().split('T')[0]),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Container(); // 로딩 중일 때 표시할 위젯
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    _sleepTime = snapshot.data;
+                    //_userSleepService.printAllDocumentIds();
+                    //print("sleep time $_sleepTime");
+                    return Container(); // 피곤도를 표시하는 위젯
+                  }
+                },
+              ),
+              FutureBuilder<String?>(
+                future: _userSleepService.getWakeTime(_selectedDay!.toLocal().toIso8601String().split('T')[0]),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Container(); // 로딩 중일 때 표시할 위젯
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    _wakeTime = snapshot.data;
+                    //_userSleepService.printAllDocumentIds();
+                    //print("wake time $_wakeTime");
+                    return Container(); // 피곤도를 표시하는 위젯
                   }
                 },
               ),

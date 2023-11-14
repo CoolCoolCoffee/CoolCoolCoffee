@@ -86,10 +86,10 @@ class _SleepConditionWidgetState extends State<SleepConditionWidget> {
               }),
             ),
           ),
-          Text(
-            'Sleep Condition: $selectedCondition',
-            style: TextStyle(fontSize: 16.0),
-          ),
+          // Text(
+          //   'Sleep Condition: $selectedCondition',
+          //   style: TextStyle(fontSize: 16.0),
+          // ),
         ],
       ),
     );
