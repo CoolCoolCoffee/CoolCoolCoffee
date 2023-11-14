@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coolcoolcoffee_front/service/user_sleep_service.dart';
 
 class Event {
   final DateTime date;
@@ -18,6 +20,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   Map<DateTime, int> dateColors = {};
+
+  final UserSleepService _userSleepService = UserSleepService();
+  int? _sleepQualityScore;
 
   @override
   void initState() {
@@ -79,9 +84,29 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         ),
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Text(
-            '${_selectedDay!.toLocal().toIso8601String().split('T')[0]}',
-            style: TextStyle(fontSize: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${_selectedDay!.toLocal().toIso8601String().split('T')[0]}',
+                style: TextStyle(fontSize: 16),
+              ),
+              FutureBuilder<int?>(
+                future: _userSleepService.getSleepQualityScore(_selectedDay!.toLocal().toIso8601String().split('T')[0]),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator(); // 로딩 중일 때 표시할 위젯
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    _sleepQualityScore = snapshot.data;
+                    //_userSleepService.printAllDocumentIds();
+                    print(_selectedDay!.toLocal().toIso8601String().split('T')[0]);
+                    return Text('피곤도: $_sleepQualityScore'); // 피곤도를 표시하는 위젯
+                  }
+                },
+              ),
+            ],
           ),
         ),
       ],
