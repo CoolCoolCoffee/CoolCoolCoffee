@@ -29,19 +29,19 @@ class _SignUpPageState extends State<SignUpPage> {
   String errorMessage = '';
 
   void _handleSignUp() async{
-    try{
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+
+      try{
+        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
           email: _email,
           password: _password,
-      );
-      print('사용자 회원가입 완료: ${userCredential.user!.email}');
+        );
+        print('사용자 회원가입 완료: ${userCredential.user!.email}');
 
-      await FirebaseFirestore.instance
-          .collection("Users")
-          .doc(userCredential.user!.uid)
-          .set({'app_access' : false})
-          .onError((error, stackTrace) => print('데이엍 추가 에러!'));
-
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userCredential.user!.uid)
+            .set({'app_access' : false})
+            .onError((error, stackTrace) => print('데이엍 추가 에러!'));
       // 왜 토스트 안 되냐 ㅡㅡ
       // Fluttertoast.showToast(
       //   msg: '회원가입이 완료되었습니다!',

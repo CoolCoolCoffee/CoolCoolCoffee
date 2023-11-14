@@ -16,17 +16,13 @@ class _UserFormState extends State<SignUpSecondPage> {
 
   TextEditingController _bedHourController = TextEditingController();
   TextEditingController _bedMinController = TextEditingController();
-  TextEditingController _wakeHourController = TextEditingController();
-  TextEditingController _wakeMinController = TextEditingController();
   TextEditingController _goodSleepHourController = TextEditingController();
   TextEditingController _goodSleepMinController = TextEditingController();
 
   late int bedHour; late int bedMin;
-  late int wakeHour; late int wakeMin;
   late int goodSleepHour; late int goodSleepMin;
 
   late String bedTime;
-  late String wakeTime;
   late String goodSleepTime;
 
   bool isAm1 = false; bool isPm1 = false;
@@ -45,22 +41,6 @@ class _UserFormState extends State<SignUpSecondPage> {
     });
   }
 
-  bool isAm2 = false; bool isPm2 = false;
-  late List<bool> isSelected2 = [isAm1, isPm1];
-
-  void toggleSelect2(value) {
-    if(value == 0){
-      isAm2 = true;
-      isPm2 = false;
-    } else{
-      isAm2 = false;
-      isPm2 = true;
-    }
-    setState(() {
-      isSelected2 = [isAm2, isPm2];
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -70,8 +50,6 @@ class _UserFormState extends State<SignUpSecondPage> {
   void dispose() {
     _bedHourController.dispose();
     _bedMinController.dispose();
-    _wakeHourController.dispose();
-    _wakeMinController.dispose();
     _goodSleepHourController.dispose();
     _goodSleepMinController.dispose();
     super.dispose();
@@ -85,12 +63,6 @@ class _UserFormState extends State<SignUpSecondPage> {
       bedTime = '${(bedHour+12).toString()}:${bedMin.toString().padLeft(2,'0')}';
     }
 
-    if(isAm2 == true) {
-      wakeTime = '${wakeHour.toString()}:${wakeMin.toString().padLeft(2,'0')}';
-    } else if(isPm2 == true) {
-      wakeTime = '${(wakeHour+12).toString()}:${wakeMin.toString().padLeft(2,'0')}';
-    }
-
     goodSleepTime = '${goodSleepHour.toString()}:${goodSleepMin.toString().padLeft(2,'0')}';
 
     if(_formKey.currentState?.validate() ?? false) {
@@ -102,7 +74,6 @@ class _UserFormState extends State<SignUpSecondPage> {
           userName: widget.userName,
           userAge: widget.userAge,
           bedTime: bedTime!,
-          wakeTime: wakeTime!,
           goodSleepTime: goodSleepTime!,
         )),
       );
@@ -149,7 +120,7 @@ class _UserFormState extends State<SignUpSecondPage> {
               textInfo(),
               const SizedBox(height: 25,),
               Container(width: screenWidth*0.9, height: 1, color: Colors.grey.withOpacity(0.5)),
-              const SizedBox(height: 30,),
+              const SizedBox(height: 80,),
               Form(
                 key: _formKey,
                 child: Column(
@@ -250,106 +221,7 @@ class _UserFormState extends State<SignUpSecondPage> {
                             const SizedBox(width: 10,),
                           ],
                         ),
-                        const SizedBox(height: 40),
-
-                        // 평균 기상시간 입력 받는 위젯
-                        Column(
-                          children: [
-                            const Row(
-                              crossAxisAlignment: CrossAxisAlignment.baseline,
-                              textBaseline: TextBaseline.ideographic,
-                              children: [
-                                Text('평균 ', style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-                                Text('기상 ', style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue),),
-                                Text('시간을 알려주세요.', style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-                                SizedBox(width: 4),
-                              ],
-                            ),
-                            const SizedBox(height: 10),
-                            Row(
-                              children: [
-                                Column(
-                                  children: [
-                                    ToggleButtons(
-                                        direction: Axis.vertical,
-                                        isSelected: isSelected2,
-                                        onPressed: toggleSelect2,
-                                        children: const [
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: 10),
-                                            child: Text('AM', style: TextStyle(fontSize: 16),),),
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: 10),
-                                            child: Text('PM', style: TextStyle(fontSize: 16),),),
-                                        ]
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(width: 20,),
-                                // 취침 시간 '시'
-                                SizedBox(
-                                  width: 100,
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    controller: _wakeHourController,
-                                    decoration: const InputDecoration(
-                                      labelText: '시',
-                                      border: OutlineInputBorder(),
-                                    ),
-                                    validator: (value) {
-                                      if (value == null) {
-                                        return "필수입력란 입니다";
-                                      }else if (int.parse(value) < 1 || int.parse(value) > 12) {
-                                        return "잘못된 형식입니다";
-                                      }
-                                      return null;
-                                    },
-                                    onChanged: (value){
-                                      setState(() {
-                                        print('기상 시간 $value 시');
-                                        wakeHour = int.parse(value);
-                                      });
-                                    },
-                                  ),
-                                ),
-                                const SizedBox(width: 10,),
-                                const Text(':', style: TextStyle(fontSize: 30),),
-                                const SizedBox(width: 10,),
-                                // 취침 시간 '분'
-                                SizedBox(
-                                  width: 100,
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    controller: _wakeMinController,
-                                    decoration: const InputDecoration(
-                                      labelText: '분',
-                                      border: OutlineInputBorder(),
-                                    ),
-                                    validator: (value) {
-                                      if (value == null) {
-                                        return "필수입력란 입니다";
-                                      }else if (int.parse(value) < 0 || int.parse(value) > 60) {
-                                        return "잘못된 형식입니다";
-                                      }
-                                      return null;
-                                    },
-                                    onChanged: (value){
-                                      setState(() {
-                                        print('취침 시간 $value 분');
-                                        wakeMin = int.parse(value);
-                                      });
-                                    },
-                                  ),
-                                ),
-                                const SizedBox(width: 10,),
-                              ],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 40),
+                        const SizedBox(height: 60),
                         // 적정 수면 시간을 입력받는 위젯
                         Column(
                           children: [
@@ -367,7 +239,7 @@ class _UserFormState extends State<SignUpSecondPage> {
                             const SizedBox(height: 10),
                             Row(
                               children: [
-                                SizedBox(width: 50,),
+                                const SizedBox(width: 50,),
                                 // 취침 시간 '시'
                                 SizedBox(
                                   width: 100,
@@ -435,7 +307,7 @@ class _UserFormState extends State<SignUpSecondPage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(height: 100,),
               Center(
                 child: ElevatedButton(
                     onPressed: _onNextButtonPressed,
