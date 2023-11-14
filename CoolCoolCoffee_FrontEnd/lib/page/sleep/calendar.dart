@@ -92,10 +92,10 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '${_selectedDay!.toLocal().toIso8601String().split('T')[0]}',
-                style: TextStyle(fontSize: 16),
-              ),
+              // Text(
+              //   '${_selectedDay!.toLocal().toIso8601String().split('T')[0]}',
+              //   style: TextStyle(fontSize: 16),
+              // ),
               FutureBuilder<int?>(
                 future: _userSleepService.getSleepQualityScore(_selectedDay!.toLocal().toIso8601String().split('T')[0]),
                 builder: (context, snapshot) {

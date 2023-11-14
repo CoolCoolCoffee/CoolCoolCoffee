@@ -20,16 +20,23 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
   final UserSleepService _userSleepService = UserSleepService();
   String resultText_start_real = '';
   String resultText_end_real = '';
+  DateTime today = DateTime.now();
+  String selecteddate = '';
+  String todaydate = '';
 
   List<HealthConnectDataType> types = [HealthConnectDataType.SleepSession];
 
   @override
   Widget build(BuildContext context) {
+    String selecteddate = widget.selectedDay!.toLocal().toIso8601String().split('T')[0];
+    String todaydate = today.toLocal().toIso8601String().split('T')[0];
     print('Selected Day: ${widget.selectedDay}');
     print('SleepTime in initState: ${widget.sleepTime}');
     print('Wake in initState: ${widget.wakeTime}');
-    resultText_start_real = widget.sleepTime ?? '';
-    resultText_end_real = widget.wakeTime ?? '';
+    print('selecteddate $selecteddate');
+    print('todaydate $todaydate');
+    // resultText_start_real = widget.sleepTime ?? '';
+    // resultText_end_real = widget.wakeTime ?? '';
     return Container(
       color: Colors.white,
       child: Center(
@@ -133,7 +140,7 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
                       ),
                       SizedBox(height: 10),
                       Text(
-                        resultText_start_real,
+                        selecteddate == todaydate ? resultText_start_real : widget.sleepTime ?? '',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 23.0,
@@ -166,7 +173,7 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
                       ),
                       SizedBox(height: 10),
                       Text(
-                        resultText_end_real,
+                        selecteddate == todaydate ? resultText_end_real : widget.wakeTime ?? '',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 23.0,
