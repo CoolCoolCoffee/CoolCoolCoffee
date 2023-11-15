@@ -53,6 +53,7 @@ class _UserFormState extends State<SignUpFirstPage> {
     // double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      // backgroundColor: Colors.brown.withOpacity(0.1),
       appBar: AppBar(
         title: Text('첫 번째 페이지'),
       ),
