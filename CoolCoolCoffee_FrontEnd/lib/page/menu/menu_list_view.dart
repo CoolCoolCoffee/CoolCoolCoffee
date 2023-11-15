@@ -4,14 +4,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/model/user_favorite_drink.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_add_page.dart';
 import 'package:coolcoolcoffee_front/page/menu/star_icon_button.dart';
+import 'package:coolcoolcoffee_front/provider/star_provider.dart';
 import 'package:coolcoolcoffee_front/service/user_favorite_drink_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MenuListView extends StatefulWidget {
   final String brandName;
-  final Function callback;
-  const MenuListView({super.key, required this.brandName, required this.callback,});
+  const MenuListView({super.key, required this.brandName,});
 
   @override
   State<MenuListView> createState() => _MenuListViewState();
@@ -19,28 +20,21 @@ class MenuListView extends StatefulWidget {
 
 class _MenuListViewState extends State<MenuListView> {
   List<bool> _isStared = [];
-  late Function _callback;
-  @override
-  void initState() {
-    _callback = widget.callback;
-    super.initState();
-  }
   @override
   Widget build(BuildContext context) {
     String brand_name = widget.brandName;
     final CollectionReference _menu = FirebaseFirestore.instance.collection('Cafe_brand').doc(brand_name).collection('menus');
-    _isStared.clear();
 
     return FutureBuilder(
       future: UserFavoriteDrinkService().getUserFavoriteDrink(),
       builder:(context, snapshot){
         final userFavDrinkList = snapshot.data!['drink_list'];
-        print(userFavDrinkList);
         return StreamBuilder(
             stream: _menu.snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+              _isStared.clear();
               if (streamSnapshot.hasData) {
-                _isStared.clear();
+                //_isStared.clear();
                 return GridView.builder(
                   shrinkWrap: true,
                   itemCount: streamSnapshot.data!.docs.length,
@@ -59,7 +53,6 @@ class _MenuListViewState extends State<MenuListView> {
                         if ((list['brand'] == brand_name) &&
                             (list['menu_id'] == documentSnapshot.id)) {
                           _isStared.add(true);
-                          //print("${brand_name}  ${documentSnapshot.id}");
                         }
                       }
                     }
@@ -75,9 +68,7 @@ class _MenuListViewState extends State<MenuListView> {
                               size: '',
                               shot: '',)));
                       },
-                      child: //SingleChildScrollView(
-                      //scrollDirection: Axis.vertical,
-                      //child:
+                      child:
                       Container(
                         //color: Colors.blue,
                         child: Stack(
@@ -107,7 +98,8 @@ class _MenuListViewState extends State<MenuListView> {
                                 margin: EdgeInsets.only(top: 5, right: 5),
                                 height: 50,
                                 width: 50,
-                                child: //StarIconButton(isStared: _isStared[index], callback: _changeStaredCallback, index: index, userFavoriteDrink: userFavDrink,),
+                                child:
+                                //StarIconButton(isStared: _isStared[index], callback: _changeStaredCallback, index: index, userFavoriteDrink: userFavDrink,),
                                 IconButton(
                                   icon: Stack(
                                       alignment: Alignment.center,
@@ -134,12 +126,14 @@ class _MenuListViewState extends State<MenuListView> {
                                       ]
                                   ),
                                   onPressed: () {
-                                    if(_isStared[index]){
-                                      UserFavoriteDrinkService().deleteUserFavoriteDrink(userFavDrink);
-                                    }else{
-                                      UserFavoriteDrinkService().addNewUserFavoriteDrink(userFavDrink);
-                                    }
-                                    _callback(brand_name);
+                                    setState(() {
+                                      if(_isStared[index]){
+                                        UserFavoriteDrinkService().deleteUserFavoriteDrink(userFavDrink);
+                                        //_isStared[index] = !_isStared[index];
+                                      }else{
+                                        UserFavoriteDrinkService().addNewUserFavoriteDrink(userFavDrink);
+                                      }
+                                    });
                                   },
                                 ),
                               ),
@@ -187,7 +181,6 @@ class _MenuListViewState extends State<MenuListView> {
                       ),
                     );
                   },
-
                 );
               }
               else {

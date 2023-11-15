@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 
 class StarIconButton extends StatelessWidget {
   final bool isStared;
+/*
   final int index;
   final Function callback;
+
+ */
   final UserFavoriteDrink userFavoriteDrink;
-  const StarIconButton({super.key, required this.isStared, required this.callback, required this.index, required this.userFavoriteDrink});
+  const StarIconButton({super.key, required this.isStared, /*required this.callback, required this.index,*/ required this.userFavoriteDrink});
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +34,8 @@ class StarIconButton extends StatelessWidget {
         }else{
           UserFavoriteDrinkService().addNewUserFavoriteDrink(userFavoriteDrink);
         }
-        Future.delayed(Duration(seconds: 1));
-        callback(!isStared, index);
+        //Future.delayed(Duration(seconds: 1));
+        //callback(!isStared, index);
       },
     );
   }

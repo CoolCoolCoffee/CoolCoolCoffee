@@ -45,6 +45,7 @@ dependencies:
   #flutter_sparkline : ^0.1.0
   analog_clock: ^0.1.0
   flutter_riverpod: ^1.0.1
+  provider: ^6.1.1
   intl: ^0.18.1
   timer_builder: ^2.0.0
   firebase_auth: ^4.12.1

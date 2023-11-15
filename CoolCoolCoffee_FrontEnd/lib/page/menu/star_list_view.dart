@@ -4,6 +4,8 @@ import 'package:coolcoolcoffee_front/service/user_favorite_drink_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'menu_add_page.dart';
+
 class StarListView extends StatefulWidget {
   const StarListView({super.key});
 
@@ -12,6 +14,7 @@ class StarListView extends StatefulWidget {
 }
 
 class _StarListViewState extends State<StarListView> {
+
   @override
   Widget build(BuildContext context) {
     final UserFavoriteDrinkService userFavoriteDrinkService = UserFavoriteDrinkService();
@@ -32,16 +35,23 @@ class _StarListViewState extends State<StarListView> {
             ),
             itemBuilder: (context, index) {
               var temp = userFavoriteDrinkList['drink_list'][index];
+              var documentSnapshot;
+              var wait = FirebaseFirestore.instance.collection('Cafe_brand').doc(temp['brand']).collection('menus').doc(temp['menu_id']).snapshots();
+              wait.forEach((element) {documentSnapshot = element;});
               UserFavoriteDrink userFavDrink = UserFavoriteDrink(menuId: temp['menu_id'], brand: temp['brand'], menuImg: temp['menu_img']);
               return GestureDetector(
                 onTap: () {
-
+                  Navigator.push(context, MaterialPageRoute(builder: (
+                      context) =>
+                      MenuAddPage(menuSnapshot: documentSnapshot,
+                        brandName: temp['brand'],
+                        size: '',
+                        shot: '',)));
                 },
                 child: //SingleChildScrollView(
                 //scrollDirection: Axis.vertical,
                 //child:
                 Container(
-                  //color: Colors.blue,
                   child: Stack(
                     children: [
                       Container(
@@ -61,6 +71,37 @@ class _StarListViewState extends State<StarListView> {
                                 image: NetworkImage(
                                     userFavDrink.menuImg)
                             )
+                        ),
+                      ),Align(
+                        alignment: Alignment.topRight,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 5, right: 5),
+                          height: 50,
+                          width: 50,
+                          child:
+                          //StarIconButton(isStared: _isStared[index], callback: _changeStaredCallback, index: index, userFavoriteDrink: userFavDrink,),
+                          IconButton(
+                            icon: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Image.asset(
+                                    "assets/star_unfilled_without_outer.png",
+                                    width: 20,
+                                    height: 20,
+                                    fit: BoxFit.fill,
+                                  ),
+                                  Image.asset(
+                                    "assets/star_unfilled_with_outer.png",
+                                    width: 20,
+                                    height: 20,
+                                    fit: BoxFit.fill,
+                                  ),
+                                ]
+                            ),
+                            onPressed: () {
+                              UserFavoriteDrinkService().deleteUserFavoriteDrink(userFavDrink);
+                            },
+                          ),
                         ),
                       ),
                       Align(

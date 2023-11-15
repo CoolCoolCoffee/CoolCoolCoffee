@@ -62,7 +62,7 @@ class _MenuPageState extends State<MenuPage> {
           Expanded(child: BrandListView(brandCallback: _changeBrandCallback,)),
           Expanded(
             flex: 9,
-            child: MenuListView(brandName: _brand, callback: _changeBrandCallback,)
+            child: MenuListView(brandName: _brand,)
           )
         ],
       ),
