@@ -90,6 +90,7 @@ class _SleepPageState extends State<SleepPage> {
                   sleepTime: _sleepTime,
                   wakeTime: _wakeTime,
                 ),
+                SizedBox(height: 10),
                 if (selecteddate == todaydate)
                   SleepConditionWidget(
                     onConditionSelected: (int sleepLevel) {

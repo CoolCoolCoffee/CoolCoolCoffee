@@ -11,104 +11,87 @@ class SleepConditionWidget extends StatefulWidget {
 }
 
 class _SleepConditionWidgetState extends State<SleepConditionWidget> {
-  int selectedCondition = 1;
+  double selectedCondition = 5.0; // Default value
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      //color: Color(0xFFD0B89E),
       color: Colors.white,
       child: Column(
         children: [
-          Text(
-            '피곤도를 기록해주세요',
-            style: TextStyle(
-              fontSize: 15.0,
-              fontWeight: FontWeight.w500
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '피곤도를 기록해주세요',
+                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w500),
+              ),
+              SizedBox(width: 10),
+              ElevatedButton(
+                onPressed: () {
+                  // Call a function to save the selected condition
+                  saveSelectedCondition();
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.brown,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  elevation: 5,
+                ),
+                child: Text('저장'),
+              ),
+            ],
           ),
           Container(
+            width: 350,
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
             decoration: BoxDecoration(
-              color: Colors.white, // Light brown color
-              borderRadius: BorderRadius.circular(12.0), // Adjust the border radius as needed
+              border: Border.all(
+                color: Colors.brown, // Border color
+                width: 3.0, // Border width
+              ),
+              borderRadius: BorderRadius.circular(12.0), // Border radius
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(5, (index) {
-                return GestureDetector(
-                  onTap: () {
+            child: Column(
+              children: [
+                Slider(
+                  value: selectedCondition,
+                  min: 0,
+                  max: 10,
+                  divisions: 10,
+                  onChanged: (value) {
                     setState(() {
-                      selectedCondition = index + 1;
+                      selectedCondition = value;
                     });
-                    widget.onConditionSelected(selectedCondition);
+                    widget.onConditionSelected(selectedCondition.toInt());
                   },
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.all(9),
-                        width: 55,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: selectedCondition == index + 1
-                              ? Colors.brown
-                              : Colors.white,
-                          border: Border.all(
-                            color: Colors.brown,
-                            width: 3.0,
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            (index + 1).toString(),
-                            style: TextStyle(
-                              color: selectedCondition == index + 1
-                                  ? Colors.white
-                                  : Colors.brown,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      //SizedBox(height: 2),
-                      Text(
-                        getConditionLevel(index + 1),
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.brown,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                  activeColor: Colors.brown,
+                  inactiveColor: Colors.grey[300],
+                  thumbColor: Colors.brown,
+                ),
+                Text(
+                  getConditionLevel(selectedCondition.toInt()),
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.brown,
+                    fontWeight: FontWeight.bold,
                   ),
-                );
-              }),
+                ),
+              ],
             ),
           ),
-          // Text(
-          //   'Sleep Condition: $selectedCondition',
-          //   style: TextStyle(fontSize: 16.0),
-          // ),
         ],
       ),
     );
   }
 
+  void saveSelectedCondition() {
+    print('selectedCondition : $selectedCondition');
+    widget.onConditionSelected(selectedCondition.toInt());
+  }
+
   String getConditionLevel(int conditionLevel) {
-    switch (conditionLevel) {
-      case 1:
-        return '매우 피곤';
-      case 2:
-        return '조금 피곤';
-      case 3:
-        return '보통';
-      case 4:
-        return '개운';
-      case 5:
-        return '매우 개운';
-      default:
-        return '';
-    }
+    return conditionLevel.toString();
   }
 }
