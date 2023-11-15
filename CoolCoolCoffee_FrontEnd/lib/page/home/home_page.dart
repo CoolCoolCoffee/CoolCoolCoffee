@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.brown.withOpacity(0.1),
         appBar: AppBar(
-          title: Center(
+          title: const Center(
             child: Text(
               '홈 화면',
             style: TextStyle(

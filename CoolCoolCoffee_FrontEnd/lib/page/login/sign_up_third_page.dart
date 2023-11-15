@@ -110,8 +110,9 @@ class _UserFormState extends State<SignUpThirdPage> {
     // double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      // backgroundColor: Colors.brown.withOpacity(0.1),
       appBar: AppBar(
-        title: Text('마지막 페이지'),
+        title: const Text('마지막 페이지'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(32.0),

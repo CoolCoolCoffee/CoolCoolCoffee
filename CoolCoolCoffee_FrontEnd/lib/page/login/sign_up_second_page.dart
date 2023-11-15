@@ -107,6 +107,7 @@ class _UserFormState extends State<SignUpSecondPage> {
     // double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      // backgroundColor: Colors.brown.withOpacity(0.1),
       appBar: AppBar(
         title: const Text('두 번째 페이지'),
       ),
