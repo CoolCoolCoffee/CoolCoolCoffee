@@ -85,7 +85,7 @@ class _StarListViewState extends State<StarListView> {
                                 alignment: Alignment.center,
                                 children: [
                                   Image.asset(
-                                    "assets/star_unfilled_without_outer.png",
+                                    "assets/filled_star.png",
                                     width: 20,
                                     height: 20,
                                     fit: BoxFit.fill,
