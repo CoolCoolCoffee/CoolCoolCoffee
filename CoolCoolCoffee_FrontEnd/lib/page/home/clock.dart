@@ -312,7 +312,7 @@ class _ClockWidgetState extends State<ClockWidget>{
                 ],
               ),
             ),
-            SizedBox(width: 55),
+            //SizedBox(width: 55),
             ElevatedButton(
               onPressed: () {
                 _showEditPopup(context);

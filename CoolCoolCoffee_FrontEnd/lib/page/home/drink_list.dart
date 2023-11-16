@@ -20,7 +20,7 @@ class _DrinkListWidgetState extends State<DrinkListWidget> {
         Row(
           children: [
             Text(
-              "    오늘 000님이 마신 카페인 음료",
+              "    오늘 쿨쿨님이 마신 카페인 음료",
               style: TextStyle(
                   fontSize: 20
               ),
@@ -46,7 +46,7 @@ class _DrinkListWidgetState extends State<DrinkListWidget> {
                   ),
                 ),
                 TextSpan(
-                  text: "150mg ",
+                  text: "300mg ",
                   style: TextStyle(
                       color: Colors.orange
                   ),

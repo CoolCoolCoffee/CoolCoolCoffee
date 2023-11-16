@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           SizedBox(height: 10),
           ClockWidget(),
-          SizedBox(height: 30),
+          SizedBox(height: 10),
           CaffeineLeftWidget(),
           SizedBox(height: 20),
           DrinkListWidget()

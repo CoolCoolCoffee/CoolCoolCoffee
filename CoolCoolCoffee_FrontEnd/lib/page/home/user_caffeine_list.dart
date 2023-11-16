@@ -151,7 +151,7 @@ class _UserCaffeineListState extends State<UserCaffeineList> {
           }
         }
         else{
-          return Text('failed');
+          return CircularProgressIndicator(color: Colors.blue,);
         }
       },
     );
