@@ -68,7 +68,7 @@ class _BrandListViewState extends State<BrandListView> {
               );
             }
             else{
-              return Text('failed');
+              return CircularProgressIndicator(color: Colors.blue,);
             }
           },
     );

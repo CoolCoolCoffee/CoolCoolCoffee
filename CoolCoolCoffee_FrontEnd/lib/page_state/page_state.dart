@@ -40,7 +40,7 @@ class _PageState extends State<PageStates> {
         items: [
           const BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: '홈'),
           const BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: '캘린더'),
-          const BottomNavigationBarItem(icon: Icon(Icons.person), label: '캐릭터'),
+          const BottomNavigationBarItem(icon: Icon(Icons.recommend), label: '음료 추천'),
           const BottomNavigationBarItem(icon: Icon(Icons.settings), label: '설정'),
         ],
         currentIndex: _selectedIndex,

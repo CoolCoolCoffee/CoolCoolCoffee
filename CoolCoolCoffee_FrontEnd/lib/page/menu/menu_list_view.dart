@@ -28,14 +28,14 @@ class _MenuListViewState extends State<MenuListView> {
     return FutureBuilder(
       future: UserFavoriteDrinkService().getUserFavoriteDrink(),
       builder:(context, snapshot){
-        final userFavDrinkList = snapshot.data!['drink_list'];
-        if(userFavDrinkList == null){
+        if(snapshot.data == null){
           return Center(child: Container(
             child: CircularProgressIndicator(color: Colors.blue,),
             height: 50,
             width: 50,
           ));
         }
+        final userFavDrinkList = snapshot.data!['drink_list'];
         return StreamBuilder(
             stream: _menu.snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
