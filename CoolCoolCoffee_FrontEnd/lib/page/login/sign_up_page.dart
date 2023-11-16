@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coolcoolcoffee_front/page/login/sign_up_first_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -28,19 +29,19 @@ class _SignUpPageState extends State<SignUpPage> {
   String errorMessage = '';
 
   void _handleSignUp() async{
-    try{
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+
+      try{
+        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
           email: _email,
           password: _password,
-      );
-      print('사용자 회원가입 완료: ${userCredential.user!.email}');
+        );
+        print('사용자 회원가입 완료: ${userCredential.user!.email}');
 
-      await FirebaseFirestore.instance
-          .collection("Users")
-          .doc(userCredential.user!.uid)
-          .set({'app_access' : false})
-          .onError((error, stackTrace) => print('데이엍 추가 에러!'));
-
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userCredential.user!.uid)
+            .set({'app_access' : false})
+            .onError((error, stackTrace) => print('데이엍 추가 에러!'));
       // 왜 토스트 안 되냐 ㅡㅡ
       // Fluttertoast.showToast(
       //   msg: '회원가입이 완료되었습니다!',
@@ -51,7 +52,7 @@ class _SignUpPageState extends State<SignUpPage> {
       // );
 
       Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const LoginPage()),
+        MaterialPageRoute(builder: (context) => const SignUpFirstPage()),
       );
 
     } on FirebaseAuthException catch (e) {
@@ -143,7 +144,7 @@ class _SignUpPageState extends State<SignUpPage> {
       obscureText: true,
       decoration: const InputDecoration(
         border: OutlineInputBorder(),
-        labelText: '비밀번호',
+        labelText: '비밀번호 확인',
         hintText: '비밀번호를 입력하세요.',
         hintStyle: TextStyle(color: Colors.grey),
       ),
@@ -166,33 +167,36 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: Colors.brown.withOpacity(0.1),
       appBar: AppBar(
         title: Text(''),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('회원가입 화면'),
-              const SizedBox(height: 30,),
-              _userEmailWidget(),
-              const SizedBox(height: 20,),
-              _userPwWidget(),
-              const SizedBox(height: 20,),
-              _userPw2Widget(),
-              const SizedBox(height: 30,),
-              ElevatedButton(
-                onPressed: (){
-                  if(_formKey.currentState!.validate()){
-                    _handleSignUp();
-                  }
-                },
-                child: Text('회원가입'),
-              ),
-            ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('회원가입 화면'),
+                const SizedBox(height: 30,),
+                _userEmailWidget(),
+                const SizedBox(height: 20,),
+                _userPwWidget(),
+                const SizedBox(height: 20,),
+                _userPw2Widget(),
+                const SizedBox(height: 30,),
+                ElevatedButton(
+                  onPressed: (){
+                    if(_formKey.currentState!.validate()){
+                      _handleSignUp();
+                    }
+                  },
+                  child: Text('회원가입'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
