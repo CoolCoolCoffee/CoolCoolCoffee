@@ -6,6 +6,13 @@ import '../provider/user_provider.dart';
 
 class UserCaffeineService {
   final userCaffeineCollection = FirebaseFirestore.instance.collection('Users').doc('ZZDgEPAMHTeb57Ox1aSgtqOXpMB2').collection('user_caffeine');
+  Future<void> checkExits(String date) async{
+    var wait = await userCaffeineCollection.doc(date).get();
+    if(!wait.exists){
+      List<dynamic> lists = [];
+      await userCaffeineCollection.doc(date).set({'caffeine_list': lists});
+    }
+  }
   //없으면 CREATE 있으면 UPDATE
   Future<void> addNewUserCaffeine(String date, UserCaffeine userCaffeine) async{
     var wait = await userCaffeineCollection.doc(date).get();
@@ -19,8 +26,8 @@ class UserCaffeineService {
     }
   }
   //READ
-  Future<DocumentSnapshot<Map<String, dynamic>>> getUserCaffeine(String date, UserCaffeine userCaffeine) async{
-      var wait = await userCaffeineCollection.doc(date).get();
+  Future<DocumentReference<Map<String, dynamic>>> getUserCaffeine(String date) async{
+      var wait = await userCaffeineCollection.doc(date);
       return wait;
   }
   //Delete

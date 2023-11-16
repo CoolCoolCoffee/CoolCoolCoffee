@@ -1,3 +1,4 @@
+import 'package:coolcoolcoffee_front/page/home/user_caffeine_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_health_connect/flutter_health_connect.dart';
 
@@ -62,12 +63,14 @@ class _DrinkListWidgetState extends State<DrinkListWidget> {
         SizedBox(height: 7),
         Center(
           child: Container(
-            width: 350,
+            margin: EdgeInsets.symmetric(horizontal: 5),
+            width: MediaQuery.of(context).size.width ,
             height: 130,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(10),
             ),
+            child: UserCaffeineList(),
           ),
         ),
       ],

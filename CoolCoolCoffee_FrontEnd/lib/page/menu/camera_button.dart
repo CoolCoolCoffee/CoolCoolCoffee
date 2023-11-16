@@ -159,7 +159,11 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
               TextButton(
                 child: const Text("갤러리"),
                 onPressed: () {
-                  getImage(ImageSource.gallery, cameraMode);
+                  if(cameraMode == "conveni"){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => CameraPage(cameraMode: cameraMode, cameraGallery: 'gallery')));
+                  }else{
+                    getImage(ImageSource.gallery, cameraMode);
+                  }
                 },
               ),
             ],
