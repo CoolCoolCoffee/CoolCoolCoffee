@@ -71,7 +71,7 @@ class _EditPopupState extends State<EditPopup> {
             Row(
               children: [
                 Container(
-                  width: 70,
+                  width: 60,
                   height: 40,
                   child: TextField(
                     controller: sleepHoursController,
@@ -87,7 +87,7 @@ class _EditPopupState extends State<EditPopup> {
                   style: TextStyle(fontSize: 20),
                 ),
                 Container(
-                  width: 70,
+                  width: 60,
                   height: 40,
                   child: TextField(
                     controller: sleepMinutesController,
@@ -135,7 +135,7 @@ class _EditPopupState extends State<EditPopup> {
               children: [
                 // Hours TextField
                 Container(
-                  width: 70,
+                  width: 60,
                   height: 40,
                   child: TextField(
                     controller: wakeHoursController,
@@ -152,7 +152,7 @@ class _EditPopupState extends State<EditPopup> {
                 ),
                 // Minutes TextField
                 Container(
-                  width: 70,
+                  width: 60,
                   height: 40,
                   child: TextField(
                     controller: wakeMinutesController,
