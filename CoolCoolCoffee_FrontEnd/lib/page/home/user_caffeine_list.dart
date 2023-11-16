@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/model/user_caffeine.dart';
+import 'package:coolcoolcoffee_front/page/home/user_caffeine_detail_page.dart';
 import 'package:coolcoolcoffee_front/provider/user_caffeine_provider.dart';
 import 'package:coolcoolcoffee_front/service/user_caffeine_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -42,14 +43,17 @@ class _UserCaffeineListState extends State<UserCaffeineList> {
                       shotAdded: temp['shot_added'],
                       caffeineContent: temp['caffeine_content']);
                   return GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (
+                          context) =>
+                          UserCaffeineDetailPage(userCaffeine: userCaffeine, date: today,))
+                      );
+                    },
                     child: Container(
                       //color: Colors.blue,
                       child: Stack(
                         children: [
-                          FractionallySizedBox(
-                            heightFactor: 0.9,
-                            child: Container(
+                            Container(
                               width: MediaQuery.of(context).size.width / 3 - 5,
                               margin: EdgeInsets.all(5),
                               decoration: BoxDecoration(
@@ -67,51 +71,69 @@ class _UserCaffeineListState extends State<UserCaffeineList> {
                                       image:
                                           NetworkImage(userCaffeine.menuImg))),
                             ),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: FractionallySizedBox(
-                              heightFactor: 0.3,
+                            Align(
+                              alignment: Alignment.topRight,
                               child: Container(
-                                width:
-                                    MediaQuery.of(context).size.width / 3 - 5,
-                                alignment: Alignment.bottomLeft,
-                                margin: EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                        bottomRight: Radius.circular(20)),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                          color: Colors.grey.withOpacity(0.7),
-                                          spreadRadius: 0,
-                                          blurRadius: 5.0,
-                                          offset: Offset(0, 5))
-                                    ]),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Text(
-                                      userCaffeine.brand,
-                                      style: TextStyle(
-                                          fontSize: 10, color: Colors.grey),
-                                    ),
-                                    Text(
-                                      userCaffeine.menuId,
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    )
-                                  ],
+                                alignment: Alignment.topLeft,
+                                margin: EdgeInsets.only(top: 5,left: 5),
+                                height: 10,
+                                width: 10,
+                                child:
+                                //StarIconButton(isStared: _isStared[index], callback: _changeStaredCallback, index: index, userFavoriteDrink: userFavDrink,),
+                                IconButton(
+                                  icon: Icon(Icons.delete,color: Colors.white,), onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (
+                                      context) =>
+                                      UserCaffeineDetailPage(userCaffeine: userCaffeine, date: today,))
+                                  );
+                                },
                                 ),
                               ),
                             ),
-                          )
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: FractionallySizedBox(
+                                heightFactor: 0.3,
+                                child: Container(
+                                  width:
+                                      MediaQuery.of(context).size.width / 3 - 5,
+                                  alignment: Alignment.bottomLeft,
+                                  margin: EdgeInsets.all(5),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          bottomRight: Radius.circular(20)),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.grey.withOpacity(0.7),
+                                            spreadRadius: 0,
+                                            blurRadius: 5.0,
+                                            offset: Offset(0, 5))
+                                      ]),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      Text(
+                                        userCaffeine.brand,
+                                        style: TextStyle(
+                                            fontSize: 10, color: Colors.grey),
+                                      ),
+                                      Text(
+                                        userCaffeine.menuId,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            )
                         ],
                       ),
                     ),

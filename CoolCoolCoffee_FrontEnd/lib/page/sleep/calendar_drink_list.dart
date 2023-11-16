@@ -143,7 +143,7 @@ class _CalendarDrinkListWidgetState extends State<CalendarDrinkListWidget> {
              }else{
                 return Center(
                   child: Text(
-                    '아직 커피를 안 마셨어요!',
+                    '커피를 마시지 않았어요!',
                     style: TextStyle(
                       fontSize: 20
                     ),
