@@ -134,7 +134,7 @@ class _RecommendPageState extends State<RecommendPage> {
                                                       alignment: Alignment.bottomCenter,
                                                       child: Container(
                                                       alignment: Alignment.bottomLeft,
-                                                      height: 50,
+                                                      height: 40,
                                                       margin: EdgeInsets.all(5),
                                                       decoration: BoxDecoration(
                                                         borderRadius: BorderRadius.only(bottomRight: Radius.circular(20)),
@@ -174,7 +174,7 @@ class _RecommendPageState extends State<RecommendPage> {
                                         );
                                        }
                                       else{
-                                        return Text('failed');
+                                        return CircularProgressIndicator(color: Colors.blue,);
                                       }
                                    },
                                   ),
