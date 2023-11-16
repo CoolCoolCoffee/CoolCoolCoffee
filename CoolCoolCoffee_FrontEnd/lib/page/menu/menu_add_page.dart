@@ -100,7 +100,7 @@ class _MenuAddPageState extends State<MenuAddPage> {
             color: Colors.black
           ),
         ),
-        actions: [
+        /*actions: [
           FractionallySizedBox(
             heightFactor: 0.7,
             child: IconButton(
@@ -111,7 +111,7 @@ class _MenuAddPageState extends State<MenuAddPage> {
               ),
             ),
           )
-        ]
+        ]*/
       ),
       body: Column(
         children: [
