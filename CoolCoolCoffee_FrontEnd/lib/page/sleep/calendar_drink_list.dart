@@ -16,9 +16,17 @@ class _CalendarDrinkListWidgetState extends State<CalendarDrinkListWidget> {
         SizedBox(
           height: 20,
         ),
+        Text(
+          '${selecteddate}에 마신 음료',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 15.0,
+                fontWeight: FontWeight.bold,
+              ),
+        ),
         Container(
           height: 90,
-          width: 300,
+          width: 330,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10.0),
@@ -27,16 +35,16 @@ class _CalendarDrinkListWidgetState extends State<CalendarDrinkListWidget> {
               width: 2.0,
             ),
           ),
-          child: Center(
-            child: Text(
-              '${selecteddate}에 마신 음료',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+          // child: Center(
+          //   child: Text(
+          //     '${selecteddate}에 마신 음료',
+          //     style: TextStyle(
+          //       color: Colors.black,
+          //       fontSize: 18.0,
+          //       fontWeight: FontWeight.bold,
+          //     ),
+          //   ),
+          // ),
         ),
       ],
     );

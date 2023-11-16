@@ -39,7 +39,7 @@ class _PageState extends State<PageStates> {
         unselectedLabelStyle: TextStyle(color: Colors.grey),
         items: [
           const BottomNavigationBarItem(icon: Icon(Icons.home_filled), label: '홈'),
-          const BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: '서재'),
+          const BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: '캘린더'),
           const BottomNavigationBarItem(icon: Icon(Icons.person), label: '캐릭터'),
           const BottomNavigationBarItem(icon: Icon(Icons.settings), label: '설정'),
         ],

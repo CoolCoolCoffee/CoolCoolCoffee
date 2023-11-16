@@ -31,12 +31,17 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   @override
   void initState() {
     super.initState();
-    // Add specific dates to display markers
-    dateColors[DateTime.utc(2023, 11, 12)] = 1;
-    dateColors[DateTime.utc(2023, 11, 13)] = 2;
-    dateColors[DateTime.utc(2023, 11, 14)] = 3;
-    dateColors[DateTime.utc(2023, 11, 15)] = 4;
-    dateColors[DateTime.utc(2023, 11, 16)] = 5;
+    dateColors[DateTime.utc(2023, 11, 10)] = 10;
+    dateColors[DateTime.utc(2023, 11, 11)] = 9;
+    dateColors[DateTime.utc(2023, 11, 12)] = 8;
+    dateColors[DateTime.utc(2023, 11, 13)] = 7;
+    dateColors[DateTime.utc(2023, 11, 14)] = 6;
+    dateColors[DateTime.utc(2023, 11, 15)] = 5;
+    dateColors[DateTime.utc(2023, 11, 16)] = 4;
+    dateColors[DateTime.utc(2023, 11, 17)] = 3;
+    dateColors[DateTime.utc(2023, 11, 18)] = 2;
+    dateColors[DateTime.utc(2023, 11, 19)] = 1;
+    dateColors[DateTime.utc(2023, 11, 20)] = 0;
   }
 
   @override
@@ -150,16 +155,28 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
   Color _getColorFromIndex(int index) {
     switch (index) {
-      case 1: // 매우 피곤
-        return Colors.brown.withOpacity(0.8);
-      case 2: // 조금 피곤
-        return Colors.brown.withOpacity(0.6);
-      case 3: // 보통
-        return Colors.brown.withOpacity(0.4);
-      case 4: // 개운
-        return Colors.brown.withOpacity(0.3);
-      case 5: // 매우 개운
+      case 0:
         return Colors.brown.withOpacity(0.1);
+      case 1:
+        return Colors.brown.withOpacity(0.17);
+      case 2:
+        return Colors.brown.withOpacity(0.24);
+      case 3:
+        return Colors.brown.withOpacity(0.31);
+      case 4:
+        return Colors.brown.withOpacity(0.38);
+      case 5:
+        return Colors.brown.withOpacity(0.45);
+      case 6:
+        return Colors.brown.withOpacity(0.52);
+      case 7:
+        return Colors.brown.withOpacity(0.59);
+      case 8:
+        return Colors.brown.withOpacity(0.66);
+      case 9:
+        return Colors.brown.withOpacity(0.73);
+      case 10:
+        return Colors.brown.withOpacity(0.8);
       default:
         return Colors.transparent;
     }
