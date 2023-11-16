@@ -29,6 +29,13 @@ class _MenuListViewState extends State<MenuListView> {
       future: UserFavoriteDrinkService().getUserFavoriteDrink(),
       builder:(context, snapshot){
         final userFavDrinkList = snapshot.data!['drink_list'];
+        if(userFavDrinkList == null){
+          return Center(child: Container(
+            child: CircularProgressIndicator(color: Colors.blue,),
+            height: 50,
+            width: 50,
+          ));
+        }
         return StreamBuilder(
             stream: _menu.snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
@@ -184,7 +191,11 @@ class _MenuListViewState extends State<MenuListView> {
                 );
               }
               else {
-                return Text('failed');
+                return Center(child: Container(
+                    child: CircularProgressIndicator(color: Colors.blue,),
+                  height: 50,
+                  width: 50,
+                ));
               }
             },
           );
