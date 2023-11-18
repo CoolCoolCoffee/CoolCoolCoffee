@@ -77,11 +77,17 @@ class _LoginPageState extends State<LoginPage> {
         password: _password,
       );
       print('사용자 로그인 완료: ${userCredential.user!.email}');
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const PageStates(),
-          ));
+
+      if(!mounted) return;
+      Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const PageStates()),);
+
+      // if(!mounted) return;
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) => const PageStates(),
+      //     ));
     } on FirebaseAuthException catch (e) {
       //로그인 예외처리
       switch (e.code) {
@@ -141,7 +147,7 @@ class _LoginPageState extends State<LoginPage> {
                       alignment: Alignment.topRight,
                       child: Text('계정이 없으신가요?')
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   TextButton(
                       onPressed: (){
                         Navigator.of(context).push(

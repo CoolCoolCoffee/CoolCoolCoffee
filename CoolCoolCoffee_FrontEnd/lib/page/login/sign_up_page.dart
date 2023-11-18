@@ -37,11 +37,19 @@ class _SignUpPageState extends State<SignUpPage> {
         );
         print('사용자 회원가입 완료: ${userCredential.user!.email}');
 
+        // 다른 앱 접근 권한 기본(false)으로 설정해놓음
         await FirebaseFirestore.instance
             .collection("Users")
             .doc(userCredential.user!.uid)
             .set({'app_access' : false})
-            .onError((error, stackTrace) => print('데이엍 추가 에러!'));
+            .onError((error, stackTrace) => print('앱 권한 정보 추가 에러!'));
+
+        // 사용자 이메일 주소도 넣어놓음
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userCredential.user!.uid)
+            .set({'user_email' : userCredential.user!.email})
+            .onError((error, stackTrace) => print('이메일 정보 추가 에러!'));
       // 왜 토스트 안 되냐 ㅡㅡ
       // Fluttertoast.showToast(
       //   msg: '회원가입이 완료되었습니다!',
