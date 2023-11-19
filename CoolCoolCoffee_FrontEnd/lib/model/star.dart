@@ -1,7 +1,8 @@
 class Star{
-  bool isStared;
-  Star({required this.isStared});
-  void clicked(){
-    isStared = !isStared;
-  }
+  String id;
+  Star({required this.id});
+/*
+  Star copyWith({required String id}) {
+    return Star(id: id);
+  }*/
 }

@@ -1,26 +1,32 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 class Brand{
   //우선 icon, label으로 test
-  final String id;
-  final String logo_image;
-  final Map<String,int> size;
+  late String id;
+  late String logo_img;
+  //late Map<String,int> size;
 
   Brand({
     required this.id,
-    required this.logo_image,
-    required this.size,
+    required this.logo_img,
+    //required this.size,
   });
 
+  Brand.fromSnapshot(DocumentSnapshot snapshot){
+    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+    id = snapshot.id;
+    logo_img = snapshot['logo_img'];
+  }
   factory Brand.formJson(Map<dynamic,dynamic> json) => Brand(
     id: json['id'],
-    logo_image: json['logo_image'],
-    size: json['size'],
+    logo_img: json['logo_img'],
+    //size: json['size'],
   );
   Map<String,dynamic> toJson() => {
     "id": id,
-    "logo_image": logo_image,
-    "size": size,
+    "logo_img": logo_img,
+    //"size": size,
   };
 
 }
