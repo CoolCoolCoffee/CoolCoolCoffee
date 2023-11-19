@@ -60,6 +60,15 @@ class _UserFormState extends State<SignUpThirdPage> {
           'avg_bed_time': widget.bedTime,
           'good_sleep_time': widget.goodSleepTime,
         }, SetOptions(merge: true));
+
+        await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(user!.uid)
+            .collection('user_favortie')
+            .doc('favorite_drink')
+            .set({
+              'drink_list' : [],
+            });
         
         await FirebaseFirestore.instance
             .collection("Users")

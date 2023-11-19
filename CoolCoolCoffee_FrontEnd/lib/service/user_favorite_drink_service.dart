@@ -8,8 +8,9 @@ class UserFavoriteDrinkService {
   final userFavoriteDrinkCollection = FirebaseFirestore.instance.collection('Users').doc('ZZDgEPAMHTeb57Ox1aSgtqOXpMB2').collection('user_favorite');
 
   Future<void> checkExits() async{
-    var wait = await userFavoriteDrinkCollection.doc('favorite_drink').get();
-    if(!wait.exists){
+    bool exists = false;
+    await userFavoriteDrinkCollection.get().then((value){value.docs.forEach((element) { if(element.id == 'favorite_drink') exists = true;});});
+    if(!exists){
       List<dynamic> lists = [];
       await userFavoriteDrinkCollection.doc('favorite_drink').set({'drink_list': lists});
     }
@@ -28,9 +29,11 @@ class UserFavoriteDrinkService {
     }
     return ret;
   }
+
   //없으면 CREATE 있으면 UPDATE
   Future<void> addNewUserFavoriteDrink(UserFavoriteDrink userFavoriteDrink) async{
     var wait = await userFavoriteDrinkCollection.doc('favorite_drink').get();
+    print(wait);
     if(!wait.exists){
       List<dynamic> lists = [userFavoriteDrink.toMap()];
       await userFavoriteDrinkCollection.doc('favorite_drink').set({'drink_list': lists});
@@ -45,12 +48,13 @@ class UserFavoriteDrinkService {
   }
   //READ
   Future<DocumentSnapshot<Map<String, dynamic>>> getUserFavoriteDrink() async{
+    checkExits();
     var wait = await userFavoriteDrinkCollection.doc('favorite_drink').get();
-    if(!wait.exists){
+    /*if(!wait.exists){
       List<dynamic> lists = [];
       await userFavoriteDrinkCollection.doc('favorite_drink').set({'drink_list': lists});
       wait = await userFavoriteDrinkCollection.doc('favorite_drink').get();
-    }
+    }*/
     //var wait = await userFavoriteDrinkCollection.doc('favorite_drink').get();
     return wait;
   }

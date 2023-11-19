@@ -10,6 +10,7 @@ final starsProvider = StateNotifierProvider<StarProvider,List<Star>>((ref){retur
 class StarProvider extends StateNotifier<List<Star>>{
   StarProvider(): super([]);
 
+
   void add(Star star){
     if(!isStar(star.id)){
       state = [...state, star];
@@ -21,14 +22,15 @@ class StarProvider extends StateNotifier<List<Star>>{
       for (final star in state)
         if(star.id != starId) star,
     ];
+
   }
 
   bool isStar(String id){
     for(final star in state) {
       if(star.id == id) return true;
     }
-
     return false;
+
   }
 
 

@@ -3,18 +3,23 @@ import 'package:coolcoolcoffee_front/model/user_favorite_drink.dart';
 import 'package:coolcoolcoffee_front/service/user_favorite_drink_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../provider/star_provider.dart';
 import 'menu_add_page.dart';
 
-class StarListView extends StatefulWidget {
+class StarListView extends ConsumerStatefulWidget {
   const StarListView({super.key});
 
   @override
-  State<StarListView> createState() => _StarListViewState();
+  _StarListViewState createState() => _StarListViewState();
 }
 
-class _StarListViewState extends State<StarListView> {
-
+class _StarListViewState extends ConsumerState<StarListView> {
+  @override
+  void initState(){
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final UserFavoriteDrinkService userFavoriteDrinkService = UserFavoriteDrinkService();
@@ -100,6 +105,7 @@ class _StarListViewState extends State<StarListView> {
                             ),
                             onPressed: () {
                               UserFavoriteDrinkService().deleteUserFavoriteDrink(userFavDrink);
+                              ref.watch(starsProvider.notifier).remove('${userFavDrink.brand}_${userFavDrink.menuId}');
                             },
                           ),
                         ),
