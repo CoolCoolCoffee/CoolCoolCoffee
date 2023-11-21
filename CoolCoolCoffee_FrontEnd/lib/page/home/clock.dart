@@ -137,7 +137,7 @@ class _EditPopupState extends State<EditPopup> {
           ),
         ),
         TextButton(
-          onPressed: () {
+          onPressed: () async {
             String sleepEnteredTime =
                 '${sleepHoursController.text}:${sleepMinutesController.text} ${sleepIsAM ? 'AM' : 'PM'}';
 
@@ -153,12 +153,21 @@ class _EditPopupState extends State<EditPopup> {
 
             String uid = FirebaseAuth.instance.currentUser!.uid;
             DocumentReference userDocRef = FirebaseFirestore.instance.collection('Users').doc(uid);
+            bool docExists = (await userDocRef.get()).exists;
+
             Future<void> updateFirestore() async {
               try {
-                // goal_sleep_time 필드를 업데이트
-                await userDocRef.update({
-                  'goal_sleep_time': convertedTime,
-                });
+                if (docExists) {
+                  // 필드 있으면 goal_sleep_time 필드를 업데이트
+                  await userDocRef.update({
+                    'goal_sleep_time': convertedTime,
+                  });
+                } else {
+                  // 필드 없으면 만들어 업데이트
+                  await userDocRef.set({
+                    'goal_sleep_time': convertedTime,
+                  });
+                }
                 widget.updateParentState(sleepEnteredTime);
 
                 Navigator.of(context).pop();
