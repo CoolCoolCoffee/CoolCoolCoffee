@@ -4,6 +4,7 @@ import 'package:flutter_health_connect/flutter_health_connect.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+
 class EditPopup extends StatefulWidget {
   final Function(String) onSave;
   final void Function(String) updateParentState;
@@ -47,7 +48,7 @@ class _EditPopupState extends State<EditPopup> {
     return AlertDialog(
       title: Text('목표 수면 시간'),
       content: Container(
-        constraints: BoxConstraints(maxHeight: 200, maxWidth: 400),
+        constraints: BoxConstraints(maxHeight: 100, maxWidth: 300),
         child: Column(
           children: [
             Text(
@@ -112,7 +113,6 @@ class _EditPopupState extends State<EditPopup> {
                 ),
               ],
             ),
-            SizedBox(height: 30),
           ],
         ),
       ),
@@ -152,7 +152,7 @@ class _EditPopupState extends State<EditPopup> {
 
                 Navigator.of(context).pop();
               } catch (error) {
-                print('goal_sleep_time 업데이트 중 오류 발생: $error');
+                print('error : $error');
               }
             }
             updateFirestore();
@@ -185,36 +185,32 @@ class ClockWidget extends StatefulWidget {
 }
 
 class _ClockWidgetState extends State<ClockWidget>{
-
   String sleepEnteredTime = '';
   String resultText = '';
 
-  Future<String> fetchDataAndUpdateUI() async {
-    String goalSleepTime = ''; // Initialize with an empty string
-
-    // 현재 사용자의 Firestore 문서에 대한 참조가 있다고 가정합니다.
-    DocumentReference userDocRef = FirebaseFirestore.instance.collection('Users').doc('userId'); // 'userId'를 실제 사용자 ID로 교체하세요.
-
-    try {
-      // Firestore에서 사용자 문서를 불러옵니다.
-      DocumentSnapshot userSnapshot = await userDocRef.get();
-
-      // 사용자 문서에서 goal_sleep_time 필드의 존재 여부를 확인하고 값을 가져옵니다.
-      if (userSnapshot.exists) {
-        final userData = userSnapshot.data() as Map<String, dynamic>?;
-
-        if (userData != null && userData.containsKey('goal_sleep_time')) {
-          goalSleepTime = userData['goal_sleep_time'];
-        }
-      }
-    } catch (error) {
-      print('Firestore에서 데이터를 불러오는 중 오류 발생: $error');
-      // 오류를 필요에 따라 처리합니다.
-    }
-
-    return goalSleepTime;
+  @override
+  void initState() {
+    super.initState();
+    _getSleepEnteredTime();
   }
 
+  Future<void> _getSleepEnteredTime() async {
+    try {
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      DocumentSnapshot<Map<String, dynamic>> userDoc =
+      await FirebaseFirestore.instance.collection('Users').doc(uid).get();
+
+      if (userDoc.exists && userDoc.data()!.containsKey('goal_sleep_time')) {
+        setState(() {
+          sleepEnteredTime = userDoc['goal_sleep_time'];
+        });
+      } else {
+        print('error1');
+      }
+    } catch (e) {
+      print('error2 : $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context){
@@ -269,6 +265,7 @@ class _ClockWidgetState extends State<ClockWidget>{
             ElevatedButton(
               onPressed: () {
                 _showEditPopup(context);
+                print("dddd $sleepEnteredTime");
               },
               style: ElevatedButton.styleFrom(
                 primary: null,
@@ -329,11 +326,6 @@ class _ClockWidgetState extends State<ClockWidget>{
         ),
       ],
     );
-  }
-  void onSave(String sleepEnteredTime) {
-    setState(() {
-      this.sleepEnteredTime = sleepEnteredTime;
-    });
   }
 
 //시간 수정 팝업
