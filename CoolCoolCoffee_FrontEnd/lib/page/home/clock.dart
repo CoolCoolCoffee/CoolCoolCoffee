@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:analog_clock/analog_clock.dart';
 import 'package:flutter_health_connect/flutter_health_connect.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EditPopup extends StatefulWidget {
   final Function(String, String) onSave;
@@ -219,15 +221,23 @@ class _EditPopupState extends State<EditPopup> {
                 '${sleepHoursController.text}:${sleepMinutesController.text} ${sleepIsAM ? 'AM' : 'PM'}';
             String wakeEnteredTime =
                 '${wakeHoursController.text}:${wakeMinutesController.text} ${wakeIsAM ? 'AM' : 'PM'}';
-            widget.updateParentState(sleepEnteredTime, wakeEnteredTime);
-            //print('취침 시간 : $sleepEnteredTime');
-            //print('기상 시간 : $wakeEnteredTime');
-            if (!isCancelled) {
-              widget.updateParentState(sleepEnteredTime, wakeEnteredTime);
-              //print('취침 시간 : $sleepEnteredTime');
-              //print('기상 시간 : $wakeEnteredTime');
+
+            String uid = FirebaseAuth.instance.currentUser!.uid;
+            DocumentReference userDocRef = FirebaseFirestore.instance.collection('Users').doc(uid);
+            Future<void> updateFirestore() async {
+              try {
+                // goal_sleep_time 필드를 업데이트
+                await userDocRef.update({
+                  'goal_sleep_time': sleepEnteredTime,
+                });
+                widget.updateParentState(sleepEnteredTime, wakeEnteredTime);
+
+                Navigator.of(context).pop();
+              } catch (error) {
+                print('goal_sleep_time 업데이트 중 오류 발생: $error');
+              }
             }
-            Navigator.of(context).pop();
+            updateFirestore();
           },
           child: Text(
             '확인',
@@ -260,7 +270,6 @@ class _ClockWidgetState extends State<ClockWidget>{
 
   String sleepEnteredTime = '';
   String wakeEnteredTime = '';
-
   String resultText = '';
 
   @override
