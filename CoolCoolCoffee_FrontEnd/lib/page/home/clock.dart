@@ -5,17 +5,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class EditPopup extends StatefulWidget {
-  final Function(String, String) onSave;
-  final void Function(String, String) updateParentState;
+  final Function(String) onSave;
+  final void Function(String) updateParentState;
   final String sleepTime;
-  final String wakeTime;
 
   const EditPopup({
     Key? key,
     required this.onSave,
     required this.updateParentState,
     required this.sleepTime, // Add sleepTime parameter to the constructor
-    required this.wakeTime,  // Add wakeTime parameter to the constructor
   }) : super(key: key);
 
   @override
@@ -25,11 +23,8 @@ class EditPopup extends StatefulWidget {
 class _EditPopupState extends State<EditPopup> {
   TextEditingController sleepHoursController = TextEditingController();
   TextEditingController sleepMinutesController = TextEditingController();
-  TextEditingController wakeHoursController = TextEditingController();
-  TextEditingController wakeMinutesController = TextEditingController();
 
   bool sleepIsAM = true;
-  bool wakeIsAM = true;
   bool isCancelled = false;
 
   @override
@@ -43,16 +38,6 @@ class _EditPopupState extends State<EditPopup> {
       if (minutesAndAMPM.length == 2) {
         sleepMinutesController.text = minutesAndAMPM[0];
         sleepIsAM = minutesAndAMPM[1] == 'AM';
-      }
-    }
-
-    List<String> wakeTimeParts = widget.wakeTime.split(':');
-    if (wakeTimeParts.length == 2) {
-      wakeHoursController.text = wakeTimeParts[0];
-      List<String> minutesAndAMPM = wakeTimeParts[1].split(' ');
-      if (minutesAndAMPM.length == 2) {
-        wakeMinutesController.text = minutesAndAMPM[0];
-        wakeIsAM = minutesAndAMPM[1] == 'AM';
       }
     }
   }
@@ -128,70 +113,6 @@ class _EditPopupState extends State<EditPopup> {
               ],
             ),
             SizedBox(height: 30),
-            Text(
-              '기상시간',
-              textAlign: TextAlign.start,
-            ),
-            SizedBox(height: 5),
-            Row(
-              children: [
-                // Hours TextField
-                Container(
-                  width: 60,
-                  height: 40,
-                  child: TextField(
-                    controller: wakeHoursController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: '시',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                Text(
-                  ' : ',
-                  style: TextStyle(fontSize: 20),
-                ),
-                // Minutes TextField
-                Container(
-                  width: 60,
-                  height: 40,
-                  child: TextField(
-                    controller: wakeMinutesController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: '분',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      wakeIsAM = true;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: wakeIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
-                    minimumSize: Size(40, 40),
-                  ),
-                  child: Text('AM'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      wakeIsAM = false;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: !wakeIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
-                    minimumSize: Size(40, 40),
-                  ),
-                  child: Text('PM'),
-                ),
-              ],
-            ),
           ],
         ),
       ),
@@ -219,9 +140,6 @@ class _EditPopupState extends State<EditPopup> {
           onPressed: () {
             String sleepEnteredTime =
                 '${sleepHoursController.text}:${sleepMinutesController.text} ${sleepIsAM ? 'AM' : 'PM'}';
-            String wakeEnteredTime =
-                '${wakeHoursController.text}:${wakeMinutesController.text} ${wakeIsAM ? 'AM' : 'PM'}';
-
             String uid = FirebaseAuth.instance.currentUser!.uid;
             DocumentReference userDocRef = FirebaseFirestore.instance.collection('Users').doc(uid);
             Future<void> updateFirestore() async {
@@ -230,7 +148,7 @@ class _EditPopupState extends State<EditPopup> {
                 await userDocRef.update({
                   'goal_sleep_time': sleepEnteredTime,
                 });
-                widget.updateParentState(sleepEnteredTime, wakeEnteredTime);
+                widget.updateParentState(sleepEnteredTime);
 
                 Navigator.of(context).pop();
               } catch (error) {
@@ -269,8 +187,34 @@ class ClockWidget extends StatefulWidget {
 class _ClockWidgetState extends State<ClockWidget>{
 
   String sleepEnteredTime = '';
-  String wakeEnteredTime = '';
   String resultText = '';
+
+  Future<String> fetchDataAndUpdateUI() async {
+    String goalSleepTime = ''; // Initialize with an empty string
+
+    // 현재 사용자의 Firestore 문서에 대한 참조가 있다고 가정합니다.
+    DocumentReference userDocRef = FirebaseFirestore.instance.collection('Users').doc('userId'); // 'userId'를 실제 사용자 ID로 교체하세요.
+
+    try {
+      // Firestore에서 사용자 문서를 불러옵니다.
+      DocumentSnapshot userSnapshot = await userDocRef.get();
+
+      // 사용자 문서에서 goal_sleep_time 필드의 존재 여부를 확인하고 값을 가져옵니다.
+      if (userSnapshot.exists) {
+        final userData = userSnapshot.data() as Map<String, dynamic>?;
+
+        if (userData != null && userData.containsKey('goal_sleep_time')) {
+          goalSleepTime = userData['goal_sleep_time'];
+        }
+      }
+    } catch (error) {
+      print('Firestore에서 데이터를 불러오는 중 오류 발생: $error');
+      // 오류를 필요에 따라 처리합니다.
+    }
+
+    return goalSleepTime;
+  }
+
 
   @override
   Widget build(BuildContext context){
@@ -286,7 +230,7 @@ class _ClockWidgetState extends State<ClockWidget>{
               textAlign: TextAlign.start,
               text: TextSpan(
                 children: [
-                  if (sleepEnteredTime.isNotEmpty && wakeEnteredTime.isNotEmpty)
+                  if (sleepEnteredTime.isNotEmpty)
                     TextSpan(
                       text: "카페인 섭취 제한 시작까지\n",
                       style: TextStyle(
@@ -294,7 +238,7 @@ class _ClockWidgetState extends State<ClockWidget>{
                         fontSize: 20,
                       ),
                     ),
-                  if (sleepEnteredTime.isNotEmpty && wakeEnteredTime.isNotEmpty)
+                  if (sleepEnteredTime.isNotEmpty)
                     TextSpan(
                       text: "n시간 m분",
                       style: TextStyle(
@@ -302,7 +246,7 @@ class _ClockWidgetState extends State<ClockWidget>{
                         fontSize: 20,
                       ),
                     ),
-                  if (sleepEnteredTime.isNotEmpty && wakeEnteredTime.isNotEmpty)
+                  if (sleepEnteredTime.isNotEmpty)
                     TextSpan(
                       text: " 남았어요!",
                       style: TextStyle(
@@ -310,7 +254,7 @@ class _ClockWidgetState extends State<ClockWidget>{
                         fontSize: 20,
                       ),
                     ),
-                  if (sleepEnteredTime.isEmpty || wakeEnteredTime.isEmpty)
+                  if (sleepEnteredTime.isEmpty)
                     TextSpan(
                       text: "목표 수면 시간을 설정해주세요.",
                       style: TextStyle(
@@ -345,7 +289,7 @@ class _ClockWidgetState extends State<ClockWidget>{
                   ),
                   SizedBox(width: 3),
                   Text(
-                    sleepEnteredTime.isNotEmpty && wakeEnteredTime.isNotEmpty
+                    sleepEnteredTime.isNotEmpty
                         ? '수정'
                         : '설정',
                     style: TextStyle(
@@ -360,28 +304,6 @@ class _ClockWidgetState extends State<ClockWidget>{
           ],
         ),
         SizedBox(height: 10),
-        // Container(
-        //   height: 250,
-        //   child: AnalogClock(
-        //     decoration: BoxDecoration(
-        //         border: Border.all(width: 2.0, color: Colors.black),
-        //         color: Colors.transparent,
-        //         shape: BoxShape.circle
-        //     ),
-        //     width: 250,
-        //     isLive: true,
-        //     hourHandColor: Colors.black,
-        //     minuteHandColor: Colors.black,
-        //     showSecondHand: true,
-        //     numberColor: Colors.black87,
-        //     showNumbers: true,
-        //     showAllNumbers: true,
-        //     textScaleFactor: 1.4,
-        //     showTicks: true,
-        //     showDigitalClock: false,
-        //     datetime: DateTime.now(),
-        //   ),
-        // ),
         ClipRRect(
           borderRadius: BorderRadius.circular(150),
           child: Container(
@@ -400,13 +322,6 @@ class _ClockWidgetState extends State<ClockWidget>{
                     ),
                   ),
                   SizedBox(height: 10,),
-                  Text(
-                    '기상 시간\n $wakeEnteredTime',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -415,17 +330,11 @@ class _ClockWidgetState extends State<ClockWidget>{
       ],
     );
   }
-  void onSave(String sleepEnteredTime, String wakeEnteredTime) {
+  void onSave(String sleepEnteredTime) {
     setState(() {
       this.sleepEnteredTime = sleepEnteredTime;
-      this.wakeEnteredTime = wakeEnteredTime;
     });
   }
-
-  void _updateResultText() {
-    setState(() {});
-  }
-
 
 //시간 수정 팝업
   void _showEditPopup(BuildContext context) async {
@@ -433,16 +342,14 @@ class _ClockWidgetState extends State<ClockWidget>{
       context: context,
       builder: (BuildContext context) {
         return EditPopup(
-          onSave: (sleepTime, wakeTime) {
+          onSave: (sleepTime) {
           },
-          updateParentState: (sleepTime, wakeTime) {
+          updateParentState: (sleepTime) {
             setState(() {
               sleepEnteredTime = sleepTime;
-              wakeEnteredTime = wakeTime;
             });
           },
           sleepTime: sleepEnteredTime,
-          wakeTime: wakeEnteredTime,
         );
       },
     );
