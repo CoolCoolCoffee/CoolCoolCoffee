@@ -140,13 +140,24 @@ class _EditPopupState extends State<EditPopup> {
           onPressed: () {
             String sleepEnteredTime =
                 '${sleepHoursController.text}:${sleepMinutesController.text} ${sleepIsAM ? 'AM' : 'PM'}';
+
+            List<String> timeComponents = sleepEnteredTime.split(':');
+            int hours = int.parse(timeComponents[0]);
+            if (!sleepIsAM && hours < 12) {
+              hours += 12;
+            } else if (sleepIsAM && hours == 12) {
+              hours = 0;
+            }
+            String convertedTime = '$hours:${timeComponents[1]}';
+            convertedTime = convertedTime.replaceAll(RegExp(r'\s?[APMapm]{2}\s?$'), '');
+
             String uid = FirebaseAuth.instance.currentUser!.uid;
             DocumentReference userDocRef = FirebaseFirestore.instance.collection('Users').doc(uid);
             Future<void> updateFirestore() async {
               try {
                 // goal_sleep_time 필드를 업데이트
                 await userDocRef.update({
-                  'goal_sleep_time': sleepEnteredTime,
+                  'goal_sleep_time': convertedTime,
                 });
                 widget.updateParentState(sleepEnteredTime);
 
@@ -201,8 +212,22 @@ class _ClockWidgetState extends State<ClockWidget>{
       await FirebaseFirestore.instance.collection('Users').doc(uid).get();
 
       if (userDoc.exists && userDoc.data()!.containsKey('goal_sleep_time')) {
+        String storedTime = userDoc['goal_sleep_time'];
+
+        List<String> timeComponents = storedTime.split(':');
+        int hours = int.parse(timeComponents[0]);
+        String minutes = timeComponents[1];
+
+        String amPm = (hours >= 12) ? 'PM' : 'AM';
+
+        if (hours > 12) {
+          hours -= 12;
+        }
+
+        String formattedTime = '$hours:$minutes $amPm';
+
         setState(() {
-          sleepEnteredTime = userDoc['goal_sleep_time'];
+          sleepEnteredTime = formattedTime;
         });
       } else {
         print('error1');
