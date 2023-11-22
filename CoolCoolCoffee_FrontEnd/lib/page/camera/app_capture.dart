@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
+
 class AppCapture extends StatefulWidget {
   final String cameraMode;
   final String cameraGallery;
@@ -16,6 +17,7 @@ class _AppCaptureState extends State<AppCapture> {
   XFile? _image; //이미지를 담을 변수 선언
   final ImagePicker picker = ImagePicker(); //ImagePicker 초기화
   String korScannedText = "";
+
   //이미지를 가져오는 함수
   Future getImage(ImageSource imageSource) async {
     //pickedFile에 ImagePicker로 가져온 이미지가 담긴다.
@@ -56,10 +58,10 @@ class _AppCaptureState extends State<AppCapture> {
               Text("${widget.cameraGallery}"),
               SizedBox(height: 30, width: double.infinity),
               _buildPhotoArea(),
-              //_buildKorRecognizedText(),
+              _buildKorRecognizedText(),
+              //_buildEngRecognizedText(),
               SizedBox(height: 20),
               _buildButton(),
-
             ],
           ),
         ),
@@ -83,6 +85,9 @@ class _AppCaptureState extends State<AppCapture> {
   Widget _buildKorRecognizedText() {
     return Text(korScannedText); //getRecognizedText()에서 얻은 scannedText 값 출력
   }
+  /*Widget _buildEngRecognizedText() {
+    return Text(engScannedText); //getRecognizedText()에서 얻은 scannedText 값 출력
+  }*/
 
   Widget _buildButton() {
     return Row(
