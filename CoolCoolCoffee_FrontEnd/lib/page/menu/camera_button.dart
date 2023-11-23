@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/function/camera_functions.dart';
+import 'package:coolcoolcoffee_front/page/menu/brand_check.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_add_page.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
@@ -71,6 +72,8 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
   }
   Future<void> fetchMenuFromAppCapture(RecognizedText recText) async{
     print("Hi!!! App Capture");
+    String brand = CameraFunc().fetchMenuFromAppCature(recText);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => BrandCheck(brand: brand)));
     print(recText);
   }
   Future<void> fetchMenuFromConveni(RecognizedText recText) async{
