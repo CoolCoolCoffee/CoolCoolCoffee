@@ -201,6 +201,7 @@ class _MyPageState extends State<MyPage> {
             TextButton(
               onPressed: () {
                 // 로그아웃 처리
+                Navigator.of(context).pop();
                 _auth.signOut();
 
                 // if(!mounted) return;
