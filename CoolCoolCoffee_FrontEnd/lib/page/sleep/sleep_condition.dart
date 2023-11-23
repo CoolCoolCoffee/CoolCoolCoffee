@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SleepConditionWidget extends StatefulWidget {
   final Function(int conditionLevel) onConditionSelected;
@@ -28,8 +30,8 @@ class _SleepConditionWidgetState extends State<SleepConditionWidget> {
               ),
               SizedBox(width: 10),
               ElevatedButton(
-                onPressed: () {
-                  saveSelectedCondition();
+                onPressed: () async {
+                  await saveSelectedCondition(); // Use 'await' here
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Colors.brown,
@@ -85,10 +87,35 @@ class _SleepConditionWidgetState extends State<SleepConditionWidget> {
     );
   }
 
-  void saveSelectedCondition() {
+  Future<void> saveSelectedCondition() async {
+    String currentDate = DateTime.now().toLocal().toString().split(' ')[0];
+
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    CollectionReference userSleepCollection = firestore.collection('Users').doc(uid).collection('user_sleep');
+    DocumentSnapshot todayDocument = await userSleepCollection.doc(currentDate).get();
+
+    // user_sleep 컬렉션 없으면 생성
+    if (!await userSleepCollection.doc('dummy').get().then((doc) => doc.exists)) {
+      await userSleepCollection.doc('dummy').set({});
+    }
+
+    if (todayDocument.exists) {
+      // 문서가 있으면 sleep_quality_score 필드 업데이트
+      await userSleepCollection.doc(currentDate).update({
+        'sleep_quality_score': selectedCondition.toInt(),
+      });
+    } else {
+      // 문서가 없으면 경우 오늘 날짜 문서 생성 후 추가
+      await userSleepCollection.doc(currentDate).set({
+        'sleep_quality_score': selectedCondition.toInt(),
+      });
+    }
+
     print('!!selectedCondition : $selectedCondition');
     widget.onConditionSelected(selectedCondition.toInt());
   }
+
 
   String getConditionLevel(int conditionLevel) {
     return conditionLevel.toString();
