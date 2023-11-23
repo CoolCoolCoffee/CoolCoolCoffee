@@ -72,9 +72,13 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
   }
   Future<void> fetchMenuFromAppCapture(RecognizedText recText) async{
     print("Hi!!! App Capture");
-    String brand = CameraFunc().fetchMenuFromAppCature(recText);
-    Navigator.push(context, MaterialPageRoute(builder: (context) => BrandCheck(brand: brand)));
-    print(recText);
+    var ret = await CameraFunc().fetchMenuFromAppCature(recText);
+    print(ret);
+    if(ret["success"]){
+      await Navigator.push(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: ret["document"], brandName: ret["brand"], size: ret["size"],shot: "",)));
+    }
+    //Navigator.push(context, MaterialPageRoute(builder: (context) => BrandCheck(brand: brand)));
+    //print(recText);
   }
   Future<void> fetchMenuFromConveni(RecognizedText recText) async{
     print("Hi!!!conveni");

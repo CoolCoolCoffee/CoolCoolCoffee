@@ -3,12 +3,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 class CameraFunc{
-  String fetchMenuFromAppCature(RecognizedText recText) {
+  Future<Map<String, dynamic>> fetchMenuFromAppCature(RecognizedText recText) async {
+    Map<String,dynamic> map= {};
     String brand = "hihi";
     for (TextBlock block in recText.blocks) {
       for (TextLine line in block.lines) {
         if (line.text.contains("제조완료된 음료와 푸드는")) {
           brand = "매머드커피";
+          map.addAll({"brand":brand});
+          await mammothCoffeeMenuCheck(recText).then((value){
+            map.addAll(value);
+          });
           break;
         }
         if (line.text.contains("빽다방")||line.text.contains("백다방")) {
@@ -35,20 +40,39 @@ class CameraFunc{
         }
       }
     }
-    return brand;
+    return map;
   }
-  List<String> mommothCoffeeMenuCheck(RecognizedText recText){
-    List<String> ret = [];
-    String size = "";
+  Future<Map<String, dynamic>> mammothCoffeeMenuCheck(RecognizedText recText) async {
+    Map<String,dynamic> ret = {};
+    var collection = FirebaseFirestore.instance.collection("Cafe_brand").doc("매머드커피").collection("menus");
+    bool flag = false;
+    bool menu = false;
     for (TextBlock block in recText.blocks) {
       for (TextLine line in block.lines) {
-        if(line.text.contains("S")||line.text.contains("M")||line.text.contains("L")){
-          size = line.text;
+        if(line.text == "S" ||line.text == "M" ||line.text == "L"){
+          ret.addAll({"size" : line.text});
+          break;
         }
-
       }
     }
+    for(TextBlock block in recText.blocks){
+      for(TextLine line in block.lines){
+        if(line.text == "결제금액") flag = true;
+        if(flag){
+          DocumentSnapshot<Map<String,dynamic>> doc = await collection.doc(line.text).get();
+          if(doc.exists){
+            ret.addAll({"document":doc});
+            ret.addAll({"success":true});
+            menu = true;
+            break;
+          }
+        }
+      }
+    }
+    if(!menu) ret.addAll({"success":false});
+    return ret;
   }
+
   Future<List<String>> fetchMenuFromStarbucksLabel(RecognizedText recText) async{
     List<String> ret = [];
     String brand = "스타벅스";
