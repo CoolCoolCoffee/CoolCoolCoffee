@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/function/camera_functions.dart';
 import 'package:coolcoolcoffee_front/page/menu/brand_check.dart';
+import 'package:coolcoolcoffee_front/page/menu/loading_menu.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_add_page.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
@@ -58,49 +59,30 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
     RecognizedText korRecognizedText =
     await korTextRecognizer.processImage(inputImage);
     await korTextRecognizer.close();
-
+    Navigator.pop(context);
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>LoadingMenu()));
     if(cameraMode=="Starbucks label"){
-      await starbucksLabel(korRecognizedText);
-    }else if(cameraMode=="App Capture"){
-      await fetchMenuFromAppCapture(korRecognizedText);
-    }else{
+      var ret = await CameraFunc().fetchMenuFromStarbucksLabel(korRecognizedText);
+      if(ret["success"]){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: ret["document"], brandName: ret["brand"], size: ret["size"],shot: "",)));
+      }
+    }
+    else if(cameraMode=="App Capture"){
+      var ret = await CameraFunc().fetchMenuFromAppCature(korRecognizedText);
+      if(ret["success"]){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: ret["document"], brandName: ret["brand"], size: ret["size"],shot: "",)));
+      }
+    }
+    else{
       await fetchMenuFromConveni(korRecognizedText);
     }
 
     //setState(() {});
     //await pushMenuAddPage(brand, menu);
   }
-  Future<void> fetchMenuFromAppCapture(RecognizedText recText) async{
-    print("Hi!!! App Capture");
-    var ret = await CameraFunc().fetchMenuFromAppCature(recText);
-    print(ret);
-    if(ret["success"]){
-      await Navigator.push(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: ret["document"], brandName: ret["brand"], size: ret["size"],shot: "",)));
-    }
-    //Navigator.push(context, MaterialPageRoute(builder: (context) => BrandCheck(brand: brand)));
-    //print(recText);
-  }
   Future<void> fetchMenuFromConveni(RecognizedText recText) async{
     print("Hi!!!conveni");
   }
-
-  Future<void> starbucksLabel(RecognizedText recText) async{
-    var getList = await CameraFunc().fetchMenuFromStarbucksLabel(recText);
-    if(getList.length == 4){
-      await pushMenuAddPage(getList[0], getList[1],getList[2],getList[3]);
-    }
-  }
-  Future<void> pushMenuAddPage(String brand, String menuName, String size, String shot) async{
-    print("push start $brand $menuName");
-    var wait = await FirebaseFirestore.instance
-        .collection('Cafe_brand')
-        .doc(brand)
-        .collection('menus')
-        .doc(menuName)
-        .get();
-    await Navigator.push(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: wait, brandName: '스타벅스', size: size,shot: shot,)));
-  }
-
   @override
   Widget build(BuildContext context) {
     return FloatingActionBubble(

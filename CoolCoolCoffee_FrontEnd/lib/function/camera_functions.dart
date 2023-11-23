@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:core';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
@@ -73,11 +76,12 @@ class CameraFunc{
     return ret;
   }
 
-  Future<List<String>> fetchMenuFromStarbucksLabel(RecognizedText recText) async{
-    List<String> ret = [];
+  Future<Map<String,dynamic>> fetchMenuFromStarbucksLabel(RecognizedText recText) async{
+    Map<String,dynamic> ret = {};
     String brand = "스타벅스";
-    ret.add(brand);
+    ret.addAll({"brand":brand});
     bool ice = false;
+    bool success = false;
     String menu = "";
     String korScannedText = "";
     String size = "";
@@ -98,7 +102,7 @@ class CameraFunc{
     }
 
     final starbucksMenu = korScannedText.split(' ');
-
+    var collection = FirebaseFirestore.instance.collection('Cafe_brand').doc(brand).collection('menus');
     var wait = await FirebaseFirestore.instance
         .collection('Cafe_brand')
         .doc(brand)
@@ -107,23 +111,21 @@ class CameraFunc{
         .then((subcol) {
       subcol.docs.forEach((element) {
         if(starbucksMenu[1].trim() == element.id.trim()){
+          success = true;
           if(ice){
             menu = element['ice'];
-            ret.add(menu);
           }else{
             menu = element['hot'];
-            ret.add(menu);
           }
         }
       });
     });
-    ret.add(size);
-    ret.add(shot);
-
-    print("menu: $menu");
-    print("size: $size");
-    print("ice: $ice");
+    if(success){
+      DocumentSnapshot<Map<String,dynamic>> doc = await collection.doc(menu).get();
+      ret.addAll({"document":doc});
+      ret.addAll({"size" : size});
+    }
+    ret.addAll({"success":success});
     return ret;
   }
-
 }
