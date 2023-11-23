@@ -39,6 +39,9 @@ class CoolCoolCoffee extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        primaryColor: Colors.brown.withOpacity(0.6),
+      ),
       debugShowCheckedModeBanner: false,
       // theme: ThemeData(scaffoldBackgroundColor: Colors.brown.withOpacity(0.1)),
       home: StreamBuilder<User?>(

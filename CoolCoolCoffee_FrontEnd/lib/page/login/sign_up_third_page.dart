@@ -12,8 +12,9 @@ class SignUpThirdPage extends StatefulWidget {
   final int userAge;
   final String bedTime;
   final String goodSleepTime;
+  final int caffeineHalfLife;
 
-  const SignUpThirdPage({Key? key, required this.userName, required this.userAge, required this.bedTime, required this.goodSleepTime,}) : super(key: key);
+  const SignUpThirdPage({Key? key, required this.userName, required this.userAge, required this.bedTime, required this.goodSleepTime, required this.caffeineHalfLife,}) : super(key: key);
 
   @override
   State<SignUpThirdPage> createState() => _UserFormState();

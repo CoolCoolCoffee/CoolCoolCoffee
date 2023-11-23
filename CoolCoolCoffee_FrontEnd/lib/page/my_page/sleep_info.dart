@@ -79,7 +79,7 @@ class _EditSleepDialogState extends State<EditSleepDialog> {
                               direction: Axis.vertical,
                               isSelected: _isSelected,
                               onPressed: toggleSelect,
-                              selectedColor: Colors.black,
+                              selectedColor: Colors.white,
                               fillColor: Colors.brown.withOpacity(0.6),
                               borderRadius: const BorderRadius.all(Radius.circular(4)),
                               constraints: const BoxConstraints(

@@ -86,16 +86,16 @@ class _UserFormState extends State<SignUpFirstPage> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Row(
+                        Row(
                           crossAxisAlignment: CrossAxisAlignment.baseline,
                           textBaseline: TextBaseline.ideographic,
                           children: [
                             Text('닉네임', style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue),),
-                            Text('을 설정해주세요.', style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.brown.withOpacity(0.6)),),
+                            const Text('을 설정해주세요.', style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-                            SizedBox(width: 4),
-                            Text('(한글 2~8자)', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black, textBaseline: TextBaseline.ideographic),),
+                            const SizedBox(width: 4),
+                            const Text('(한글 2~4자)', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black, textBaseline: TextBaseline.ideographic),),
                           ],
                         ),
                         const SizedBox(height: 10),
@@ -133,14 +133,14 @@ class _UserFormState extends State<SignUpFirstPage> {
                         const SizedBox(height: 60),
                         Column(
                           children: [
-                            const Row(
+                            Row(
                               children: [
                                 Text('만 나이', style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue),),
-                                Text('를 알려주세요.', style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold, color: Colors.brown.withOpacity(0.6)),),
+                                const Text('를 알려주세요.', style: TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-                                SizedBox(width: 4),
-                                Text('(필수)', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black, textBaseline: TextBaseline.ideographic),),
+                                const SizedBox(width: 4),
+                                const Text('(필수)', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black, textBaseline: TextBaseline.ideographic),),
                               ],
                             ),
                             const SizedBox(height: 10),
@@ -185,16 +185,24 @@ class _UserFormState extends State<SignUpFirstPage> {
               ),
               const SizedBox(height: 100,),
               Center(
-                child: ElevatedButton(
-                    onPressed: () async {
-                      if(_formKey.currentState?.validate() ?? false) {
-                        await Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => SignUpSecondPage(userName: userName!, userAge: userAge!,)),
-                        );
-                      }
-                    },
-                    child: Text('다음')),
+                child: Container(
+                  height: 60,
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.brown.withOpacity(0.6)),
+                      ),
+                      onPressed: () async {
+                        if(_formKey.currentState?.validate() ?? false) {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => SignUpSecondPage(userName: userName!, userAge: userAge!,)),
+                          );
+                        }
+                      },
+                      child: const Text('다음')),
+                ),
               ),
             ],
           ),
