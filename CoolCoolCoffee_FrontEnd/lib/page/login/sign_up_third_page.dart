@@ -56,6 +56,7 @@ class _UserFormState extends State<SignUpThirdPage> {
           'user_age': widget.userAge,
           'avg_bed_time': widget.bedTime,
           'good_sleep_time': widget.goodSleepTime,
+          'caffeine_half_life' : widget.caffeineHalfLife,
         }, SetOptions(merge: true));
         
         await FirebaseFirestore.instance
@@ -89,12 +90,12 @@ class _UserFormState extends State<SignUpThirdPage> {
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.ideographic,
           children: [
-            Text(widget.userName, style: const TextStyle(
-                fontSize: 25, fontWeight: FontWeight.bold, color: Colors.blue),),
+            Text(widget.userName, style: TextStyle(
+                fontSize: 25, fontWeight: FontWeight.bold, color: Colors.brown.withOpacity(0.6)),),
             const Text(' 님이 자주 이용하시는', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, textBaseline: TextBaseline.ideographic),),
           ],
         ),
-        Text('브랜드를 알려주세요! ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+        const Text('브랜드를 알려주세요! ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
         const SizedBox(height: 4),
         const Text('디카페인 음료 추천 시스템에 활용할거에요!', style: TextStyle(fontSize: 13, color: Colors.black54)),
       ],
@@ -134,16 +135,16 @@ class _UserFormState extends State<SignUpThirdPage> {
               textInfo(),
               const SizedBox(height: 25,),
               Container(width: screenWidth*0.9, height: 1, color: Colors.grey.withOpacity(0.5)),
-              const SizedBox(height: 30,),
-              const Row(
+              const SizedBox(height: 25,),
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.ideographic,
                 children: [
-                  Text('10개의 브랜드 중 ', style: TextStyle(
+                  const Text('10개의 브랜드 중 ', style: TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),),
                   Text('3개', style: TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue),),
-                  Text('를 골라주세요.', style: TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold, color: Colors.brown.withOpacity(0.6)),),
+                  const Text('를 골라주세요.', style: TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),),
                 ],
               ),
@@ -180,7 +181,7 @@ class _UserFormState extends State<SignUpThirdPage> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 15),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -202,7 +203,7 @@ class _UserFormState extends State<SignUpThirdPage> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 15),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -224,7 +225,7 @@ class _UserFormState extends State<SignUpThirdPage> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 15),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -246,7 +247,7 @@ class _UserFormState extends State<SignUpThirdPage> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 15),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -268,7 +269,7 @@ class _UserFormState extends State<SignUpThirdPage> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 15),
                           Center(
                             child: BrandBtn(
                               brandName: '편의점',
@@ -285,11 +286,19 @@ class _UserFormState extends State<SignUpThirdPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 50),
+              const SizedBox(height: 30),
               Center(
-                child: ElevatedButton(
-                  onPressed: _onNextButtonPressed,
-                  child: const Text('다음')),
+                child: Container(
+                  height: 60,
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.brown.withOpacity(0.6)),
+                      ),
+                    onPressed: _onNextButtonPressed,
+                    child: const Text('다음')),
+                ),
               ),
             ],
           ),
