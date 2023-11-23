@@ -32,6 +32,16 @@ class _MyPageState extends State<MyPage> {
     return uid;
   }
 
+  // 사용자 이름을 가져와서 화면에 업데이트
+  void loadUserName() async {
+    String? name = await getUserName();
+    if (name != null) {
+      setState(() {
+        userName = name;
+      });
+    }
+  }
+
   // 사용자의 userName 가져오기
   Future<String?> getUserName() async {
     String uid = getCurrentUserUID();
@@ -50,15 +60,6 @@ class _MyPageState extends State<MyPage> {
     }
   }
 
-  // 사용자 이름을 가져와서 화면에 업데이트
-  void loadUserName() async {
-    String? name = await getUserName();
-    if (name != null) {
-      setState(() {
-        userName = name;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -202,11 +203,11 @@ class _MyPageState extends State<MyPage> {
                 // 로그아웃 처리
                 _auth.signOut();
 
-                if(!mounted) return;
-                // 다이얼로그 닫기
-                Navigator.of(context).pop();
-                Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()),);
+                // if(!mounted) return;
+                // // 다이얼로그 닫기
+                // Navigator.of(context).pop();
+                // Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()),);
               },
               child: const Text('예', style: TextStyle(color: Colors.redAccent),),
             ),

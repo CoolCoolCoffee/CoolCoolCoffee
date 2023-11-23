@@ -50,6 +50,7 @@ class _SignUpPageState extends State<SignUpPage> {
             .doc(userCredential.user!.uid)
             .set({'user_email' : userCredential.user!.email})
             .onError((error, stackTrace) => print('이메일 정보 추가 에러!'));
+
       // 왜 토스트 안 되냐 ㅡㅡ
       // Fluttertoast.showToast(
       //   msg: '회원가입이 완료되었습니다!',

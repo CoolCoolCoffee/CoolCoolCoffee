@@ -25,7 +25,7 @@ class _UserFormState extends State<SignUpSecondPage> {
   late String bedTime;
   late String goodSleepTime;
 
-  bool isAm1 = false; bool isPm1 = false;
+  bool isAm1 = true; bool isPm1 = false;
   late List<bool> isSelected1 = [isAm1, isPm1];
 
   void toggleSelect1(value) {
@@ -41,6 +41,27 @@ class _UserFormState extends State<SignUpSecondPage> {
     });
   }
 
+  bool little = false; bool medium = true;  bool many = false;
+  late List<bool> caffeineSelected = [little, medium, many];
+
+  void caffeineToggleSelected(value) {
+    if(value == 0){
+      little = true;
+      medium = false;
+      many = false;
+    } else if(value == 1){
+      little = false;
+      medium = true;
+      many = false;
+    } else{
+      little = false;
+      medium = false;
+      many = true;
+    }
+    setState(() {
+      caffeineSelected = [little, medium, many];
+    });
+  }
   @override
   void initState() {
     super.initState();
@@ -56,7 +77,7 @@ class _UserFormState extends State<SignUpSecondPage> {
   }
 
   void _onNextButtonPressed() {
-    // bedTime, wakeTime, goodSleepTime 모두 string으로 변화 시키자
+    // bedTime, goodSleepTime 모두 string으로 변화 시키자
     if(isAm1 == true) {
       bedTime = '${bedHour.toString()}:${bedMin.toString().padLeft(2,'0')}';
     } else if(isPm1 == true) {
@@ -89,7 +110,7 @@ class _UserFormState extends State<SignUpSecondPage> {
           textBaseline: TextBaseline.ideographic,
           children: [
             Text(widget.userName, style: const TextStyle(
-                fontSize: 30, fontWeight: FontWeight.bold, color: Colors.blue),),
+                fontSize: 25, fontWeight: FontWeight.bold, color: Colors.blue),),
         const Text(' 님의 수면 주기를 파악하려면', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, textBaseline: TextBaseline.ideographic),),
           ],
         ),
@@ -109,7 +130,18 @@ class _UserFormState extends State<SignUpSecondPage> {
     return Scaffold(
       // backgroundColor: Colors.brown.withOpacity(0.1),
       appBar: AppBar(
-        title: const Text('두 번째 페이지'),
+        backgroundColor: Colors.white,
+        title: const Text('두 번째 페이지', style: TextStyle(color: Colors.black),),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(32),
@@ -120,8 +152,8 @@ class _UserFormState extends State<SignUpSecondPage> {
               const SizedBox(height: 10),
               textInfo(),
               const SizedBox(height: 25,),
-              Container(width: screenWidth*0.9, height: 1, color: Colors.grey.withOpacity(0.5)),
-              const SizedBox(height: 80,),
+              Container(width: screenWidth * 0.9, height: 1, color: Colors.grey.withOpacity(0.5)),
+              const SizedBox(height: 60,),
               Form(
                 key: _formKey,
                 child: Column(
@@ -222,7 +254,7 @@ class _UserFormState extends State<SignUpSecondPage> {
                             const SizedBox(width: 10,),
                           ],
                         ),
-                        const SizedBox(height: 60),
+                        const SizedBox(height: 40),
                         // 적정 수면 시간을 입력받는 위젯
                         Column(
                           children: [
@@ -305,6 +337,29 @@ class _UserFormState extends State<SignUpSecondPage> {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 40),
+                    Column(
+                      children: [
+                        const Text('평소에 카페인의 영향을 얼마나 받으시나요?', style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
+                        const SizedBox(width: 4),
+                        ToggleButtons(
+                            isSelected: caffeineSelected,
+                            onPressed: caffeineToggleSelected,
+                            children: const [
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Text('조금', style: TextStyle(fontSize: 16),),),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Text('보통', style: TextStyle(fontSize: 16),),),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Text('많이', style: TextStyle(fontSize: 16),),),
+                            ]
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),

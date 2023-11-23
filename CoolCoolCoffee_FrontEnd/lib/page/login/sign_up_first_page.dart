@@ -55,7 +55,18 @@ class _UserFormState extends State<SignUpFirstPage> {
     return Scaffold(
       // backgroundColor: Colors.brown.withOpacity(0.1),
       appBar: AppBar(
-        title: Text('첫 번째 페이지'),
+        backgroundColor: Colors.white,
+        title: const Text('첫 번째 페이지', style: TextStyle(color: Colors.black),),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(32),
