@@ -1,10 +1,11 @@
-// sleep_info.dart
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_health_connect/flutter_health_connect.dart';
 import 'package:timezone/timezone.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:intl/intl.dart';
 import 'package:coolcoolcoffee_front/service/user_sleep_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SleepInfoWidget extends StatefulWidget {
   final DateTime selectedDay;
@@ -101,6 +102,7 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
                         print(e.toString());
                       }
                       _updateResultText();
+                      _updateFirestore();
                       print(resultText_start_real);
                       print(resultText_end_real);
 
@@ -195,6 +197,43 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
       ),
     );
   }
+
+  Future<void> _updateFirestore() async {
+    String currentDate = DateTime.now().toLocal().toString().split(' ')[0];
+
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    DocumentReference userDocRef = firestore.collection('Users').doc(uid);
+
+    // 오늘날짜의 user_sleep 컬렉션 가져오기
+    CollectionReference userSleepCollection = userDocRef.collection('user_sleep');
+
+    // user_sleep 컬렉션이 없는 경우 생성
+    if (!(await userDocRef.get()).exists) {
+      await userDocRef.set({
+        'user_sleep': {},
+      });
+    }
+
+    // 오늘날짜의 문서 가져오기
+    DocumentSnapshot todayDocument = await userSleepCollection.doc(currentDate).get();
+
+    if (todayDocument.exists) {
+      // 문서 있으면 sleep_time 및 wake_time 필드 업데이트
+      await userSleepCollection.doc(currentDate).update({
+        'sleep_time': resultText_start_real,
+        'wake_time': resultText_end_real,
+      });
+    } else {
+      // 문서 없으면 경우 새로운 문서 생성
+      await userSleepCollection.doc(currentDate).set({
+        'sleep_time': resultText_start_real,
+        'wake_time': resultText_end_real,
+      });
+    }
+    print("sssssssssssssss $currentDate");
+  }
+
 
   void _updateResultText() {
     setState(() {});
