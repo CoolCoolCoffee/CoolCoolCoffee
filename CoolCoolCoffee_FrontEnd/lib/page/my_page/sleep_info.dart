@@ -265,7 +265,7 @@ class _SleepInfoState extends State<SleepInfo> {
                 fontSize: 15, fontWeight: FontWeight.w500),),
             IconButton(
               onPressed: () {
-                // 수정화면 보여주는 콜백함수
+                // 수정화면 보여주는 함수
                 _showEditSleepDialog(context);
               },
               icon: const Icon(Icons.edit),
@@ -371,7 +371,7 @@ class _SleepInfoState extends State<SleepInfo> {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return EditSleepDialog();
+        return const EditSleepDialog();
       },
     );
   }

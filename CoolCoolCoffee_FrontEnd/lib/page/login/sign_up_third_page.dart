@@ -93,13 +93,7 @@ class _UserFormState extends State<SignUpThirdPage> {
             const Text(' 님이 자주 이용하시는', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, textBaseline: TextBaseline.ideographic),),
           ],
         ),
-        const Row(
-          children: [
-            Text('카페 브랜드 ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-            Text('3군데', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue),),
-            Text('를 알려주세요!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-          ],
-        ),
+        Text('브랜드를 알려주세요! ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
         const SizedBox(height: 4),
         const Text('디카페인 음료 추천 시스템에 활용할거에요!', style: TextStyle(fontSize: 13, color: Colors.black54)),
       ],
@@ -144,10 +138,10 @@ class _UserFormState extends State<SignUpThirdPage> {
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.ideographic,
                 children: [
-                  Text('9개의 브랜드 중 ', style: TextStyle(
+                  Text('10개의 브랜드 중 ', style: TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),),
-                  Text('최대 3개', style: TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blue),),
+                  Text('3개', style: TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue),),
                   Text('를 골라주세요.', style: TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),),
                 ],
@@ -190,11 +184,11 @@ class _UserFormState extends State<SignUpThirdPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               BrandBtn(
-                                brandName: '매머드',
+                                brandName: '할리스',
                                 pressedNum: brandBtns.length,
-                                isSelected: brandBtns.contains('매머드'),
+                                isSelected: brandBtns.contains('할리스'),
                                 onPressed: (isSelected){
-                                  handleSelectedBtn('매머드');
+                                  handleSelectedBtn('할리스');
                                 },
                               ),
                               BrandBtn(
@@ -220,11 +214,11 @@ class _UserFormState extends State<SignUpThirdPage> {
                                 },
                               ),
                               BrandBtn(
-                                brandName: '메가커피',
+                                brandName: '매머드커피',
                                 pressedNum: brandBtns.length,
-                                isSelected: brandBtns.contains('메가커피'),
+                                isSelected: brandBtns.contains('매머드커피'),
                                 onPressed: (isSelected){
-                                  handleSelectedBtn('메가커피');
+                                  handleSelectedBtn('매머드커피');
                                 },
                               ),
                             ],
@@ -264,14 +258,25 @@ class _UserFormState extends State<SignUpThirdPage> {
                                 },
                               ),
                               BrandBtn(
-                                brandName: '할리스',
+                                brandName: '메가커피',
                                 pressedNum: brandBtns.length,
-                                isSelected: brandBtns.contains('할리스'),
+                                isSelected: brandBtns.contains('메가커피'),
                                 onPressed: (isSelected){
-                                  handleSelectedBtn('할리스');
+                                  handleSelectedBtn('메가커피');
                                 },
                               ),
                             ],
+                          ),
+                          const SizedBox(height: 20),
+                          Center(
+                            child: BrandBtn(
+                              brandName: '편의점',
+                              pressedNum: brandBtns.length,
+                              isSelected: brandBtns.contains('편의점'),
+                              onPressed: (isSelected){
+                                handleSelectedBtn('편의점');
+                              },
+                            ),
                           ),
                         ],
                       ),

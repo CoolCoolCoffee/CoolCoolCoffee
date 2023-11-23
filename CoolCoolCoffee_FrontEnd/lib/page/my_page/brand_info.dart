@@ -3,6 +3,230 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../login/brand_btn.dart';
 
+class EditBrandDialog extends StatefulWidget {
+  List<String> brand_list;
+
+  EditBrandDialog({Key? key, required this.brand_list}) : super(key: key);
+  @override
+  State<EditBrandDialog> createState() => _EditBrandDialogState();
+}
+
+class _EditBrandDialogState extends State<EditBrandDialog> {
+  String uid = FirebaseAuth.instance.currentUser!.uid;
+  late List <String> new_brand_list;
+
+  @override
+  void initState(){
+    new_brand_list = widget.brand_list;
+    super.initState();
+  }
+
+  // 브래드 정보 db에 업데이트하는 함수
+  void updateBrandInfo(new_brand_list) async {
+    var db = FirebaseFirestore.instance;
+    final data = new_brand_list;
+
+    try {
+      await db
+          .collection("Users")
+          .doc(uid)
+          .collection('user_favorite')
+          .doc('favorite_brand')
+          .set({
+        'brand_list' : data,
+      }, SetOptions(merge: true));
+
+      print('브랜드 수정 성공!');
+    } catch(e) {
+      print("브랜드 수정 에러: $e");
+    }
+
+  }
+
+  void handleSelectedBtn(String brandName){
+    setState(() {
+      if (new_brand_list.contains(brandName)) {
+        new_brand_list.remove(brandName);
+      } else {
+        if (new_brand_list.length <= 2) {
+          new_brand_list.add(brandName);
+        }
+      }
+    });
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      // RoundedRectangleBorder - Dialog 화면 모서리 둥글게 조절
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0)),
+      //Dialog Main Title
+      title: const Center(child: Text('브랜드 정보 수정')),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: SizedBox(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        BrandBtn(
+                          brandName: '더벤티',
+                          pressedNum: new_brand_list.length,
+                          isSelected: new_brand_list.contains('더벤티'),
+                          onPressed: (isSelected){
+                            handleSelectedBtn('더벤티');
+                          },
+                        ),
+                        const SizedBox(width: 10),
+                        BrandBtn(
+                          brandName: '투썸플레이스',
+                          pressedNum: new_brand_list.length,
+                          isSelected: new_brand_list.contains('투썸플레이스'),
+                          onPressed: (isSelected){
+                            handleSelectedBtn('투썸플레이스');
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        BrandBtn(
+                          brandName: '할리스',
+                          pressedNum: new_brand_list.length,
+                          isSelected: new_brand_list.contains('할리스'),
+                          onPressed: (isSelected){
+                            handleSelectedBtn('할리스');
+                          },
+                        ),
+                        BrandBtn(
+                          brandName: '컴포즈커피',
+                          pressedNum: new_brand_list.length,
+                          isSelected: new_brand_list.contains('컴포즈커피'),
+                          onPressed: (isSelected){
+                            handleSelectedBtn('컴포즈커피');
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        BrandBtn(
+                          brandName: '이디야',
+                          pressedNum: new_brand_list.length,
+                          isSelected: new_brand_list.contains('이디야'),
+                          onPressed: (isSelected){
+                            handleSelectedBtn('이디야');
+                          },
+                        ),
+                        BrandBtn(
+                          brandName: '매머드커피',
+                          pressedNum: new_brand_list.length,
+                          isSelected: new_brand_list.contains('매머드커피'),
+                          onPressed: (isSelected){
+                            handleSelectedBtn('매머드커피');
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        BrandBtn(
+                          brandName: '커피빈',
+                          pressedNum: new_brand_list.length,
+                          isSelected: new_brand_list.contains('커피빈'),
+                          onPressed: (isSelected){
+                            handleSelectedBtn('커피빈');
+                          },
+                        ),
+                        BrandBtn(
+                          brandName: '스타벅스',
+                          pressedNum: new_brand_list.length,
+                          isSelected: new_brand_list.contains('스타벅스'),
+                          onPressed: (isSelected){
+                            handleSelectedBtn('스타벅스');
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        BrandBtn(
+                          brandName: '빽다방',
+                          pressedNum: new_brand_list.length,
+                          isSelected: new_brand_list.contains('빽다방'),
+                          onPressed: (isSelected){
+                            handleSelectedBtn('빽다방');
+                          },
+                        ),
+                        BrandBtn(
+                          brandName: '메가커피',
+                          pressedNum: new_brand_list.length,
+                          isSelected: new_brand_list.contains('메가커피'),
+                          onPressed: (isSelected){
+                            handleSelectedBtn('메가커피');
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: BrandBtn(
+                        brandName: '편의점',
+                        pressedNum: new_brand_list.length,
+                        isSelected: new_brand_list.contains('편의점'),
+                        onPressed: (isSelected){
+                          handleSelectedBtn('편의점');
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          child: const Text("취소", style: TextStyle(color: Colors.black)),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        TextButton(
+          onPressed: () {
+            updateBrandInfo(new_brand_list);
+            Navigator.pop(context);
+          },
+          child: const Text('수정', style: TextStyle(color: Colors.redAccent),),
+        ),
+      ],
+    );
+  }
+}
+
+
+
+
+
+
 class BrandInfo extends StatefulWidget {
   final FirebaseAuth auth;
   final FirebaseFirestore firestore;
@@ -16,6 +240,26 @@ class BrandInfo extends StatefulWidget {
 
 class _BrandInfoState extends State<BrandInfo> {
   String uid = FirebaseAuth.instance.currentUser!.uid;
+  late Map<String, dynamic> userData;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  void fetchData() async {
+    var result = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(uid)
+        .collection('user_favorite')
+        .doc('favorite_brand')
+        .get();
+    setState(() {
+      userData = result.data() ?? {};
+    });
+  }
+
 
   getUserInfo() async {
     var result = await FirebaseFirestore.instance.collection('Users')
@@ -25,9 +269,12 @@ class _BrandInfoState extends State<BrandInfo> {
     return result.data();
   }
 
+  // 홈 화면에 보여질 브랜드 정보 위젯
   Widget brandInfoWidget({required Map<String, dynamic> userData}){
     double screenWidth = MediaQuery.of(context).size.width;
-    List<String> brand_list = List<String>.from(userData['brand_list'] ?? []);
+
+    // 브랜드 정보 받아와서
+    List<String> brand_list = List<String>.from(userData['brand_list']);
 
     return Column(
       children: [
@@ -38,7 +285,8 @@ class _BrandInfoState extends State<BrandInfo> {
                 fontSize: 15, fontWeight: FontWeight.w500),),
             IconButton(
               onPressed: (){
-                showEditBrandDialog(context, brand_list);
+                // 수정 화면 보여주는 함수
+                _showEditBrandDialog(context, brand_list);
               },
               icon: const Icon(Icons.edit),
               iconSize: 20,)
@@ -90,205 +338,6 @@ class _BrandInfoState extends State<BrandInfo> {
     );
   }
 
-  void showEditBrandDialog(BuildContext context, brand_list) {
-    //  새로 수정된 브랜드 담을 변수(default는 기존 정보)
-    List <String> new_brand_list = brand_list;
-
-    // 브래드 정보 db에 업데이트하는 함수
-    void updateBrandInfo(brand_list) async {
-      var db = FirebaseFirestore.instance;
-      final data = brand_list;
-
-      try {
-        await db
-            .collection("Users")
-            .doc(uid)
-            .collection('user_favorite')
-            .doc('favorite_brand')
-            .set({
-          'brand_list' : data,
-        }, SetOptions(merge: true));
-
-        print('브랜드 수정 성공!');
-      } catch(e) {
-        print("브랜드 수정 에러: $e");
-      }
-
-    }
-
-    void handleSelectedBtn(String brandName, bool isSelected){
-      setState(() {
-        if (isSelected) {
-          new_brand_list.remove(brandName);
-        } else {
-          if (new_brand_list.length <= 2) {
-            new_brand_list.add(brandName);
-          }
-        }
-        print(new_brand_list);
-      });
-    }
-
-    // 브랜드 수정 alert dialog 화면
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context){
-          return AlertDialog(
-            // RoundedRectangleBorder - Dialog 화면 모서리 둥글게 조절
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            //Dialog Main Title
-            title: const Center(child: Text('브랜드 정보 수정')),
-            content: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20,10,20,10),
-                    child: SizedBox(
-                      // width: MediaQuery.of(context).size.width * 0.8,
-                      child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  BrandBtn(
-                                    brandName: '더벤티',
-                                    pressedNum: new_brand_list.length,
-                                    isSelected: new_brand_list.contains('더벤티'),
-                                    onPressed: (isSelected){
-                                      handleSelectedBtn('더벤티', isSelected);
-                                    },
-                                  ),
-                                  BrandBtn(
-                                    brandName: '투썸플레이스',
-                                    pressedNum: new_brand_list.length,
-                                    isSelected: new_brand_list.contains('투썸플레이스'),
-                                    onPressed: (isSelected){
-                                      handleSelectedBtn('투썸플레이스', isSelected);
-                                    },
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  BrandBtn(
-                                    brandName: '매머드',
-                                    pressedNum: new_brand_list.length,
-                                    isSelected: new_brand_list.contains('매머드'),
-                                    onPressed: (isSelected){
-                                      handleSelectedBtn('매머드', isSelected);
-                                    },
-                                  ),
-                                  BrandBtn(
-                                    brandName: '컴포즈커피',
-                                    pressedNum: new_brand_list.length,
-                                    isSelected: new_brand_list.contains('컴포즈커피'),
-                                    onPressed: (isSelected){
-                                      handleSelectedBtn('컴포즈커피', isSelected);
-                                    },
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  BrandBtn(
-                                    brandName: '이디야',
-                                    pressedNum: new_brand_list.length,
-                                    isSelected: new_brand_list.contains('이디야'),
-                                    onPressed: (isSelected){
-                                      handleSelectedBtn('이디야', isSelected);
-                                    },
-                                  ),
-                                  BrandBtn(
-                                    brandName: '메가커피',
-                                    pressedNum: new_brand_list.length,
-                                    isSelected: new_brand_list.contains('메가커피'),
-                                    onPressed: (isSelected){
-                                      handleSelectedBtn('메가커피', isSelected);
-                                    },
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  BrandBtn(
-                                    brandName: '커피빈',
-                                    pressedNum: new_brand_list.length,
-                                    isSelected: new_brand_list.contains('커피빈'),
-                                    onPressed: (isSelected){
-                                      handleSelectedBtn('커피빈', isSelected);
-                                    },
-                                  ),
-                                  BrandBtn(
-                                    brandName: '스타벅스',
-                                    pressedNum: new_brand_list.length,
-                                    isSelected: new_brand_list.contains('스타벅스'),
-                                    onPressed: (isSelected){
-                                      handleSelectedBtn('스타벅스', isSelected);
-                                    },
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  BrandBtn(
-                                    brandName: '빽다방',
-                                    pressedNum: new_brand_list.length,
-                                    isSelected: new_brand_list.contains('빽다방'),
-                                    onPressed: (isSelected){
-                                      handleSelectedBtn('빽다방', isSelected);
-                                    },
-                                  ),
-                                  BrandBtn(
-                                    brandName: '할리스',
-                                    pressedNum: new_brand_list.length,
-                                    isSelected: new_brand_list.contains('할리스'),
-                                    onPressed: (isSelected){
-                                      handleSelectedBtn('할리스', isSelected);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                child: const Text("취소", style: TextStyle(color: Colors.black)),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              TextButton(
-                onPressed: () {
-                  updateBrandInfo(new_brand_list);
-                  Navigator.pop(context);
-                },
-                child: const Text('수정', style: TextStyle(color: Colors.redAccent),),
-              ),
-            ],
-          );
-        }
-    );
-
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -309,5 +358,15 @@ class _BrandInfoState extends State<BrandInfo> {
         }
       },
     );
+  }
+
+  void _showEditBrandDialog(BuildContext context, brand_list) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context){
+        return EditBrandDialog(brand_list: brand_list);
+      },
+    );
+    fetchData();
   }
 }
