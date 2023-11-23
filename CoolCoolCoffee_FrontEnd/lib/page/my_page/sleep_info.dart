@@ -38,21 +38,22 @@ class _EditSleepDialogState extends State<EditSleepDialog> {
     print('적정 수면 시간: $goodSleepHour시 $goodSleepMin분');
   }
 
+    bool isAm = true;
 
   @override
   Widget build(BuildContext context) {
-    bool isAm = true;
-    List<bool> _isSelected = [isAm, !isAm];
 
+    List<bool> _isSelected = [isAm, !isAm];
     void toggleSelect(value) {
       print(value);
 
+      if(value == 0){
+        isAm = true;
+      } else{
+        isAm = false;
+      }
+
       setState(() {
-        if(value == 0){
-          isAm = true;
-        } else{
-          isAm = false;
-        }
         _isSelected = [isAm, !isAm];
         print(_isSelected);
       });
