@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/service/user_sleep_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Event {
   final DateTime date;
@@ -31,18 +33,55 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   @override
   void initState() {
     super.initState();
-    dateColors[DateTime.utc(2023, 11, 10)] = 10;
-    dateColors[DateTime.utc(2023, 11, 11)] = 9;
-    dateColors[DateTime.utc(2023, 11, 12)] = 8;
-    dateColors[DateTime.utc(2023, 11, 13)] = 7;
-    dateColors[DateTime.utc(2023, 11, 14)] = 6;
-    dateColors[DateTime.utc(2023, 11, 15)] = 5;
-    dateColors[DateTime.utc(2023, 11, 16)] = 4;
-    dateColors[DateTime.utc(2023, 11, 17)] = 3;
-    dateColors[DateTime.utc(2023, 11, 18)] = 2;
-    dateColors[DateTime.utc(2023, 11, 19)] = 1;
-    dateColors[DateTime.utc(2023, 11, 20)] = 0;
+    var s = DateTime.utc(2023, 11, 10);
+    //print("이거 : $s");
+    _updateDateColors();
+    // dateColors[DateTime.utc(2023, 11, 10)] = 10;
+    // dateColors[DateTime.utc(2023, 11, 11)] = 9;
+    // dateColors[DateTime.utc(2023, 11, 12)] = 8;
+    // dateColors[DateTime.utc(2023, 11, 13)] = 7;
+    // dateColors[DateTime.utc(2023, 11, 14)] = 6;
+    // dateColors[DateTime.utc(2023, 11, 15)] = 5;
+    // dateColors[DateTime.utc(2023, 11, 16)] = 4;
+    // dateColors[DateTime.utc(2023, 11, 17)] = 3;
+    // dateColors[DateTime.utc(2023, 11, 18)] = 2;
+    // dateColors[DateTime.utc(2023, 11, 19)] = 1;
+    // dateColors[DateTime.utc(2023, 11, 20)] = 0;
   }
+
+  Future<void> _updateDateColors() async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    CollectionReference userSleepCollection = firestore.collection('Users').doc(uid).collection('user_sleep');
+
+    try {
+      QuerySnapshot<Map<String, dynamic>> userSleepData = await userSleepCollection.get() as QuerySnapshot<Map<String, dynamic>>;
+
+      userSleepData.docs.forEach((doc) {
+        DateTime date = DateTime.parse(doc.id).toLocal();
+        if (doc.data()!.containsKey('sleep_quality_score')) {
+          int? sleepQualityScore = doc['sleep_quality_score'];
+
+          if (sleepQualityScore != null) {
+            DateTime utcDate = DateTime.utc(date.year, date.month, date.day);
+            dateColors[utcDate] = sleepQualityScore;
+            var c = DateTime(date.year, date.month, date.day);
+            print("tlqkf $c");
+          } else {
+            print('"sleep_quality_score"가 null: ${doc.id}');
+          }
+        } else {
+          print('"sleep_quality_score": 필드 없음 ${doc.id}');
+        }
+      });  // 업데이트 후에는 UI를 다시 그리기
+      setState(() {
+        print("tlqkf");
+      });
+    } catch (e) {
+      print('Error : $e');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {

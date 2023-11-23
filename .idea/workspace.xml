@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="873e7c14-3694-4bd9-9645-17be87d3022e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/lib/page/sleep/sleep_condition.dart" beforeDir="false" afterPath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/lib/page/sleep/sleep_condition.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/lib/page/sleep/sleep_info.dart" beforeDir="false" afterPath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/lib/page/sleep/sleep_info.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/lib/page/sleep/calendar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/lib/page/sleep/calendar.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
