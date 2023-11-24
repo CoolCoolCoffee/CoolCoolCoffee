@@ -2,7 +2,9 @@ import 'package:coolcoolcoffee_front/page/login/sign_up_second_page.dart';
 import 'package:flutter/material.dart';
 
 class SignUpFirstPage extends StatefulWidget {
-  const SignUpFirstPage({Key? key,}) : super(key: key);
+  final String userEmail;
+  final String userPassword;
+  const SignUpFirstPage({Key? key, required this.userEmail, required this.userPassword,}) : super(key: key);
 
   @override
   State<SignUpFirstPage> createState() => _UserFormState();
@@ -68,79 +70,37 @@ class _UserFormState extends State<SignUpFirstPage> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(32),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              textInfo(),
-              const SizedBox(height: 25,),
-              Container(width: screenWidth*0.9, height: 1, color: Colors.grey.withOpacity(0.5)),
-              const SizedBox(height: 80,),
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 10),
+                  textInfo(),
+                  const SizedBox(height: 25,),
+                  Container(width: screenWidth*0.9, height: 1, color: Colors.grey.withOpacity(0.5)),
+                  const SizedBox(height: 80,),
+                  Form(
+                    key: _formKey,
+                    child: Column(
                       children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.baseline,
-                          textBaseline: TextBaseline.ideographic,
-                          children: [
-                            Text('닉네임', style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.brown.withOpacity(0.6)),),
-                            const Text('을 설정해주세요.', style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-                            const SizedBox(width: 4),
-                            const Text('(한글 2~4자)', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black, textBaseline: TextBaseline.ideographic),),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                keyboardType: TextInputType.text,
-                                controller: _nameController,
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  hintText: '닉네임을 입력하세요',
-                                  hintStyle: TextStyle(color: Colors.grey),
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return "필수입력란 입니다";
-                                  } else if (!isKorean(value)) {
-                                    return "한글만 입력해주세요";
-                                  } else if (value.length < 2 || value.length > 8) {
-                                    return "한글 2~8자 이내로 입력해주세요";
-                                  }
-                                  return null;
-                                },
-                                onChanged: (value){
-                                  setState(() {
-                                    print('Name onChanged: $value');
-                                    userName = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 60),
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
+                              crossAxisAlignment: CrossAxisAlignment.baseline,
+                              textBaseline: TextBaseline.ideographic,
                               children: [
-                                Text('만 나이', style: TextStyle(
+                                Text('닉네임', style: TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.bold, color: Colors.brown.withOpacity(0.6)),),
-                                const Text('를 알려주세요.', style: TextStyle(
+                                const Text('을 설정해주세요.', style: TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
                                 const SizedBox(width: 4),
-                                const Text('(필수)', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black, textBaseline: TextBaseline.ideographic),),
+                                const Text('(한글 2~4자)', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black, textBaseline: TextBaseline.ideographic),),
                               ],
                             ),
                             const SizedBox(height: 10),
@@ -148,64 +108,114 @@ class _UserFormState extends State<SignUpFirstPage> {
                               children: [
                                 Expanded(
                                   child: TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    controller: _ageController,
+                                    keyboardType: TextInputType.text,
+                                    controller: _nameController,
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
-                                      hintText: '만 나이를 입력하세요',
+                                      hintText: '닉네임을 입력하세요',
                                       hintStyle: TextStyle(color: Colors.grey),
                                     ),
-                                    validator: (value){
-                                      if(value == null || value.isEmpty){
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
                                         return "필수입력란 입니다";
-                                      } else if(value == '0'){
-                                        return "1 이상의 숫자를 입력해주세요";
+                                      } else if (!isKorean(value)) {
+                                        return "한글만 입력해주세요";
+                                      } else if (value.length < 2 || value.length > 8) {
+                                        return "한글 2~8자 이내로 입력해주세요";
                                       }
                                       return null;
                                     },
                                     onChanged: (value){
-                                      print('Age onChanged: $value');
                                       setState(() {
-                                        userAge = int.parse(value);
+                                        print('Name onChanged: $value');
+                                        userName = value;
                                       });
                                     },
                                   ),
                                 ),
-                                const SizedBox(width: 10),
-                                const Text('세', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
-                                const SizedBox(width: 125),
                               ],
                             ),
+                            const SizedBox(height: 60),
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Text('만 나이', style: TextStyle(
+                                        fontSize: 20, fontWeight: FontWeight.bold, color: Colors.brown.withOpacity(0.6)),),
+                                    const Text('를 알려주세요.', style: TextStyle(
+                                        fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
+                                    const SizedBox(width: 4),
+                                    const Text('(필수)', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black, textBaseline: TextBaseline.ideographic),),
+                                  ],
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        controller: _ageController,
+                                        decoration: const InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          hintText: '만 나이를 입력하세요',
+                                          hintStyle: TextStyle(color: Colors.grey),
+                                        ),
+                                        validator: (value){
+                                          if(value == null || value.isEmpty){
+                                            return "필수입력란 입니다";
+                                          } else if(value == '0'){
+                                            return "1 이상의 숫자를 입력해주세요";
+                                          }
+                                          return null;
+                                        },
+                                        onChanged: (value){
+                                          print('Age onChanged: $value');
+                                          setState(() {
+                                            userAge = int.parse(value);
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    const Text('세', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                                    const SizedBox(width: 125),
+                                  ],
+                                ),
+                              ],
+                            )
                           ],
-                        )
+                        ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 100,),
-              Center(
-                child: Container(
-                  height: 60,
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.brown.withOpacity(0.6)),
-                      ),
-                      onPressed: () async {
-                        if(_formKey.currentState?.validate() ?? false) {
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (BuildContext context) => SignUpSecondPage(userName: userName!, userAge: userAge!,)),
-                          );
-                        }
-                      },
-                      child: const Text('다음')),
-                ),
+            ),
+            const SizedBox(height: 160),
+            Center(
+              child: Container(
+                height: 70,
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.only(top: 8.0),
+                child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.brown.withOpacity(0.6)),
+                    ),
+                    onPressed: () async {
+                      if(_formKey.currentState?.validate() ?? false) {
+                        await Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => SignUpSecondPage(
+                                  userEmail: widget.userEmail, userPassword: widget.userPassword, userName: userName!, userAge: userAge!
+                              )
+                          ),
+                        );
+                      }
+                    },
+                    child: const Text('다음', style: TextStyle(fontSize: 22),)),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
