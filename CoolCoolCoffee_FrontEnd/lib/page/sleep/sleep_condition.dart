@@ -15,6 +15,12 @@ class SleepConditionWidget extends StatefulWidget {
 class _SleepConditionWidgetState extends State<SleepConditionWidget> {
   double selectedCondition = 5.0; // Default value
 
+  @override
+  void initState() {
+    super.initState();
+    // 이니셜 상태에서 Firestore에서 값을 가져와서 설정합니다.
+    _fetchSleepQualityScore();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +96,40 @@ class _SleepConditionWidgetState extends State<SleepConditionWidget> {
       ),
     );
   }
+
+  Future<void> _fetchSleepQualityScore() async {
+    try {
+      String currentDate = DateTime.now().toLocal().toString().split(' ')[0];
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+
+      DocumentReference userDocRef = firestore.collection('Users').doc(uid);
+      CollectionReference userSleepCollection = userDocRef.collection('user_sleep');
+
+      if (!(await userDocRef.get()).exists) {
+        await userDocRef.set({
+          'user_sleep': {},
+        });
+      }
+      DocumentSnapshot todayDocument = await userSleepCollection.doc(currentDate).get();
+
+      if (todayDocument.exists) {
+        // 문서 있으면 그거로 표시
+        setState(() {
+          selectedCondition = (todayDocument['sleep_quality_score'] ?? 5).toDouble();
+          //print("tlqkf : $selectedCondition");
+        });
+      } else {
+        // 문서 없으면 5.0
+        setState(() {
+          selectedCondition = 5.0;
+        });
+      }
+    } catch (error) {
+      print('Error fetching sleep quality score: $error');
+    }
+  }
+
   void saveSelectedCondition() async {
     try {
       String currentDate = DateTime.now().toLocal().toString().split(' ')[0];

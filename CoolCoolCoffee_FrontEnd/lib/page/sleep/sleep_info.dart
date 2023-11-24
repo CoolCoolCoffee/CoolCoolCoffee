@@ -25,6 +25,16 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
   String selecteddate = '';
   String todaydate = '';
 
+  @override
+  void initState() {
+    super.initState();
+    // 값이 없는 경우에만 초기화
+    if (resultText_start_real.isEmpty || resultText_end_real.isEmpty) {
+      _fetchSleepTimeAndUpdateState();
+    }
+  }
+
+
   List<HealthConnectDataType> types = [HealthConnectDataType.SleepSession];
 
   @override
@@ -238,4 +248,53 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
   void _updateResultText() {
     setState(() {});
   }
+
+  Future<void> _fetchSleepTimeAndUpdateState() async {
+    try {
+      tz.initializeTimeZones();
+      var startTime = widget.selectedDay.subtract(const Duration(days: 1));
+      var endTime = widget.selectedDay;
+
+      final requests = <Future>[];
+      Map<String, dynamic> typePoints = {};
+      for (var type in types) {
+        requests.add(
+          HealthConnectFactory.getRecord(
+            type: type,
+            startTime: startTime,
+            endTime: endTime,
+          ).then(
+                (value) => typePoints.addAll({type.name: value}),
+          ),
+        );
+      }
+      await Future.wait(requests);
+
+      final currentDate = widget.selectedDay.toLocal().toString().split(' ')[0];
+      final firestore = FirebaseFirestore.instance;
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+      final userDocRef = firestore.collection('Users').doc(uid);
+      final userSleepCollection = userDocRef.collection('user_sleep');
+
+      final todayDocument = await userSleepCollection.doc(currentDate).get();
+
+      if (todayDocument.exists) {
+        // Firestore에서 데이터 가져오기
+        resultText_start_real = todayDocument['sleep_time'] ?? '';
+        resultText_end_real = todayDocument['wake_time'] ?? '';
+      } else {
+        // 문서가 없으면 빈 문자열로 설정
+        resultText_start_real = '';
+        resultText_end_real = '';
+      }
+
+      _updateResultText();
+      _updateFirestore();
+      print(resultText_start_real);
+      print(resultText_end_real);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
 }
