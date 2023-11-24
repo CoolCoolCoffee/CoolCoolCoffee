@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="873e7c14-3694-4bd9-9645-17be87d3022e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/lib/page/home/drink_list.dart" beforeDir="false" afterPath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/lib/page/home/drink_list.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/lib/page/home/home_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/lib/page/home/home_page.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/lib/page/sleep/sleep_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/lib/page/sleep/sleep_page.dart" afterDir="false" />
     </list>

@@ -46,8 +46,7 @@ class _SleepPageState extends State<SleepPage> {
         toolbarHeight: 50,
         iconTheme: IconThemeData(color: Colors.white),
       ),
-      body: Expanded(
-        child: Column(
+      body: Column(
           children: [
             CalendarWidget(
                 onDaySelected: (DateTime selectedDay, String? sleepTime,
@@ -87,7 +86,6 @@ class _SleepPageState extends State<SleepPage> {
             ),
           ],
         ),
-      ),
     );
   }
 }
