@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../page_state/page_state.dart';
+import 'login_page.dart';
 
 
 class SignUpThirdPage extends StatefulWidget {
@@ -11,8 +12,9 @@ class SignUpThirdPage extends StatefulWidget {
   final int userAge;
   final String bedTime;
   final String goodSleepTime;
+  final int caffeineHalfLife;
 
-  const SignUpThirdPage({Key? key, required this.userName, required this.userAge, required this.bedTime, required this.goodSleepTime,}) : super(key: key);
+  const SignUpThirdPage({Key? key, required this.userName, required this.userAge, required this.bedTime, required this.goodSleepTime, required this.caffeineHalfLife,}) : super(key: key);
 
   @override
   State<SignUpThirdPage> createState() => _UserFormState();
@@ -30,19 +32,14 @@ class _UserFormState extends State<SignUpThirdPage> {
 
   void handleSelectedBtn(String brandName){
     setState(() {
-      brandBtns.contains(brandName)
-          ? brandBtns.remove(brandName)
-          : brandBtns.add(brandName);
-      print(brandBtns);
-    });
-  }
-
-  void handleSelectedBtn2(String brandName){
-    setState(() {
       if(brandBtns.contains(brandName)) {
         brandBtns.remove(brandName);
-        print(brandBtns);
+      } else{
+        if(brandBtns.length <= 2) {
+          brandBtns.add(brandName);
+        }
       }
+        print(brandBtns);
     });
   }
 
@@ -59,6 +56,7 @@ class _UserFormState extends State<SignUpThirdPage> {
           'user_age': widget.userAge,
           'avg_bed_time': widget.bedTime,
           'good_sleep_time': widget.goodSleepTime,
+          'caffeine_half_life' : widget.caffeineHalfLife,
         }, SetOptions(merge: true));
 
         await FirebaseFirestore.instance
@@ -81,10 +79,12 @@ class _UserFormState extends State<SignUpThirdPage> {
 
         print('유저 회원가입 정보 db에 저장 성공!');
 
-        Navigator.push(
-          currentContext,
-          MaterialPageRoute(builder: (context) => PageStates()),
-        );
+        if(!mounted) return;
+        Navigator.popUntil(context, (route) => route.isFirst);
+        // Navigator.push(
+        //   currentContext,
+        //   MaterialPageRoute(builder: (context) => LoginPage()),
+        // );
 
       } catch(e) {
         print("유저 회원가입 정보 db 저장 에러: $e");
@@ -99,12 +99,12 @@ class _UserFormState extends State<SignUpThirdPage> {
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.ideographic,
           children: [
-            Text(widget.userName, style: const TextStyle(
-                fontSize: 30, fontWeight: FontWeight.bold, color: Colors.blue),),
+            Text(widget.userName, style: TextStyle(
+                fontSize: 25, fontWeight: FontWeight.bold, color: Colors.brown.withOpacity(0.6)),),
             const Text(' 님이 자주 이용하시는', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, textBaseline: TextBaseline.ideographic),),
           ],
         ),
-        const Text('카페 브랜드를 알려주세요! (최대 3개)', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+        const Text('브랜드를 알려주세요! ', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
         const SizedBox(height: 4),
         const Text('디카페인 음료 추천 시스템에 활용할거에요!', style: TextStyle(fontSize: 13, color: Colors.black54)),
       ],
@@ -121,7 +121,18 @@ class _UserFormState extends State<SignUpThirdPage> {
     return Scaffold(
       // backgroundColor: Colors.brown.withOpacity(0.1),
       appBar: AppBar(
-        title: const Text('마지막 페이지'),
+        backgroundColor: Colors.white,
+        title: const Center(child: Text('마지막 페이지', style: TextStyle(color: Colors.black),)),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(32.0),
@@ -133,16 +144,16 @@ class _UserFormState extends State<SignUpThirdPage> {
               textInfo(),
               const SizedBox(height: 25,),
               Container(width: screenWidth*0.9, height: 1, color: Colors.grey.withOpacity(0.5)),
-              const SizedBox(height: 30,),
-              const Row(
+              const SizedBox(height: 25,),
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
                 textBaseline: TextBaseline.ideographic,
                 children: [
-                  Text('9개의 브랜드 중 ', style: TextStyle(
+                  const Text('10개의 브랜드 중 ', style: TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),),
-                  Text('최대 3개', style: TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blue),),
-                  Text('를 골라주세요.', style: TextStyle(
+                  Text('3개', style: TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold, color: Colors.brown.withOpacity(0.6)),),
+                  const Text('를 골라주세요.', style: TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),),
                 ],
               ),
@@ -164,134 +175,139 @@ class _UserFormState extends State<SignUpThirdPage> {
                               BrandBtn(
                                   brandName: '더벤티',
                                   pressedNum: brandBtns.length,
+                                  isSelected: brandBtns.contains('더벤티'),
                                   onPressed: (isSelected){
-                                    if (brandBtns.length <= 2) {
-                                      handleSelectedBtn('더벤티');
-                                    } else if(brandBtns.length == 3){
-                                      handleSelectedBtn2('더벤티');
-                                    }
+                                    handleSelectedBtn('더벤티');
                                   },
                               ),
                               BrandBtn(
-                                brandName: '메가커피',
+                                brandName: '투썸플레이스',
                                 pressedNum: brandBtns.length,
+                                isSelected: brandBtns.contains('투썸플레이스'),
                                 onPressed: (isSelected){
-                                  if (brandBtns.length <= 2) {
-                                    handleSelectedBtn('메가커피');
-                                  } else if(brandBtns.length == 3){
-                                    handleSelectedBtn2('메가커피');
-                                  }
+                                  handleSelectedBtn('투썸플레이스');
                                 },
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 15),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               BrandBtn(
-                                brandName: '매머드',
+                                brandName: '할리스',
                                 pressedNum: brandBtns.length,
+                                isSelected: brandBtns.contains('할리스'),
                                 onPressed: (isSelected){
-                                  if (brandBtns.length <= 2) {
-                                    handleSelectedBtn('매머드');
-                                  } else if(brandBtns.length == 3){
-                                    handleSelectedBtn2('매머드');
-                                  }
+                                  handleSelectedBtn('할리스');
                                 },
                               ),
                               BrandBtn(
-                                brandName: '스타벅스',
+                                brandName: '컴포즈커피',
                                 pressedNum: brandBtns.length,
+                                isSelected: brandBtns.contains('컴포즈커피'),
                                 onPressed: (isSelected){
-                                  if (brandBtns.length <= 2) {
-                                    handleSelectedBtn('스타벅스');
-                                  } else if(brandBtns.length == 3){
-                                    handleSelectedBtn2('스타벅스');
-                                  }
+                                  handleSelectedBtn('컴포즈커피');
                                 },
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 15),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               BrandBtn(
                                 brandName: '이디야',
                                 pressedNum: brandBtns.length,
+                                isSelected: brandBtns.contains('이디야'),
                                 onPressed: (isSelected){
-                                  if (brandBtns.length <= 2) {
-                                    handleSelectedBtn('이디야');
-                                  } else if(brandBtns.length == 3){
-                                    handleSelectedBtn2('이디야');
-                                  }
+                                  handleSelectedBtn('이디야');
                                 },
                               ),
                               BrandBtn(
-                                brandName: '투썸플레이스',
+                                brandName: '매머드커피',
                                 pressedNum: brandBtns.length,
+                                isSelected: brandBtns.contains('매머드커피'),
                                 onPressed: (isSelected){
-                                  if (brandBtns.length <= 2) {
-                                    handleSelectedBtn('투썸플레이스');
-                                  } else if(brandBtns.length == 3){
-                                    handleSelectedBtn2('투썸플레이스');
-                                  }
+                                  handleSelectedBtn('매머드커피');
                                 },
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 15),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               BrandBtn(
                                 brandName: '커피빈',
                                 pressedNum: brandBtns.length,
+                                isSelected: brandBtns.contains('커피빈'),
                                 onPressed: (isSelected){
-                                  if (brandBtns.length <= 2) {
-                                    handleSelectedBtn('커피빈');
-                                  } else if(brandBtns.length == 3){
-                                    handleSelectedBtn2('커피빈');
-                                  }
+                                  handleSelectedBtn('커피빈');
                                 },
                               ),
                               BrandBtn(
-                                brandName: '컴포즈커피',
+                                brandName: '스타벅스',
                                 pressedNum: brandBtns.length,
+                                isSelected: brandBtns.contains('스타벅스'),
                                 onPressed: (isSelected){
-                                  if (brandBtns.length <= 2) {
-                                    handleSelectedBtn('컴포즈커피');
-                                  } else if(brandBtns.length == 3){
-                                    handleSelectedBtn2('컴포즈커피');
-                                  }
+                                  handleSelectedBtn('스타벅스');
                                 },
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20),
+                          const SizedBox(height: 15),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              BrandBtn(
+                                brandName: '빽다방',
+                                pressedNum: brandBtns.length,
+                                isSelected: brandBtns.contains('빽다방'),
+                                onPressed: (isSelected){
+                                  handleSelectedBtn('빽다방');
+                                },
+                              ),
+                              BrandBtn(
+                                brandName: '메가커피',
+                                pressedNum: brandBtns.length,
+                                isSelected: brandBtns.contains('메가커피'),
+                                onPressed: (isSelected){
+                                  handleSelectedBtn('메가커피');
+                                },
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 15),
+                          Center(
+                            child: BrandBtn(
+                              brandName: '편의점',
+                              pressedNum: brandBtns.length,
+                              isSelected: brandBtns.contains('편의점'),
+                              onPressed: (isSelected){
+                                handleSelectedBtn('편의점');
+                              },
+                            ),
+                          ),
                         ],
-                      ),
-                      BrandBtn(
-                        brandName: '빽다방',
-                        pressedNum: brandBtns.length,
-                        onPressed: (isSelected){
-                          if (brandBtns.length <= 2) {
-                            handleSelectedBtn('빽다방');
-                          } else if(brandBtns.length == 3){
-                            handleSelectedBtn2('빽다방');
-                          }
-                        },
                       ),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 50),
+              const SizedBox(height: 30),
               Center(
-                child: ElevatedButton(
-                  onPressed: _onNextButtonPressed,
-                  child: Text('다음')),
+                child: Container(
+                  height: 60,
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.brown.withOpacity(0.6)),
+                      ),
+                    onPressed: _onNextButtonPressed,
+                    child: const Text('다음')),
+                ),
               ),
             ],
           ),

@@ -37,22 +37,23 @@ class _SignUpPageState extends State<SignUpPage> {
         );
         print('사용자 회원가입 완료: ${userCredential.user!.email}');
 
+        // 다른 앱 접근 권한 기본(false)으로 설정해놓음
         await FirebaseFirestore.instance
             .collection("Users")
             .doc(userCredential.user!.uid)
             .set({'app_access' : false})
-            .onError((error, stackTrace) => print('데이엍 추가 에러!'));
-      // 왜 토스트 안 되냐 ㅡㅡ
-      // Fluttertoast.showToast(
-      //   msg: '회원가입이 완료되었습니다!',
-      //   toastLength: Toast.LENGTH_SHORT,
-      //   gravity: ToastGravity.CENTER,
-      //   backgroundColor: Colors.grey,
-      //   textColor: Colors.blue,ㅅ
-      // );
+            .onError((error, stackTrace) => print('앱 권한 정보 추가 에러!'));
 
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const SignUpFirstPage()),
+        // 사용자 이메일 주소도 넣어놓음
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userCredential.user!.uid)
+            .set({'user_email' : userCredential.user!.email})
+            .onError((error, stackTrace) => print('이메일 정보 추가 에러!'));
+
+        if(!mounted) return;
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const SignUpFirstPage()),
       );
 
     } on FirebaseAuthException catch (e) {
@@ -169,37 +170,57 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       // backgroundColor: Colors.brown.withOpacity(0.1),
       appBar: AppBar(
-        title: Text(''),
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+        ),
       ),
-      body: SingleChildScrollView(
+      body: Form(
+        key: _formKey,
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('회원가입 화면'),
-                const SizedBox(height: 30,),
-                _userEmailWidget(),
-                const SizedBox(height: 20,),
-                _userPwWidget(),
-                const SizedBox(height: 20,),
-                _userPw2Widget(),
-                const SizedBox(height: 30,),
-                ElevatedButton(
+          padding: const EdgeInsets.all(30.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Text('쿨쿨커피가 처음이신가요?'),
+              const SizedBox(height: 20,),
+              _userEmailWidget(),
+              const SizedBox(height: 20,),
+              _userPwWidget(),
+              const SizedBox(height: 20,),
+              _userPw2Widget(),
+              const SizedBox(height: 30,),
+              Container(
+                height: 70,
+                width: 150,
+                padding: const EdgeInsets.only(top: 8.0),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.brown.withOpacity(0.6)),
+                  ),
                   onPressed: (){
                     if(_formKey.currentState!.validate()){
                       _handleSignUp();
                     }
                   },
-                  child: Text('회원가입'),
+                  child: const Text('회원가입'),
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(
+                height: 120,
+              )
+            ],
           ),
         ),
       ),
+      resizeToAvoidBottomInset: true,
     );
   }
 

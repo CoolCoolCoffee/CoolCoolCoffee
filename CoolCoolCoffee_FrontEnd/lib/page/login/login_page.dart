@@ -77,11 +77,17 @@ class _LoginPageState extends State<LoginPage> {
         password: _password,
       );
       print('사용자 로그인 완료: ${userCredential.user!.email}');
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const PageStates(),
-          ));
+
+      // if(!mounted) return;
+      // Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+      // Navigator.push(context, MaterialPageRoute(builder: (context) => const PageStates()),);
+
+      // if(!mounted) return;
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) => const PageStates(),
+      //     ));
     } on FirebaseAuthException catch (e) {
       //로그인 예외처리
       switch (e.code) {
@@ -123,13 +129,13 @@ class _LoginPageState extends State<LoginPage> {
       body: Form(
         key: _formKey,
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(30.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('안녕하세요'),
-              Text('쿨쿨커피입니다 :)'),
+              const Text('안녕하세요'),
+              const Text('쿨쿨커피입니다 :)'),
               const SizedBox(height: 20.0),
               _userIdWidget(),
               const SizedBox(height: 20.0),
@@ -139,9 +145,9 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   Container(
                       alignment: Alignment.topRight,
-                      child: Text('계정이 없으신가요?')
+                      child: const Text('계정이 없으신가요?')
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   TextButton(
                       onPressed: (){
                         Navigator.of(context).push(
@@ -152,9 +158,10 @@ class _LoginPageState extends State<LoginPage> {
                         padding: MaterialStateProperty.all(EdgeInsets.zero),
                         minimumSize: MaterialStateProperty.all(Size(0,0)),
                       ),
-                      child: const Text('계정 생성하기',
+                      child: Text('계정 생성하기',
                         style: TextStyle(
                           decoration: TextDecoration.underline,
+                          color: Colors.brown.withOpacity(0.6),
                         ),
                       )
                   ),
@@ -166,6 +173,9 @@ class _LoginPageState extends State<LoginPage> {
                 width: 150,
                 padding: const EdgeInsets.only(top: 8.0), // 8단위 배수가 보기 좋음
                 child: ElevatedButton(
+                    style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.brown.withOpacity(0.6)),
+                    ),
                     onPressed: () {
                       if(_formKey.currentState!.validate()) {
                         _handleLogin();

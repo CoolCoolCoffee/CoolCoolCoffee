@@ -34,7 +34,7 @@ class _PageState extends State<PageStates> {
     return Scaffold(
       body: pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.blue,
+        selectedItemColor: const Color(0xff93796A),
         unselectedItemColor: Colors.grey,
         unselectedLabelStyle: TextStyle(color: Colors.grey),
         items: [

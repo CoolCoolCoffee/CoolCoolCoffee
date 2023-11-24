@@ -1,4 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'brand_info.dart';
+import 'my_info.dart';
+import 'sleep_info.dart';
 
 class ProfileChangePage extends StatefulWidget {
   const ProfileChangePage({super.key});
@@ -8,56 +14,42 @@ class ProfileChangePage extends StatefulWidget {
 }
 
 class _ProfileChangePageState extends State<ProfileChangePage> {
-
-  @override
-  void initState(){
-    super.initState();
-  }
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      // backgroundColor: Colors.brown.withOpacity(0.1),
       appBar: AppBar(
-        title: const Text('프로필 수정'),
+        backgroundColor: Colors.white,
+        title: const Text('프로필 수정', style: TextStyle(color: Colors.black),),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+        ),
       ),
-      body: const Center(
-        child: Padding(
-          padding: EdgeInsets.all(20),
+      body: Center(
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          color: Colors.brown.withOpacity(0.1),
+          width: double.infinity,
+          height: double.infinity,
+
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('유저 정보', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),),
-                  SizedBox(height: 10),
-                  Text('사용자 이메일 보여주기'),
-                  Text('사용자 닉네임 보여주고, 수정하기 아이콘'),
-                  Text('사용자 나이 보여주고, 수정하기 아이콘'),
-                ],
-              ),
-              SizedBox(height: 30),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('수면 정보', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),),
-                  SizedBox(height: 10),
-                  Text('평균 취침 시간 보여주고, 수정하기 아이콘'),
-                  Text('적정 수면 시간 보여주고, 수정하기 아이콘'),
-                ],
-              ),
-              SizedBox(height: 30),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('선호 브랜드 정보', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),),
-                  SizedBox(height: 10),
-                  Text('선호 브랜드 리스트 보여주고, 수정하기 아이콘'),
-                ],
-              ),
+              MyInfo(auth: _auth, firestore: _firestore),
+              const SizedBox(height: 40),
+              SleepInfo(auth: _auth, firestore: _firestore),
+              const SizedBox(height: 40),
+              BrandInfo(auth: _auth, firestore: _firestore),
             ],
           ),
         ),

@@ -3,9 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_health_connect/flutter_health_connect.dart';
-import 'package:flutter_health_connect/flutter_health_connect.dart';
 
 import 'package:coolcoolcoffee_front/page/my_page/profile_change_page.dart';
+
+import '../login/login_page.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
@@ -19,6 +20,7 @@ class _MyPageState extends State<MyPage> {
   String userName = '';
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  @override
   void initState(){
     super.initState();
     loadUserName();
@@ -30,7 +32,17 @@ class _MyPageState extends State<MyPage> {
     return uid;
   }
 
-// 사용자의 userName 가져오기
+  // 사용자 이름을 가져와서 화면에 업데이트
+  void loadUserName() async {
+    String? name = await getUserName();
+    if (name != null) {
+      setState(() {
+        userName = name;
+      });
+    }
+  }
+
+  // 사용자의 userName 가져오기
   Future<String?> getUserName() async {
     String uid = getCurrentUserUID();
 
@@ -48,15 +60,6 @@ class _MyPageState extends State<MyPage> {
     }
   }
 
-  // 사용자 이름을 가져와서 화면에 업데이트
-  void loadUserName() async {
-    String? name = await getUserName();
-    if (name != null) {
-      setState(() {
-        userName = name;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +68,9 @@ class _MyPageState extends State<MyPage> {
     return Scaffold(
         backgroundColor: Colors.brown.withOpacity(0.1),
         appBar: AppBar(
-          title: const Center(
-            child: Text('마이 페이지'),
-          ),
+          backgroundColor: Colors.white,
+          title: Text('마이 페이지', style: TextStyle(color: Colors.black),),
+          centerTitle: true,
         ),
         body: Center(
           child: Padding(
@@ -86,7 +89,7 @@ class _MyPageState extends State<MyPage> {
                         height: 100.0, // 원의 지름
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle, // 원 모양 지정
-                          color: Colors.white, // 원의 색상 지정
+                          color: Color(0xff93796A), // 원의 색상 지정
                         ),
                       ),
                     ),
@@ -167,7 +170,6 @@ class _MyPageState extends State<MyPage> {
                   ],
                 ),
                 const SizedBox(height: 20,),
-                // Text('현재 사용자 계정 이메일 주소는 ${_auth.currentUser!.email}입니다.'),
                 Center(child: Container(width: screenWidth * 0.9, height: 1, color: Colors.grey.withOpacity(0.5))),
               ],
             ),
@@ -199,9 +201,14 @@ class _MyPageState extends State<MyPage> {
             TextButton(
               onPressed: () {
                 // 로그아웃 처리
-                _auth.signOut();
-                // 다이얼로그 닫기
                 Navigator.of(context).pop();
+                _auth.signOut();
+
+                // if(!mounted) return;
+                // // 다이얼로그 닫기
+                // Navigator.of(context).pop();
+                // Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()),);
               },
               child: const Text('예', style: TextStyle(color: Colors.redAccent),),
             ),

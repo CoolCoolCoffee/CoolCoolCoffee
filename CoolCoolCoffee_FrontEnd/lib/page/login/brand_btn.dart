@@ -1,36 +1,27 @@
 import 'package:flutter/material.dart';
 
-class BrandBtn extends StatefulWidget {
+class BrandBtn extends StatelessWidget {
   final String brandName;
-  final Function(bool) onPressed;
   final int pressedNum;
+  final bool isSelected;
+  final Function(bool) onPressed;
 
-  const BrandBtn({Key? key, required this.brandName, required this.onPressed, required this.pressedNum}) : super(key: key);
-
-  @override
-  State<BrandBtn> createState() => _BrandBtnState();
-}
-
-class _BrandBtnState extends State<BrandBtn> {
-  bool isSelected = false;
+  const BrandBtn({
+    Key? key,
+    required this.brandName,
+    required this.pressedNum,
+    required this.isSelected,
+    required this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        if(widget.pressedNum <=2) {
-          setState(() {
-            isSelected = !isSelected;
-            widget.onPressed(isSelected);
-          });
-        }
-        else if(widget.pressedNum == 3){
-          if(isSelected == true) {
-            setState(() {
-              isSelected = !isSelected;
-              widget.onPressed(isSelected);
-            });
-          }
+        if (pressedNum <= 2) {
+          onPressed(!isSelected);
+        } else if (pressedNum == 3 && isSelected) {
+          onPressed(!isSelected);
         }
       },
       style: ButtonStyle(
@@ -38,17 +29,16 @@ class _BrandBtnState extends State<BrandBtn> {
           isSelected ? Colors.blue : Colors.white,
         ),
         foregroundColor: MaterialStateProperty.all<Color>(
-          isSelected? Colors.white : Colors.black,
+          isSelected ? Colors.white : Colors.black,
         ),
         shadowColor: MaterialStateProperty.all(Colors.grey),
-        // 3d 입체감 효과
-        // elevation: MaterialStateProperty.all(5),
-        textStyle: MaterialStateProperty.all(const TextStyle(fontSize: 20),
+        textStyle: MaterialStateProperty.all(
+          const TextStyle(fontSize: 20),
         ),
         padding: MaterialStateProperty.all(const EdgeInsets.all(12)),
-        // 테두리는 side
       ),
-      child: Text(widget.brandName),
+      child: Text(brandName),
     );
   }
 }
+

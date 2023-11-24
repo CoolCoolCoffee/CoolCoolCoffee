@@ -25,7 +25,7 @@ class _UserFormState extends State<SignUpSecondPage> {
   late String bedTime;
   late String goodSleepTime;
 
-  bool isAm1 = false; bool isPm1 = false;
+  bool isAm1 = true; bool isPm1 = false;
   late List<bool> isSelected1 = [isAm1, isPm1];
 
   void toggleSelect1(value) {
@@ -38,6 +38,34 @@ class _UserFormState extends State<SignUpSecondPage> {
     }
     setState(() {
       isSelected1 = [isAm1, isPm1];
+    });
+  }
+
+  int caffeineHalfLife = 5;
+  bool little = false; bool medium = true;  bool many = false;
+  late List<bool> caffeineSelected = [little, medium, many];
+
+  void caffeineToggleSelected(value) {
+    if(value == 0){
+      little = true;
+      medium = false;
+      many = false;
+      caffeineHalfLife = 4;
+
+    } else if(value == 1){
+      little = false;
+      medium = true;
+      many = false;
+      caffeineHalfLife = 5;
+    } else{
+      little = false;
+      medium = false;
+      many = true;
+      caffeineHalfLife = 6;
+    }
+    setState(() {
+      caffeineSelected = [little, medium, many];
+      caffeineHalfLife;
     });
   }
 
@@ -56,7 +84,7 @@ class _UserFormState extends State<SignUpSecondPage> {
   }
 
   void _onNextButtonPressed() {
-    // bedTime, wakeTime, goodSleepTime 모두 string으로 변화 시키자
+    // bedTime, goodSleepTime 모두 string으로 변화 시키자
     if(isAm1 == true) {
       bedTime = '${bedHour.toString()}:${bedMin.toString().padLeft(2,'0')}';
     } else if(isPm1 == true) {
@@ -65,6 +93,7 @@ class _UserFormState extends State<SignUpSecondPage> {
 
     goodSleepTime = '${goodSleepHour.toString()}:${goodSleepMin.toString().padLeft(2,'0')}';
 
+    print(caffeineHalfLife);
     if(_formKey.currentState?.validate() ?? false) {
       Navigator.push(
         context,
@@ -75,6 +104,7 @@ class _UserFormState extends State<SignUpSecondPage> {
           userAge: widget.userAge,
           bedTime: bedTime!,
           goodSleepTime: goodSleepTime!,
+          caffeineHalfLife: caffeineHalfLife,
         )),
       );
     }
@@ -88,12 +118,12 @@ class _UserFormState extends State<SignUpSecondPage> {
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.ideographic,
           children: [
-            Text(widget.userName, style: const TextStyle(
-                fontSize: 30, fontWeight: FontWeight.bold, color: Colors.blue),),
+            Text(widget.userName, style: TextStyle(
+                fontSize: 25, fontWeight: FontWeight.bold, color: Colors.brown.withOpacity(0.6))),
         const Text(' 님의 수면 주기를 파악하려면', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, textBaseline: TextBaseline.ideographic),),
           ],
         ),
-        const Text('아래의 정보들이 필요해요!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+        const Text('아래 정보들이 필요해요!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
         const SizedBox(height: 4),
         const Text('사용자 맞춤 서비스를 제공해드릴게요!', style: TextStyle(fontSize: 13, color: Colors.black54)),
       ],
@@ -109,7 +139,18 @@ class _UserFormState extends State<SignUpSecondPage> {
     return Scaffold(
       // backgroundColor: Colors.brown.withOpacity(0.1),
       appBar: AppBar(
-        title: const Text('두 번째 페이지'),
+        backgroundColor: Colors.white,
+        title: const Text('두 번째 페이지', style: TextStyle(color: Colors.black),),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(32),
@@ -120,8 +161,8 @@ class _UserFormState extends State<SignUpSecondPage> {
               const SizedBox(height: 10),
               textInfo(),
               const SizedBox(height: 25,),
-              Container(width: screenWidth*0.9, height: 1, color: Colors.grey.withOpacity(0.5)),
-              const SizedBox(height: 80,),
+              Container(width: screenWidth * 0.9, height: 1, color: Colors.grey.withOpacity(0.5)),
+              const SizedBox(height: 40,),
               Form(
                 key: _formKey,
                 child: Column(
@@ -130,17 +171,17 @@ class _UserFormState extends State<SignUpSecondPage> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Row(
+                        Row(
                           crossAxisAlignment: CrossAxisAlignment.baseline,
                           textBaseline: TextBaseline.ideographic,
                           children: [
-                            Text('평균 ', style: TextStyle(
+                            const Text('평균 ', style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
                             Text('취침 ', style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue),),
-                            Text('시간을 알려주세요.', style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.brown.withOpacity(0.6))),
+                            const Text('시간을 알려주세요.', style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-                            SizedBox(width: 4),
+                            const SizedBox(width: 4),
                           ],
                         ),
                         const SizedBox(height: 10),
@@ -152,6 +193,13 @@ class _UserFormState extends State<SignUpSecondPage> {
                                   direction: Axis.vertical,
                                     isSelected: isSelected1,
                                     onPressed: toggleSelect1,
+                                    selectedColor: Colors.white,
+                                    fillColor: Colors.brown.withOpacity(0.6),
+                                    borderRadius: const BorderRadius.all(Radius.circular(4)),
+                                    constraints: const BoxConstraints(
+                                      minHeight: 45.0,
+                                      minWidth: 60.0,
+                                    ),
                                     children: const [
                                       Padding(
                                         padding: EdgeInsets.symmetric(horizontal: 10),
@@ -222,19 +270,19 @@ class _UserFormState extends State<SignUpSecondPage> {
                             const SizedBox(width: 10,),
                           ],
                         ),
-                        const SizedBox(height: 60),
+                        const SizedBox(height: 40),
                         // 적정 수면 시간을 입력받는 위젯
                         Column(
                           children: [
-                            const Row(
+                            Row(
                               crossAxisAlignment: CrossAxisAlignment.baseline,
                               textBaseline: TextBaseline.ideographic,
                               children: [
                                 Text('적정 수면 ', style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue),),
-                                Text('시간을 알려주세요.', style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold, color: Colors.brown.withOpacity(0.6)),),
+                                const Text('시간을 알려주세요.', style: TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
-                                SizedBox(width: 4),
+                                const SizedBox(width: 4),
                               ],
                             ),
                             const SizedBox(height: 10),
@@ -305,14 +353,57 @@ class _UserFormState extends State<SignUpSecondPage> {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 40),
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            const Text('평소 ', style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold, color: Colors.black)),
+                            Text('카페인 영향', style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold, color: Colors.brown.withOpacity(0.6))),
+                            const Text('을 얼마나 받으시나요? ', style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold, color: Colors.black)),
+                          ]
+                        ),
+                        const SizedBox(height: 14),
+                        ToggleButtons(
+                            isSelected: caffeineSelected,
+                            onPressed: caffeineToggleSelected,
+                            selectedColor: Colors.white,
+                            fillColor: Colors.brown.withOpacity(0.6),
+                            borderRadius: const BorderRadius.all(Radius.circular(4)),
+                            constraints: const BoxConstraints(
+                              minHeight: 45.0,
+                              minWidth: 60.0,
+                            ),
+                            children: const [
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Text('조금', style: TextStyle(fontSize: 16),),),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Text('보통', style: TextStyle(fontSize: 16),),),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Text('많이', style: TextStyle(fontSize: 16),),),
+                            ]
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),
-              const SizedBox(height: 100,),
+              const SizedBox(height: 40),
               Center(
-                child: ElevatedButton(
-                    onPressed: _onNextButtonPressed,
-                    child: Text('다음')),
+                child: Container(
+                  height: 60,
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.brown.withOpacity(0.6)),
+                      ),
+                      onPressed: _onNextButtonPressed,
+                      child: const Text('다음')),
+                ),
               ),
             ],
           ),
