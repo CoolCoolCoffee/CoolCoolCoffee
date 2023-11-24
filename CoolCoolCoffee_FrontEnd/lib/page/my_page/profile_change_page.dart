@@ -22,6 +22,7 @@ class _ProfileChangePageState extends State<ProfileChangePage> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text('프로필 수정', style: TextStyle(color: Colors.black),),
