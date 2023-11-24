@@ -27,7 +27,8 @@ class _SleepPageState extends State<SleepPage> {
       selectedDay = DateTime.now();
     }
     print(today);
-    String selecteddate = selectedDay!.toLocal().toIso8601String().split('T')[0];
+    String selecteddate = selectedDay!.toLocal().toIso8601String().split(
+        'T')[0];
     String todaydate = today.toLocal().toIso8601String().split('T')[0];
 
     return Scaffold(
@@ -45,42 +46,47 @@ class _SleepPageState extends State<SleepPage> {
         toolbarHeight: 50,
         iconTheme: IconThemeData(color: Colors.white),
       ),
-      body: Column(
-        children: [
-          CalendarWidget(onDaySelected: (DateTime selectedDay,String? sleepTime, String? wakeTime) {
-            setState(() {
-              this.selectedDay = selectedDay;
-              this._sleepTime = sleepTime;
-              this._wakeTime = wakeTime;
-              print("tlqkf11 - sleep_time: $_sleepTime, wake_time: $_wakeTime");
-            });
-          }),
-          Container(
-            color: Colors.white,
-            child: Column(
-              children: [
-                SleepInfoWidget(
-                  selectedDay: selectedDay!,
-                  sleepTime: _sleepTime,
-                  wakeTime: _wakeTime,
-                ),
-                SizedBox(height: 10),
-                if (selecteddate == todaydate)
-                  SleepConditionWidget(
-                    onConditionSelected: (int sleepLevel) {
-                      setState(() {
-                        sleepCondition = sleepLevel;
-                      });
-                    },
-                  )
-                else
-                  CalendarDrinkListWidget(
+      body: Expanded(
+        child: Column(
+          children: [
+            CalendarWidget(
+                onDaySelected: (DateTime selectedDay, String? sleepTime,
+                    String? wakeTime) {
+                  setState(() {
+                    this.selectedDay = selectedDay;
+                    this._sleepTime = sleepTime;
+                    this._wakeTime = wakeTime;
+                    print(
+                        "tlqkf11 - sleep_time: $_sleepTime, wake_time: $_wakeTime");
+                  });
+                }),
+            Container(
+              color: Colors.white,
+              child: Column(
+                children: [
+                  SleepInfoWidget(
                     selectedDay: selectedDay!,
+                    sleepTime: _sleepTime,
+                    wakeTime: _wakeTime,
                   ),
-              ],
+                  SizedBox(height: 10),
+                  if (selecteddate == todaydate)
+                    SleepConditionWidget(
+                      onConditionSelected: (int sleepLevel) {
+                        setState(() {
+                          sleepCondition = sleepLevel;
+                        });
+                      },
+                    )
+                  else
+                    CalendarDrinkListWidget(
+                      selectedDay: selectedDay!,
+                    ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

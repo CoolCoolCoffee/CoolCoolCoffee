@@ -35,16 +35,18 @@ class _HomePageState extends State<HomePage> {
         toolbarHeight: 50,
         iconTheme: IconThemeData(color: Colors.white),
     ),
-      body: Column(
-        children: [
-          SizedBox(height: 10),
-          ClockWidget(),
-          SizedBox(height: 10),
-          CaffeineLeftWidget(),
-          SizedBox(height: 20),
-          DrinkListWidget()
-        ],
-      )
+      body: Expanded(
+        child: Column(
+          children: [
+            SizedBox(height: 10),
+            ClockWidget(),
+            SizedBox(height: 10),
+            CaffeineLeftWidget(),
+            SizedBox(height: 20),
+            DrinkListWidget(),
+          ],
+        ),
+      ),
     );
   }
 }
