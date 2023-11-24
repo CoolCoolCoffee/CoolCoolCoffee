@@ -4,7 +4,6 @@ import 'package:flutter_health_connect/flutter_health_connect.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
 class EditPopup extends StatefulWidget {
   final Function(String) onSave;
   final void Function(String) updateParentState;
@@ -47,73 +46,75 @@ class _EditPopupState extends State<EditPopup> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text('목표 수면 시간'),
-      content: Container(
-        constraints: BoxConstraints(maxHeight: 100, maxWidth: 300),
-        child: Column(
-          children: [
-            Text(
-              '취침시간',
-              textAlign: TextAlign.start,
-            ),
-            SizedBox(height: 5),
-            Row(
-              children: [
-                Container(
-                  width: 60,
-                  height: 40,
-                  child: TextField(
-                    controller: sleepHoursController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: '시',
-                      border: OutlineInputBorder(),
+      content: SingleChildScrollView(
+        child: Container(
+          //constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height - 100),
+          child: Column(
+            children: [
+              Text(
+                '취침시간',
+                textAlign: TextAlign.start,
+              ),
+              SizedBox(height: 5),
+              Row(
+                children: [
+                  Container(
+                    width: 60,
+                    height: 40,
+                    child: TextField(
+                      controller: sleepHoursController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: '시',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
                   ),
-                ),
-                Text(
-                  ' : ',
-                  style: TextStyle(fontSize: 20),
-                ),
-                Container(
-                  width: 60,
-                  height: 40,
-                  child: TextField(
-                    controller: sleepMinutesController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: '분',
-                      border: OutlineInputBorder(),
+                  Text(
+                    ' : ',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  Container(
+                    width: 60,
+                    height: 40,
+                    child: TextField(
+                      controller: sleepMinutesController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: '분',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      sleepIsAM = true;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: sleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
-                    minimumSize: Size(40, 40),
+                  SizedBox(width: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        sleepIsAM = true;
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: sleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
+                      minimumSize: Size(40, 40),
+                    ),
+                    child: Text('AM'),
                   ),
-                  child: Text('AM'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      sleepIsAM = false;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: !sleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
-                    minimumSize: Size(40, 40),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        sleepIsAM = false;
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: !sleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
+                      minimumSize: Size(40, 40),
+                    ),
+                    child: Text('PM'),
                   ),
-                  child: Text('PM'),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
       actions: [

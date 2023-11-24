@@ -46,19 +46,19 @@ class _SleepPageState extends State<SleepPage> {
         toolbarHeight: 50,
         iconTheme: IconThemeData(color: Colors.white),
       ),
-      body: Column(
+      body: SingleChildScrollView(
+        child: Column(
           children: [
             CalendarWidget(
-                onDaySelected: (DateTime selectedDay, String? sleepTime,
-                    String? wakeTime) {
-                  setState(() {
-                    this.selectedDay = selectedDay;
-                    this._sleepTime = sleepTime;
-                    this._wakeTime = wakeTime;
-                    print(
-                        "tlqkf11 - sleep_time: $_sleepTime, wake_time: $_wakeTime");
-                  });
-                }),
+              onDaySelected: (DateTime selectedDay, String? sleepTime, String? wakeTime) {
+                setState(() {
+                  this.selectedDay = selectedDay;
+                  this._sleepTime = sleepTime;
+                  this._wakeTime = wakeTime;
+                  print("tlqkf11 - sleep_time: $_sleepTime, wake_time: $_wakeTime");
+                });
+              },
+            ),
             Container(
               color: Colors.white,
               child: Column(
@@ -86,6 +86,7 @@ class _SleepPageState extends State<SleepPage> {
             ),
           ],
         ),
+      ),
     );
   }
 }

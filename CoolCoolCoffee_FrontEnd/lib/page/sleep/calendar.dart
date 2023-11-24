@@ -74,6 +74,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     CollectionReference userSleepCollection = firestore.collection('Users').doc(uid).collection('user_sleep');
 
     try {
+      _sleepTime = null;
+      _wakeTime = null;
       QuerySnapshot<Map<String, dynamic>> userSleepData = await userSleepCollection.get() as QuerySnapshot<Map<String, dynamic>>;
 
       userSleepData.docs.forEach((doc) {
@@ -85,9 +87,11 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             _wakeTime = doc['wake_time'];
           } else {
             if (!doc.data()!.containsKey('sleep_time')) {
+              _sleepTime = null;
               print('"sleep_time" 필드 없음: ${doc.id}');
             }
             if (!doc.data()!.containsKey('wake_time')) {
+              _wakeTime = null;
               print('"wake_time" 필드 없음: ${doc.id}');
             }
           }

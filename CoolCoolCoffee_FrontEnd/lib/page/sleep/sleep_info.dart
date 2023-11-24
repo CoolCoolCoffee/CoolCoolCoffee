@@ -129,6 +129,20 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
                     ),
                     child: Text(selecteddate == todaydate ? '가져오기' : ''),
                   ),
+                SizedBox(width: 10),
+                if (selecteddate == todaydate)
+                  ElevatedButton(
+                    onPressed: () async {
+                      _showManualInputPopup(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.brown,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    child: Text('입력'),
+                  ),
               ],
             ),
             Row(
@@ -241,7 +255,7 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
         'wake_time': resultText_end_real,
       });
     }
-    print("sssssssssssssss $currentDate");
+    //print("sssssssssssssss $currentDate");
   }
 
 
@@ -293,8 +307,237 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
       print(resultText_start_real);
       print(resultText_end_real);
     } catch (e) {
+      resultText_start_real = '';
+      resultText_end_real = '';
+      _updateResultText();
       print(e.toString());
     }
+  }
+
+  Future<void> _showManualInputPopup(BuildContext context) async {
+    TextEditingController sleepHoursController = TextEditingController();
+    TextEditingController sleepMinutesController = TextEditingController();
+    TextEditingController wakeHoursController = TextEditingController();
+    TextEditingController wakeMinutesController = TextEditingController();
+    bool sleepIsAM = true;
+    bool wakeIsAM = true;
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text('입력'),
+              content: SingleChildScrollView( // Wrap with SingleChildScrollView
+                child: Column(
+                  children: [
+                    Text(
+                      '취침시간',
+                      textAlign: TextAlign.start,
+                    ),
+                    SizedBox(height: 5),
+                    Row(
+                      children: [
+                        Container(
+                          width: 60,
+                          height: 40,
+                          child: TextField(
+                            controller: sleepHoursController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              labelText: '시',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        Text(
+                          ' : ',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        Container(
+                          width: 60,
+                          height: 40,
+                          child: TextField(
+                            controller: sleepMinutesController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              labelText: '분',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              sleepIsAM = true;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: sleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
+                            minimumSize: Size(40, 40),
+                          ),
+                          child: Text('AM'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              sleepIsAM = false;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: !sleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
+                            minimumSize: Size(40, 40),
+                          ),
+                          child: Text('PM'),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      '기상시간',
+                      textAlign: TextAlign.start,
+                    ),
+                    SizedBox(height: 5),
+                    Row(
+                      children: [
+                        Container(
+                          width: 60,
+                          height: 40,
+                          child: TextField(
+                            controller: wakeHoursController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              labelText: '시',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        Text(
+                          ' : ',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        Container(
+                          width: 60,
+                          height: 40,
+                          child: TextField(
+                            controller: wakeMinutesController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              labelText: '분',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              wakeIsAM = true;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: wakeIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
+                            minimumSize: Size(40, 40),
+                          ),
+                          child: Text('AM'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              wakeIsAM = false;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: !wakeIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
+                            minimumSize: Size(40, 40),
+                          ),
+                          child: Text('PM'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog when cancel is pressed
+                  },
+                  child: Text('취소'),
+                  style: TextButton.styleFrom(
+                    minimumSize: Size(60, 40),
+                    primary: Colors.black,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    Navigator.of(context).pop();
+
+                    String selectedSleepTime = '${sleepHoursController.text}:${sleepMinutesController.text} ${sleepIsAM ? 'AM' : 'PM'}';
+                    String selectedWakeTime = '${wakeHoursController.text}:${wakeMinutesController.text} ${wakeIsAM ? 'AM' : 'PM'}';
+
+                    await _updateFirestoreWithManualInput(selectedSleepTime, selectedWakeTime);
+
+                    await _fetchSleepTimeAndUpdateState();
+
+                    print('Selected Sleep Time: $selectedSleepTime');
+                    print('Selected Wake Time: $selectedWakeTime');
+                  },
+                  child: Text('확인'),
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.brown,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    minimumSize: Size(60, 40),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+
+  Future<void> _updateFirestoreWithManualInput(String selectedSleepTime, String selectedWakeTime) async {
+    String currentDate = DateTime.now().toLocal().toString().split(' ')[0];
+
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    DocumentReference userDocRef = firestore.collection('Users').doc(uid);
+
+    // 오늘날짜의 user_sleep 컬렉션 가져오기
+    CollectionReference userSleepCollection = userDocRef.collection('user_sleep');
+
+    // user_sleep 컬렉션이 없는 경우 생성
+    if (!(await userDocRef.get()).exists) {
+      await userDocRef.set({
+        'user_sleep': {},
+      });
+    }
+
+    // 오늘날짜의 문서 가져오기
+    DocumentSnapshot todayDocument = await userSleepCollection.doc(currentDate).get();
+
+    if (todayDocument.exists) {
+      // 문서 있으면 sleep_time 및 wake_time 필드 업데이트
+      await userSleepCollection.doc(currentDate).update({
+        'sleep_time': selectedSleepTime,
+        'wake_time': selectedWakeTime,
+      });
+    } else {
+      // 문서 없으면 경우 새로운 문서 생성
+      await userSleepCollection.doc(currentDate).set({
+        'sleep_time': selectedSleepTime,
+        'wake_time': selectedWakeTime,
+      });
+    }
+
+    print("sssssssssssssss $currentDate");
   }
 
 }
