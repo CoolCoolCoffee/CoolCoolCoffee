@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SleepConditionWidget extends StatefulWidget {
   final Function(int conditionLevel) onConditionSelected;
@@ -12,6 +14,7 @@ class SleepConditionWidget extends StatefulWidget {
 
 class _SleepConditionWidgetState extends State<SleepConditionWidget> {
   double selectedCondition = 5.0; // Default value
+
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +31,11 @@ class _SleepConditionWidgetState extends State<SleepConditionWidget> {
               ),
               SizedBox(width: 10),
               ElevatedButton(
+                // onPressed: () async {
+                //   await saveSelectedCondition(); // Use 'await' here
+                // },
                 onPressed: () {
-                  saveSelectedCondition();
+                  onPressedHandler(); // Call asynchronously
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Colors.brown,
@@ -84,10 +90,48 @@ class _SleepConditionWidgetState extends State<SleepConditionWidget> {
       ),
     );
   }
+  void saveSelectedCondition() async {
+    try {
+      String currentDate = DateTime.now().toLocal().toString().split(' ')[0];
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      String uid = FirebaseAuth.instance.currentUser!.uid;
 
-  void saveSelectedCondition() {
-    print('!!selectedCondition : $selectedCondition');
-    widget.onConditionSelected(selectedCondition.toInt());
+      // 사용자 문서
+      DocumentReference userDocRef = firestore.collection('Users').doc(uid);
+
+      // 오늘날짜의 user_sleep 컬렉션 가져오기
+      CollectionReference userSleepCollection = userDocRef.collection('user_sleep');
+
+      // user_sleep 컬렉션이 없는 경우 생성
+      if (!(await userDocRef.get()).exists) {
+        await userDocRef.set({
+          'user_sleep': {},
+        });
+      }
+
+      // 오늘날짜의 문서 가져오기
+      DocumentSnapshot todayDocument = await userSleepCollection.doc(currentDate).get();
+
+      if (todayDocument.exists) {
+        // 문서 있으면 sleep_quality_score 필드 업데이트
+        await userSleepCollection.doc(currentDate).update({
+          'sleep_quality_score': selectedCondition.toInt(),
+        });
+      } else {
+        // 문서 없으면 문서 생성
+        await userSleepCollection.doc(currentDate).set({
+          'sleep_quality_score': selectedCondition.toInt(),
+        });
+      }
+
+      print('!!selectedCondition : $selectedCondition');
+      widget.onConditionSelected(selectedCondition.toInt());
+    } catch (error) {
+      print('Error saving condition: $error');
+    }
+  }
+  void onPressedHandler() {
+    saveSelectedCondition(); // No need for 'await' here
   }
 
   String getConditionLevel(int conditionLevel) {

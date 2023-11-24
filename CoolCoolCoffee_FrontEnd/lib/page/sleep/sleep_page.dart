@@ -20,6 +20,7 @@ class _SleepPageState extends State<SleepPage> {
   String? _wakeTime;
   DateTime today = DateTime.now();
 
+
   @override
   Widget build(BuildContext context) {
     if (selectedDay == null) {
@@ -46,41 +47,14 @@ class _SleepPageState extends State<SleepPage> {
       ),
       body: Column(
         children: [
-          CalendarWidget(onDaySelected: (DateTime selectedDay) {
+          CalendarWidget(onDaySelected: (DateTime selectedDay,String? sleepTime, String? wakeTime) {
             setState(() {
               this.selectedDay = selectedDay;
+              this._sleepTime = sleepTime;
+              this._wakeTime = wakeTime;
+              print("tlqkf11 - sleep_time: $_sleepTime, wake_time: $_wakeTime");
             });
           }),
-          FutureBuilder<String?>(
-            future: _userSleepService.getSleepTime(selectedDay!.toLocal().toIso8601String().split('T')[0]),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container(); // 로딩 중일 때 표시할 위젯
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                _sleepTime = snapshot.data;
-                //_userSleepService.printAllDocumentIds();
-                //print("!!!sleep time $_sleepTime");
-                return Container(); // 피곤도를 표시하는 위젯
-              }
-            },
-          ),
-          FutureBuilder<String?>(
-            future: _userSleepService.getWakeTime(selectedDay!.toLocal().toIso8601String().split('T')[0]),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container(); // 로딩 중일 때 표시할 위젯
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                _wakeTime = snapshot.data;
-                //_userSleepService.printAllDocumentIds();
-                //print("!!!wake time $_wakeTime");
-                return Container(); // 피곤도를 표시하는 위젯
-              }
-            },
-          ),
           Container(
             color: Colors.white,
             child: Column(
