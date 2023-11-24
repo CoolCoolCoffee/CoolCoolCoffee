@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:coolcoolcoffee_front/page/login/sign_up_third_page.dart';
 import 'package:flutter/material.dart';
 
@@ -84,6 +86,7 @@ class _UserFormState extends State<SignUpSecondPage> {
   }
 
   void _onNextButtonPressed() {
+    double h1 = 0.75; double h2 = 0.2469; double a = 0.09478; double C = 0.45145833333;
     // bedTime, goodSleepTime 모두 string으로 변화 시키자
     if(isAm1 == true) {
       bedTime = '${bedHour.toString()}:${bedMin.toString().padLeft(2,'0')}';
@@ -92,6 +95,14 @@ class _UserFormState extends State<SignUpSecondPage> {
     }
 
     goodSleepTime = '${goodSleepHour.toString()}:${goodSleepMin.toString().padLeft(2,'0')}';
+    var good_sleep = goodSleepHour + goodSleepMin/60;
+    var t0 = bedHour + bedMin/60 + good_sleep;
+    if(t0 >= 24.0) t0 = t0 - 24.0;
+    t0 = t0/24-C;
+    var delta = (24 - good_sleep)/24;
+    var x0 = h2 + a*sin(2*pi*t0);
+    var x1 = h1 + a*sin(2*pi*(t0 + delta));
+    var tw = double.parse((-delta / (log(1-x1)-log(1-x0))).toStringAsFixed(10));
 
     print(caffeineHalfLife);
     if(_formKey.currentState?.validate() ?? false) {
@@ -105,6 +116,7 @@ class _UserFormState extends State<SignUpSecondPage> {
           bedTime: bedTime!,
           goodSleepTime: goodSleepTime!,
           caffeineHalfLife: caffeineHalfLife,
+          tw: tw,
         )),
       );
     }

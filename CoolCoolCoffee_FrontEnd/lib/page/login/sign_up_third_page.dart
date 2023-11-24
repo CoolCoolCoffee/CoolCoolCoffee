@@ -13,8 +13,8 @@ class SignUpThirdPage extends StatefulWidget {
   final String bedTime;
   final String goodSleepTime;
   final int caffeineHalfLife;
-
-  const SignUpThirdPage({Key? key, required this.userName, required this.userAge, required this.bedTime, required this.goodSleepTime, required this.caffeineHalfLife,}) : super(key: key);
+  final double tw;
+  const SignUpThirdPage({Key? key, required this.userName, required this.userAge, required this.bedTime, required this.goodSleepTime, required this.caffeineHalfLife, required this.tw,}) : super(key: key);
 
   @override
   State<SignUpThirdPage> createState() => _UserFormState();
@@ -57,6 +57,7 @@ class _UserFormState extends State<SignUpThirdPage> {
           'avg_bed_time': widget.bedTime,
           'good_sleep_time': widget.goodSleepTime,
           'caffeine_half_life' : widget.caffeineHalfLife,
+          'tw' : widget.tw,
         }, SetOptions(merge: true));
 
         await FirebaseFirestore.instance

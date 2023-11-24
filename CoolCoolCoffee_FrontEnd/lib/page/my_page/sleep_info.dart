@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,15 +22,25 @@ class _EditSleepDialogState extends State<EditSleepDialog> {
   /// 수정된 수면 정보 업데이트하는 함수
   void updateSleepInfo(bool am, int bedHour, int bedMin, int goodSleepHour, int goodSleepMin) {
     int bedH = bedHour; int bedM = bedMin; int sleepH = goodSleepHour; int sleepM = goodSleepMin;
-
+    double h1 = 0.75; double h2 = 0.2469; double a = 0.09478; double C = 0.45145833333;
     if(!am){
       bedH = bedH + 12;
     }
+    var good_sleep = sleepH + sleepM/60;
+    var t0 = bedH + bedM/60 + good_sleep;
+    if(t0 >= 24.0) t0 = t0 - 24.0;
+    t0 = t0/24-C;
+
+    var delta = (24 - good_sleep)/24;
+
+    var x0 = h2 + a*sin(2*pi*t0);
+    var x1 = h1 + a*sin(2*pi*(t0 + delta));
+    var tw = double.parse((-delta / (log(1-x1)-log(1-x0))).toStringAsFixed(10));
 
     String bedTime = '${bedH.toString()}:${bedM.toString().padLeft(2, '0')}';
     String goodSleepTime = '${sleepH.toString()}:${sleepM.toString().padLeft(2, '0')}';
 
-    final data = {'avg_bed_time' : bedTime, "good_sleep_time" : goodSleepTime};
+    final data = {'avg_bed_time' : bedTime, "good_sleep_time" : goodSleepTime, "tw": tw};
 
     var db = FirebaseFirestore.instance;
     db.collection("Users").doc(uid).set(data, SetOptions(merge: true));
