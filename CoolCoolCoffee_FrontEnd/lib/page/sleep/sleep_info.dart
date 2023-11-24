@@ -238,6 +238,22 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
         'user_sleep': {},
       });
     }
+    List<String> sleepTimeComponents = resultText_start_real.split(':');
+    int sleepHours = int.parse(sleepTimeComponents[0]);
+    if (sleepHours < 12 && resultText_start_real.toLowerCase().contains('pm')) {
+      sleepHours += 12;
+    }
+    String convertedSleepTime = '$sleepHours:${sleepTimeComponents[1]}';
+    convertedSleepTime = convertedSleepTime.replaceAll(RegExp(r'\s?[APMapm]{2}\s?$'), '');
+
+    // Convert selected wake time to 24-hour format
+    List<String> wakeTimeComponents = resultText_end_real.split(':');
+    int wakeHours = int.parse(wakeTimeComponents[0]);
+    if (wakeHours < 12 && resultText_end_real.toLowerCase().contains('pm')) {
+      wakeHours += 12;
+    }
+    String convertedWakeTime = '$wakeHours:${wakeTimeComponents[1]}';
+    convertedWakeTime = convertedWakeTime.replaceAll(RegExp(r'\s?[APMapm]{2}\s?$'), '');
 
     // 오늘날짜의 문서 가져오기
     DocumentSnapshot todayDocument = await userSleepCollection.doc(currentDate).get();
@@ -245,14 +261,14 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
     if (todayDocument.exists) {
       // 문서 있으면 sleep_time 및 wake_time 필드 업데이트
       await userSleepCollection.doc(currentDate).update({
-        'sleep_time': resultText_start_real,
-        'wake_time': resultText_end_real,
+        'sleep_time': convertedSleepTime,
+        'wake_time': convertedWakeTime,
       });
     } else {
       // 문서 없으면 경우 새로운 문서 생성
       await userSleepCollection.doc(currentDate).set({
-        'sleep_time': resultText_start_real,
-        'wake_time': resultText_end_real,
+        'sleep_time': convertedSleepTime,
+        'wake_time': convertedWakeTime,
       });
     }
     //print("sssssssssssssss $currentDate");
@@ -262,6 +278,24 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
   void _updateResultText() {
     setState(() {});
   }
+
+  String convertTo12HourFormat(String time) {
+    List<String> parts = time.split(':');
+    int hours = int.parse(parts[0]);
+    int minutes = int.parse(parts[1]);
+
+    String amPm = (hours >= 12) ? 'PM' : 'AM';
+
+    if (hours > 12) {
+      hours -= 12;
+    }
+
+    // Pad single-digit minutes with a leading zero
+    String formattedMinutes = (minutes < 10) ? '0$minutes' : '$minutes';
+
+    return '$hours:$formattedMinutes $amPm';
+  }
+
 
   Future<void> _fetchSleepTimeAndUpdateState() async {
     try {
@@ -293,9 +327,10 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
       final todayDocument = await userSleepCollection.doc(currentDate).get();
 
       if (todayDocument.exists) {
-        // Firestore에서 데이터 가져오기
         resultText_start_real = todayDocument['sleep_time'] ?? '';
         resultText_end_real = todayDocument['wake_time'] ?? '';
+        resultText_start_real = convertTo12HourFormat(resultText_start_real);
+        resultText_end_real = convertTo12HourFormat(resultText_end_real);
       } else {
         // 문서가 없으면 빈 문자열로 설정
         resultText_start_real = '';
@@ -321,6 +356,20 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
     TextEditingController wakeMinutesController = TextEditingController();
     bool sleepIsAM = true;
     bool wakeIsAM = true;
+
+    if (resultText_start_real.isNotEmpty && resultText_end_real.isNotEmpty) {
+      List<String> sleepTimeComponents = resultText_start_real.split(RegExp(r'[: ]'));
+      List<String> wakeTimeComponents = resultText_end_real.split(RegExp(r'[: ]'));
+
+      sleepHoursController.text = sleepTimeComponents[0];
+      sleepMinutesController.text = sleepTimeComponents[1];
+      sleepIsAM = sleepTimeComponents[2] == 'AM';
+
+      wakeHoursController.text = wakeTimeComponents[0];
+      wakeMinutesController.text = wakeTimeComponents[1];
+      wakeIsAM = wakeTimeComponents[2] == 'AM';
+    }
+
 
     await showDialog(
       context: context,
@@ -519,21 +568,40 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
         'user_sleep': {},
       });
     }
+    // Convert selected sleep time to 24-hour format
+    List<String> sleepTimeComponents = selectedSleepTime.split(':');
+    int sleepHours = int.parse(sleepTimeComponents[0]);
+    if (sleepHours < 12 && selectedSleepTime.toLowerCase().contains('pm')) {
+      sleepHours += 12;
+    }
+    String convertedSleepTime = '$sleepHours:${sleepTimeComponents[1]}';
+    convertedSleepTime = convertedSleepTime.replaceAll(RegExp(r'\s?[APMapm]{2}\s?$'), '');
+
+    // Convert selected wake time to 24-hour format
+    List<String> wakeTimeComponents = selectedWakeTime.split(':');
+    int wakeHours = int.parse(wakeTimeComponents[0]);
+    if (wakeHours < 12 && selectedWakeTime.toLowerCase().contains('pm')) {
+      wakeHours += 12;
+    }
+    String convertedWakeTime = '$wakeHours:${wakeTimeComponents[1]}';
+    convertedWakeTime = convertedWakeTime.replaceAll(RegExp(r'\s?[APMapm]{2}\s?$'), '');
+
 
     // 오늘날짜의 문서 가져오기
     DocumentSnapshot todayDocument = await userSleepCollection.doc(currentDate).get();
 
     if (todayDocument.exists) {
       // 문서 있으면 sleep_time 및 wake_time 필드 업데이트
+
       await userSleepCollection.doc(currentDate).update({
-        'sleep_time': selectedSleepTime,
-        'wake_time': selectedWakeTime,
+        'sleep_time': convertedSleepTime,
+        'wake_time': convertedWakeTime,
       });
     } else {
       // 문서 없으면 경우 새로운 문서 생성
       await userSleepCollection.doc(currentDate).set({
-        'sleep_time': selectedSleepTime,
-        'wake_time': selectedWakeTime,
+        'sleep_time': convertedSleepTime,
+        'wake_time': convertedWakeTime,
       });
     }
 
