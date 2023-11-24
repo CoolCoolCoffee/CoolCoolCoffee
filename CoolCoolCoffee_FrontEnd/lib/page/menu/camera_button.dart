@@ -61,24 +61,28 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
     await korTextRecognizer.close();
     Navigator.pop(context);
     Navigator.push(context, MaterialPageRoute(builder: (context)=>LoadingMenu()));
+
     if(cameraMode=="Starbucks label"){
       var ret = await CameraFunc().fetchMenuFromStarbucksLabel(korRecognizedText);
       if(ret["success"]){
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: ret["document"], brandName: ret["brand"], size: ret["size"],shot: "",)));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: ret["document"], brandName: ret["brand"], size: ret["size"],shot: ret["shot"],)));
+      }else{
+        Navigator.pop(context);
+        _failedDialogBuilder(context);
       }
     }
     else if(cameraMode=="App Capture"){
       var ret = await CameraFunc().fetchMenuFromAppCature(korRecognizedText);
       if(ret["success"]){
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: ret["document"], brandName: ret["brand"], size: ret["size"],shot: "",)));
+      }else{
+        Navigator.pop(context);
+        _failedDialogBuilder(context);
       }
     }
     else{
       await fetchMenuFromConveni(korRecognizedText);
     }
-
-    //setState(() {});
-    //await pushMenuAddPage(brand, menu);
   }
   Future<void> fetchMenuFromConveni(RecognizedText recText) async{
     print("Hi!!!conveni");
@@ -128,6 +132,27 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
     );
   }
 
+  Future<void> _failedDialogBuilder(BuildContext context){
+    return showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context){
+          return AlertDialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular((10.0))),
+            content: const Text("메뉴 분석에 실패했습니다."),
+            insetPadding: const EdgeInsets.fromLTRB(10, 100, 10, 10),
+            actions: [
+              TextButton(
+                child: const Text("닫기"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        }
+    );
+  }
   Future<void> _dialogBuilder(BuildContext context, String cameraMode){
     return showDialog(
         context: context,
@@ -135,7 +160,7 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
         builder: (BuildContext context) {
           return AlertDialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular((10.0))),
-            content: const Text("어떤 것으로 접근?"),
+            content: const Text("어떤 것으로 접근하시겠습니까?"),
             insetPadding: const EdgeInsets.fromLTRB(10, 100, 10, 10),
             actions: [
               TextButton(
