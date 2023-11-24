@@ -12,7 +12,7 @@ class Event {
 }
 
 class CalendarWidget extends StatefulWidget {
-  final Function(DateTime) onDaySelected;
+  final Function(DateTime,String?, String?) onDaySelected;
 
   const CalendarWidget({Key? key, required this.onDaySelected}) : super(key: key);
 
@@ -25,8 +25,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   DateTime? _selectedDay;
   Map<DateTime, int> dateColors = {};
 
-  final UserSleepService _userSleepService = UserSleepService();
-  int? _sleepQualityScore;
   String? _sleepTime;
   String? _wakeTime;
 
@@ -36,17 +34,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
     var s = DateTime.utc(2023, 11, 10);
     //print("이거 : $s");
     _updateDateColors();
-    // dateColors[DateTime.utc(2023, 11, 10)] = 10;
-    // dateColors[DateTime.utc(2023, 11, 11)] = 9;
-    // dateColors[DateTime.utc(2023, 11, 12)] = 8;
-    // dateColors[DateTime.utc(2023, 11, 13)] = 7;
-    // dateColors[DateTime.utc(2023, 11, 14)] = 6;
-    // dateColors[DateTime.utc(2023, 11, 15)] = 5;
-    // dateColors[DateTime.utc(2023, 11, 16)] = 4;
-    // dateColors[DateTime.utc(2023, 11, 17)] = 3;
-    // dateColors[DateTime.utc(2023, 11, 18)] = 2;
-    // dateColors[DateTime.utc(2023, 11, 19)] = 1;
-    // dateColors[DateTime.utc(2023, 11, 20)] = 0;
   }
 
   Future<void> _updateDateColors() async {
@@ -66,22 +53,55 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             DateTime utcDate = DateTime.utc(date.year, date.month, date.day);
             dateColors[utcDate] = sleepQualityScore;
             var c = DateTime(date.year, date.month, date.day);
-            print("tlqkf $c");
+            //print("tlqkf $c");
           } else {
             print('"sleep_quality_score"가 null: ${doc.id}');
           }
         } else {
           print('"sleep_quality_score": 필드 없음 ${doc.id}');
         }
-      });  // 업데이트 후에는 UI를 다시 그리기
+      });
       setState(() {
-        print("tlqkf");
+        //print("tlqkf11");
       });
     } catch (e) {
       print('Error : $e');
     }
   }
+  Future<void> _updateSelectedDayInfo(DateTime selectedDay) async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    CollectionReference userSleepCollection = firestore.collection('Users').doc(uid).collection('user_sleep');
 
+    try {
+      QuerySnapshot<Map<String, dynamic>> userSleepData = await userSleepCollection.get() as QuerySnapshot<Map<String, dynamic>>;
+
+      userSleepData.docs.forEach((doc) {
+        DateTime date = DateTime.parse(doc.id).toLocal();
+
+        if (isSameDay(selectedDay, date)) {
+          if (doc.data()!.containsKey('sleep_time') && doc.data()!.containsKey('wake_time')) {
+            _sleepTime = doc['sleep_time'];
+            _wakeTime = doc['wake_time'];
+          } else {
+            if (!doc.data()!.containsKey('sleep_time')) {
+              print('"sleep_time" 필드 없음: ${doc.id}');
+            }
+            if (!doc.data()!.containsKey('wake_time')) {
+              print('"wake_time" 필드 없음: ${doc.id}');
+            }
+          }
+        }
+      });
+
+      // 업데이트 후에는 UI를 다시 그리기
+      setState(() {
+        print("tlqkf - sleep_time: $_sleepTime, wake_time: $_wakeTime");
+      });
+    } catch (e) {
+      print('Error : $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,11 +118,14 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           selectedDayPredicate: (day) {
             return isSameDay(_selectedDay, day);
           },
-          onDaySelected: (selectedDay, focusedDay) {
+          onDaySelected: (selectedDay, focusedDay) async {
+            await _updateSelectedDayInfo(selectedDay);
             setState(() {
               _selectedDay = selectedDay;
               _focusedDay = focusedDay;
-              widget.onDaySelected(selectedDay); // Callback function
+              widget.onDaySelected(selectedDay, _sleepTime, _wakeTime);// Callback function
+
+              //_updateSelectedDayInfo(selectedDay);
             });
           },
           onPageChanged: (focusedDay) {
@@ -129,63 +152,6 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                 return null;
               }
             },
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Text(
-              //   '${_selectedDay!.toLocal().toIso8601String().split('T')[0]}',
-              //   style: TextStyle(fontSize: 16),
-              // ),
-              FutureBuilder<int?>(
-                future: _userSleepService.getSleepQualityScore(_selectedDay!.toLocal().toIso8601String().split('T')[0]),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Container(); // 로딩 중일 때 표시할 위젯
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    _sleepQualityScore = snapshot.data;
-                    //_userSleepService.printAllDocumentIds();
-                    //print(_selectedDay!.toLocal().toIso8601String().split('T')[0]);
-                    return Container(); // 피곤도를 표시하는 위젯
-                  }
-                },
-              ),
-              FutureBuilder<String?>(
-                future: _userSleepService.getSleepTime(_selectedDay!.toLocal().toIso8601String().split('T')[0]),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Container(); // 로딩 중일 때 표시할 위젯
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    _sleepTime = snapshot.data;
-                    //_userSleepService.printAllDocumentIds();
-                    //print("sleep time $_sleepTime");
-                    return Container(); // 피곤도를 표시하는 위젯
-                  }
-                },
-              ),
-              FutureBuilder<String?>(
-                future: _userSleepService.getWakeTime(_selectedDay!.toLocal().toIso8601String().split('T')[0]),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Container(); // 로딩 중일 때 표시할 위젯
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    _wakeTime = snapshot.data;
-                    //_userSleepService.printAllDocumentIds();
-                    //print("wake time $_wakeTime");
-                    return Container(); // 피곤도를 표시하는 위젯
-                  }
-                },
-              ),
-            ],
           ),
         ),
       ],
