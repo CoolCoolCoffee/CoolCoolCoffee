@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,12 @@ class RecommendPage extends StatefulWidget {
 }
 
 class _RecommendPageState extends State<RecommendPage> {
-  var userCaffeine = 300;
+  String uid = FirebaseAuth.instance.currentUser!.uid;
+  var db = FirebaseFirestore.instance;
+
+  // 나중에 마실 수 있는 카페인 값 받아오기
+  var userCaffeine = 100;
+
   @override
   Widget build(BuildContext context) {
     /*var userFavBrand;
@@ -24,24 +30,21 @@ class _RecommendPageState extends State<RecommendPage> {
     return Scaffold(
         backgroundColor: Colors.brown.withOpacity(0.1),
         appBar: AppBar(
-          title: Center(
-            child: Text(
-              '추천',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
-              ),
+          title: const Text('추천', style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w600,
             ),
           ),
+          centerTitle: true,
           backgroundColor: Colors.white,
           toolbarHeight: 50,
-          iconTheme: IconThemeData(color: Colors.white),
+          iconTheme: const IconThemeData(color: Colors.white),
         ),
         body: Column(
           children: [
             Container(
               height: MediaQuery.of(context).size.height / 12,
-              margin: EdgeInsets.all(20),
+              margin: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(5),
@@ -50,21 +53,21 @@ class _RecommendPageState extends State<RecommendPage> {
                     color: Colors.grey.withOpacity(0.3),
                     spreadRadius: 5,
                     blurRadius: 7,
-                    offset: Offset(0, 3),
+                    offset: const Offset(0, 3),
                   ),
                 ],
               ),
               child: Center(
                   child: Text(
                       '앞으로 $userCaffeine mg 마실 수 있어요!',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 20
                     ),
                   ),
               ),
             ),
             StreamBuilder(
-                stream: FirebaseFirestore.instance.collection('Users').doc('ZZDgEPAMHTeb57Ox1aSgtqOXpMB2').collection('user_favorite').doc('favorite_brand').snapshots(),
+                stream: db.collection('Users').doc(uid).collection('user_favorite').doc('favorite_brand').snapshots(),
                 builder: (context,snapshot){
                   if(snapshot.hasData){
                     var userFavoriteBrandList = snapshot.data!;
@@ -74,30 +77,32 @@ class _RecommendPageState extends State<RecommendPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           for(var brand in brand_list)
-                            Container(
+                            SizedBox(
                               height: MediaQuery.of(context).size.height *(2/9),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.all(7),
+                                    padding: const EdgeInsets.all(7),
                                     child: Text(
                                         "  $brand 추천 메뉴",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 17,
-
                                       ),
                                     ),
                                   ),
                                   StreamBuilder(
-                                    stream: FirebaseFirestore.instance.collection('Cafe_brand').doc(brand).collection('menus').where('caffeine_per_size',isNull: false ).limit(3).snapshots(),
+                                    stream: db.collection('Cafe_brand').doc(brand)
+                                        .collection('menus')
+                                        .where('caffeine', isLessThanOrEqualTo: userCaffeine)
+                                        .limit(3).snapshots(),
                                     builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot){
                                       if(streamSnapshot.hasData){
                                         return GridView.builder(
                                           shrinkWrap: true,
                                           itemCount: streamSnapshot.data!.docs.length,
-                                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                                             crossAxisCount: 3,
                                             childAspectRatio: 1,
                                             mainAxisSpacing: 10,
@@ -107,21 +112,21 @@ class _RecommendPageState extends State<RecommendPage> {
                                             final DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[index];
                                             return GestureDetector(
                                               onTap: (){
-                                                Navigator.push(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: documentSnapshot, brandName: brand, size: '', shot: '',)));
+                                                Navigator.push(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: documentSnapshot, brandName: brand, size: documentSnapshot['basic_size'], shot: '',)));
                                               },
                                               child:
                                                 Container(
                                                   child: Stack(
                                                     children: [
                                                       Container(
-                                                        margin: EdgeInsets.all(5),
+                                                        margin: const EdgeInsets.all(5),
                                                         decoration: BoxDecoration(
                                                         borderRadius: BorderRadius.circular(20),
                                                         boxShadow: [BoxShadow(
                                                           color: Colors.grey.withOpacity(0.7),
                                                           spreadRadius: 0,
                                                           blurRadius: 5.0,
-                                                          offset: Offset(0,5)
+                                                          offset: const Offset(0,5)
                                                         )],
                                                         //color: Colors.green,
                                                         image: DecorationImage(
@@ -135,15 +140,15 @@ class _RecommendPageState extends State<RecommendPage> {
                                                       child: Container(
                                                       alignment: Alignment.bottomLeft,
                                                       height: 40,
-                                                      margin: EdgeInsets.all(5),
+                                                      margin: const EdgeInsets.all(5),
                                                       decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.only(bottomRight: Radius.circular(20)),
+                                                        borderRadius: const BorderRadius.only(bottomRight: Radius.circular(20)),
                                                         color: Colors.white,
                                                         boxShadow: [BoxShadow(
                                                         color: Colors.grey.withOpacity(0.7),
                                                         spreadRadius: 0,
                                                         blurRadius: 5.0,
-                                                        offset: Offset(0,5)
+                                                        offset: const Offset(0,5)
                                                         )]
                                                       ),
                                                       child: Column(
@@ -152,7 +157,7 @@ class _RecommendPageState extends State<RecommendPage> {
                                                         children: [
                                                           Text(
                                                             brand,
-                                                            style: TextStyle(
+                                                            style: const TextStyle(
                                                               fontSize: 12,
                                                               color: Colors.grey
                                                             ),
@@ -174,7 +179,7 @@ class _RecommendPageState extends State<RecommendPage> {
                                         );
                                        }
                                       else{
-                                        return CircularProgressIndicator(color: Colors.blue,);
+                                        return const CircularProgressIndicator(color: Colors.blue,);
                                       }
                                    },
                                   ),
