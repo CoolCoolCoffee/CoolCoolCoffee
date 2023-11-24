@@ -14,82 +14,31 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passController = TextEditingController();
-  TextEditingController _pass2Controller = TextEditingController();
+  late TextEditingController _emailController;
+  late TextEditingController _passController;
+  late TextEditingController _pass2Controller;
 
   String _email = '';
   String _password = '';
   String _password2 = '';
 
-
-  String errorMessage = '';
-
-  void _handleSignUp() async{
-
-      try{
-        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-          email: _email,
-          password: _password,
-        );
-        print('사용자 회원가입 완료: ${userCredential.user!.email}');
-
-        // 다른 앱 접근 권한 기본(false)으로 설정해놓음
-        await FirebaseFirestore.instance
-            .collection("Users")
-            .doc(userCredential.user!.uid)
-            .set({'app_access' : false})
-            .onError((error, stackTrace) => print('앱 권한 정보 추가 에러!'));
-
-        // 사용자 이메일 주소도 넣어놓음
-        await FirebaseFirestore.instance
-            .collection("Users")
-            .doc(userCredential.user!.uid)
-            .set({'user_email' : userCredential.user!.email})
-            .onError((error, stackTrace) => print('이메일 정보 추가 에러!'));
-
-        if(!mounted) return;
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const SignUpFirstPage()),
-      );
-
-    } on FirebaseAuthException catch (e) {
-      //회원가입 예외처리
-      switch (e.code) {
-        case 'email-already-in-use':
-          setState(() {
-            errorMessage = '이미 존재하는 이메일 계정입니다.';
-            print(errorMessage);
-          });
-          break;
-        case 'invalid-email':
-          setState(() {
-            errorMessage = '이메일 주소가 올바른 형식이 아닙니다.';
-            print(errorMessage);
-          });
-          break;
-        case 'operation-no-allowed':
-          setState(() {
-            errorMessage = '이메일/패스워드 계정 생성이 허용되지 않습니다.';
-            print(errorMessage);
-          });
-          break;
-        case 'weak-password':
-          setState(() {
-            errorMessage = '비밀번호는 6자 이상이어야 합니다.';
-            print(errorMessage);
-          });
-          break;
-        default:
-          errorMessage = e.code;
-          print('오류가 발생했습니다. : $errorMessage');
-      }
-    }
+  @override
+  void initState(){
+    super.initState();
+    _emailController = TextEditingController();
+    _passController = TextEditingController();
+    _pass2Controller = TextEditingController();
   }
 
+  @override
+  void dispose(){
+    _emailController.dispose();
+    _passController.dispose();
+    _pass2Controller.dispose();
+    super.dispose();
+  }
 
   Widget _userEmailWidget(){
     return TextFormField(
@@ -183,59 +132,50 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
       body: Form(
         key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text('쿨쿨커피가 처음이신가요?'),
-              const SizedBox(height: 20,),
-              _userEmailWidget(),
-              const SizedBox(height: 20,),
-              _userPwWidget(),
-              const SizedBox(height: 20,),
-              _userPw2Widget(),
-              const SizedBox(height: 30,),
-              Container(
-                height: 70,
-                width: 150,
-                padding: const EdgeInsets.only(top: 8.0),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.brown.withOpacity(0.6)),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text('쿨쿨커피가 처음이신가요?'),
+                  const SizedBox(height: 20,),
+                  _userEmailWidget(),
+                  const SizedBox(height: 20,),
+                  _userPwWidget(),
+                  const SizedBox(height: 20,),
+                  _userPw2Widget(),
+                  const SizedBox(height: 30,),
+                  Container(
+                    height: 70,
+                    width: 150,
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.brown.withOpacity(0.6)),
+                      ),
+                      onPressed: (){
+                        if(_formKey.currentState!.validate()){
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => SignUpFirstPage(userEmail: _email, userPassword: _password))
+                          );
+                        }
+                      },
+                      child: const Text('회원가입'),
+                    ),
                   ),
-                  onPressed: (){
-                    if(_formKey.currentState!.validate()){
-                      _handleSignUp();
-                    }
-                  },
-                  child: const Text('회원가입'),
-                ),
+                  const SizedBox(
+                    height: 120,
+                  )
+                ],
               ),
-              const SizedBox(
-                height: 120,
-              )
-            ],
+            ),
           ),
         ),
       ),
-      resizeToAvoidBottomInset: true,
     );
-  }
-
-  @override
-  void initState() {
-    //해당 클래스가 호출되었을떄
-    super.initState();
-  }
-  @override
-  void dispose() {
-    // 해당 클래스가 사라질떄
-    _emailController.dispose();
-    _passController.dispose();
-    _pass2Controller.dispose();
-    super.dispose();
   }
 }
 
