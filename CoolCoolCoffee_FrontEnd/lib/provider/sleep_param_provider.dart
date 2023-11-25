@@ -10,7 +10,7 @@ final sleepParmaProvider = StateNotifierProvider<SleepParamNotifier,SleepParam>(
 });
 
 class SleepParamNotifier extends StateNotifier<SleepParam>{
-  SleepParamNotifier():super(SleepParam(goal_sleep_time: "", tw: 0, caff_list: [], wake_time: ""));
+  SleepParamNotifier():super(SleepParam(goal_sleep_time: "", tw: 0, caff_list: [], wake_time: "", sleep_quality: -1));
   void changeGoalSleepTime(String goal_sleep_time){
     state.goal_sleep_time = goal_sleep_time;
   }
@@ -30,6 +30,9 @@ class SleepParamNotifier extends StateNotifier<SleepParam>{
       for(final caff in state.caff_list)
         if(caff.drinkTime != userCaffeine.drinkTime) caff,
     ];
+  }
+  void changeSleepQuality(int sq){
+    state.sleep_quality = sq;
   }
   void changeWakeTime(String wakeTime){
     state.wake_time = wakeTime;

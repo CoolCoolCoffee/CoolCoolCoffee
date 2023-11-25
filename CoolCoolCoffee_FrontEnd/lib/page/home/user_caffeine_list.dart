@@ -1,20 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/model/user_caffeine.dart';
 import 'package:coolcoolcoffee_front/page/home/user_caffeine_detail_page.dart';
+import 'package:coolcoolcoffee_front/provider/sleep_param_provider.dart';
 import 'package:coolcoolcoffee_front/provider/user_caffeine_provider.dart';
 import 'package:coolcoolcoffee_front/service/user_caffeine_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class UserCaffeineList extends StatefulWidget {
+class UserCaffeineList extends ConsumerStatefulWidget {
   const UserCaffeineList({super.key});
 
   @override
-  State<UserCaffeineList> createState() => _UserCaffeineListState();
+  _UserCaffeineListState createState() => _UserCaffeineListState();
 }
 
-class _UserCaffeineListState extends State<UserCaffeineList> {
+class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
@@ -28,6 +30,7 @@ class _UserCaffeineListState extends State<UserCaffeineList> {
       builder: (context, snapshot){
         if(snapshot.hasData){
           var userCaffeineSnapshot= snapshot.data!;
+          if(userCaffeineSnapshot['caffeine_list'].length == 0) ref.watch(sleepParmaProvider.notifier).clearCaffList();
           if(userCaffeineSnapshot['caffeine_list'].length != 0){
             return ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -42,6 +45,7 @@ class _UserCaffeineListState extends State<UserCaffeineList> {
                       menuSize: temp['menu_size'],
                       shotAdded: temp['shot_added'],
                       caffeineContent: temp['caffeine_content']);
+                  ref.watch(sleepParmaProvider.notifier).addCaffList(userCaffeine);
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(builder: (

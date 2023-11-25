@@ -104,6 +104,21 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
             child: Center(
               child: Column(
                 children: [
+                  for(int i = 0;i<prov.state.caff_list.length;i++)
+                    Text(
+                      prov.state.caff_list[i].menuId,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                      ),
+                    ),
+                  Text(
+                    prov.state.sleep_quality.toString(),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                    ),
+                  ),
                   Text(
                     prov.state.wake_time,
                     style: TextStyle(
