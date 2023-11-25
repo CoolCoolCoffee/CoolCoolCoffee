@@ -33,6 +33,9 @@ class _HomePageState extends ConsumerState<HomePage> {
     if(userSleepDoc.exists && userSleepDoc.data()!.containsKey('wake_time')&&userSleepDoc.data()!.containsKey('sleep_quality_score')){
       ref.watch(sleepParmaProvider.notifier).changeWakeTime(userSleepDoc['wake_time']);
       ref.watch(sleepParmaProvider.notifier).changeSleepQuality(userSleepDoc['sleep_quality_score']);
+    }else{
+      ref.watch(sleepParmaProvider.notifier).changeWakeTime("");
+      ref.watch(sleepParmaProvider.notifier).changeSleepQuality(-1);
     }
   }
   @override

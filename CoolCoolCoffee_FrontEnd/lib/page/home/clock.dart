@@ -237,6 +237,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
         String formattedTime = '$hours:$minutes $amPm';
         ref.watch(sleepParmaProvider.notifier).changeGoalSleepTime(formattedTime);
         ref.watch(sleepParmaProvider.notifier).changeTw(userDoc['tw']);
+        ref.watch(sleepParmaProvider.notifier).changeHalfTime(userDoc['caffeine_half_life']);
       }
 
       if (userDoc.exists && userDoc.data()!.containsKey('goal_sleep_time')) {
@@ -257,6 +258,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
           sleepEnteredTime = formattedTime;
           ref.watch(sleepParmaProvider.notifier).changeGoalSleepTime(sleepEnteredTime);
           ref.watch(sleepParmaProvider.notifier).changeTw(userDoc['tw']);
+          ref.watch(sleepParmaProvider.notifier).changeHalfTime(userDoc['caffeine_half_life']);
         });
       } else {
         print('error1');
