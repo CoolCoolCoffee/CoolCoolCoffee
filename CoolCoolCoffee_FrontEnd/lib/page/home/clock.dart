@@ -347,7 +347,10 @@ class _ClockWidgetState extends State<ClockWidget>{
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '취침 시간\n $sleepEnteredTime',
+                    //'취침 시간\n $sleepEnteredTime',
+                    sleepEnteredTime.isNotEmpty
+                        ? '취침 시간\n $sleepEnteredTime'
+                        : '아직 목표 취침시간이 설정되지 않았네요!\n 목표 취침시간을 설정해볼까요?',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,

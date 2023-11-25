@@ -6,12 +6,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
+import 'package:coolcoolcoffee_front/notification/notification_global.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
   );
+
+  await NotificationGlobal.initializeNotifications();
+
   runApp(
       ProviderScope(
           child: CoolCoolCoffee()
@@ -39,6 +43,7 @@ class CoolCoolCoffee extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (ctx, userSnapshot) {
           if(userSnapshot.hasData && userSnapshot.data != null ){
+            NotificationGlobal.showDailyNotification();
             return PageStates();
           } else{
             return LoginPage();
