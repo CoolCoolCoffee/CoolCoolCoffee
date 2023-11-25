@@ -1,13 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_health_connect/flutter_health_connect.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timezone/timezone.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:intl/intl.dart';
 import 'package:coolcoolcoffee_front/service/user_sleep_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class SleepInfoWidget extends StatefulWidget {
+import '../../provider/sleep_param_provider.dart';
+
+class SleepInfoWidget extends ConsumerStatefulWidget {
   final DateTime selectedDay;
   final String? sleepTime;
   final String? wakeTime;
@@ -17,7 +20,7 @@ class SleepInfoWidget extends StatefulWidget {
   _SleepInfoWidgetState createState() => _SleepInfoWidgetState();
 }
 
-class _SleepInfoWidgetState extends State<SleepInfoWidget> {
+class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
   final UserSleepService _userSleepService = UserSleepService();
   String resultText_start_real = '';
   String resultText_end_real = '';
@@ -217,7 +220,9 @@ class _SleepInfoWidgetState extends State<SleepInfoWidget> {
 
     // 오늘날짜의 문서 가져오기
     DocumentSnapshot todayDocument = await userSleepCollection.doc(currentDate).get();
-
+    ref.watch(sleepParmaProvider.notifier).changeWakeTime(resultText_end_real);
+    final prov = ref.watch(sleepParmaProvider.notifier);
+    print(prov.state.wake_time);
     if (todayDocument.exists) {
       // 문서 있으면 sleep_time 및 wake_time 필드 업데이트
       await userSleepCollection.doc(currentDate).update({

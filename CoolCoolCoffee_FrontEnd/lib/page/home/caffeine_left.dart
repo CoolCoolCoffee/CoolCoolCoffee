@@ -1,13 +1,15 @@
+import 'package:coolcoolcoffee_front/provider/sleep_param_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CaffeineLeftWidget extends StatefulWidget {
+class CaffeineLeftWidget extends ConsumerStatefulWidget {
   const CaffeineLeftWidget({Key? key}) : super(key: key);
 
   @override
   _CaffeineLeftWidgetState createState() => _CaffeineLeftWidgetState();
 }
 
-class _CaffeineLeftWidgetState extends State<CaffeineLeftWidget> {
+class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -89,6 +91,7 @@ class _CaffeineLeftWidgetState extends State<CaffeineLeftWidget> {
   }
 
   void _showPopup(BuildContext context) {
+    final prov = ref.watch(sleepParmaProvider.notifier);
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -99,12 +102,30 @@ class _CaffeineLeftWidgetState extends State<CaffeineLeftWidget> {
             height: 200,
             color: Colors.brown[100],
             child: Center(
-              child: Text(
-                '그래프',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20.0,
-                ),
+              child: Column(
+                children: [
+                  Text(
+                    prov.state.wake_time,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  Text(
+                    prov.state.tw.toString(),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                  Text(
+                    prov.state.goal_sleep_time,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

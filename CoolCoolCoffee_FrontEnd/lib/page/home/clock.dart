@@ -1,8 +1,10 @@
+import 'package:coolcoolcoffee_front/provider/sleep_param_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:analog_clock/analog_clock.dart';
 import 'package:flutter_health_connect/flutter_health_connect.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
 class EditPopup extends StatefulWidget {
@@ -197,14 +199,14 @@ class _EditPopupState extends State<EditPopup> {
 }
 
 
-class ClockWidget extends StatefulWidget {
+class ClockWidget extends ConsumerStatefulWidget {
   const ClockWidget({Key? key}) : super(key: key);
 
   @override
   _ClockWidgetState createState() => _ClockWidgetState();
 }
 
-class _ClockWidgetState extends State<ClockWidget>{
+class _ClockWidgetState extends ConsumerState<ClockWidget>{
   String sleepEnteredTime = '';
   String resultText = '';
 
@@ -219,10 +221,24 @@ class _ClockWidgetState extends State<ClockWidget>{
       String uid = FirebaseAuth.instance.currentUser!.uid;
       DocumentSnapshot<Map<String, dynamic>> userDoc =
       await FirebaseFirestore.instance.collection('Users').doc(uid).get();
+      if(!userDoc.data()!.containsKey('goal_sleep_time')){
+        String storedTime = userDoc['avg_bed_time'];
+        List<String> timeComponents = storedTime.split(':');
+        int hours = int.parse(timeComponents[0]);
+        String minutes = timeComponents[1];
+
+        String amPm = (hours >= 12) ? 'PM' : 'AM';
+
+        if (hours > 12) {
+          hours -= 12;
+        }
+
+        String formattedTime = '$hours:$minutes $amPm';
+        ref.watch(sleepParmaProvider.notifier).changeGoalSleepTime(formattedTime);
+      }
 
       if (userDoc.exists && userDoc.data()!.containsKey('goal_sleep_time')) {
         String storedTime = userDoc['goal_sleep_time'];
-
         List<String> timeComponents = storedTime.split(':');
         int hours = int.parse(timeComponents[0]);
         String minutes = timeComponents[1];
@@ -237,6 +253,7 @@ class _ClockWidgetState extends State<ClockWidget>{
 
         setState(() {
           sleepEnteredTime = formattedTime;
+          ref.watch(sleepParmaProvider.notifier).changeGoalSleepTime(sleepEnteredTime);
         });
       } else {
         print('error1');
@@ -373,6 +390,7 @@ class _ClockWidgetState extends State<ClockWidget>{
           updateParentState: (sleepTime) {
             setState(() {
               sleepEnteredTime = sleepTime;
+              ref.watch(sleepParmaProvider.notifier).changeGoalSleepTime(sleepEnteredTime);
             });
           },
           sleepTime: sleepEnteredTime,

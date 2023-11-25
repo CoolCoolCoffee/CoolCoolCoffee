@@ -1,17 +1,19 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coolcoolcoffee_front/provider/sleep_param_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class EditSleepDialog extends StatefulWidget {
+class EditSleepDialog extends ConsumerStatefulWidget {
   const EditSleepDialog({super.key});
 
   @override
-  State<EditSleepDialog> createState() => _EditSleepDialogState();
+  _EditSleepDialogState createState() => _EditSleepDialogState();
 }
 
-class _EditSleepDialogState extends State<EditSleepDialog> {
+class _EditSleepDialogState extends ConsumerState<EditSleepDialog> {
   String uid = FirebaseAuth.instance.currentUser!.uid;
 
   late int bedHour;
@@ -41,7 +43,7 @@ class _EditSleepDialogState extends State<EditSleepDialog> {
     String goodSleepTime = '${sleepH.toString()}:${sleepM.toString().padLeft(2, '0')}';
 
     final data = {'avg_bed_time' : bedTime, "good_sleep_time" : goodSleepTime, "tw": tw};
-
+    ref.watch(sleepParmaProvider.notifier).changeTw(tw);
     var db = FirebaseFirestore.instance;
     db.collection("Users").doc(uid).set(data, SetOptions(merge: true));
 

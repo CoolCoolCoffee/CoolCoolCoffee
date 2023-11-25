@@ -1,6 +1,8 @@
+import 'package:coolcoolcoffee_front/provider/sleep_param_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'caffeine_left.dart';
 import 'drink_list.dart';
 import 'clock.dart';
@@ -11,12 +13,19 @@ class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  /*@override
+  void initState(){
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ref.watch(sleepParmaProvider);
+    });
+  }*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
