@@ -25,7 +25,7 @@ class _StarListViewState extends ConsumerState<StarListView> {
     final UserFavoriteDrinkService userFavoriteDrinkService = UserFavoriteDrinkService();
     userFavoriteDrinkService.checkExits();
     return StreamBuilder(
-      stream: userFavoriteDrinkService.userFavoriteDrinkCollection.doc('favorite_drink').snapshots(),
+      stream: FirebaseFirestore.instance.collection('Users').doc(userFavoriteDrinkService.uid).collection('user_favorite').doc('favorite_drink').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           var userFavoriteDrinkList = snapshot.data!;
@@ -104,7 +104,7 @@ class _StarListViewState extends ConsumerState<StarListView> {
                                 ]
                             ),
                             onPressed: () {
-                              UserFavoriteDrinkService().deleteUserFavoriteDrink(userFavDrink);
+                              userFavoriteDrinkService.deleteUserFavoriteDrink(userFavDrink);
                               ref.watch(starsProvider.notifier).remove('${userFavDrink.brand}_${userFavDrink.menuId}');
                             },
                           ),

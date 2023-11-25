@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../model/user_caffeine.dart';
@@ -42,7 +43,7 @@ class _CalendarDrinkListWidgetState extends State<CalendarDrinkListWidget> {
             ),
           ),
           child: StreamBuilder(
-            stream: userCaffeineService.userCaffeineCollection.doc(selecteddate).snapshots(),
+            stream: FirebaseFirestore.instance.collection('Users').doc(userCaffeineService.uid).collection('user_caffeine').doc(selecteddate).snapshots(),
             builder: (context, snapshot){
               if(snapshot.hasData){
                 var userCaffeineSnapshot= snapshot.data!;

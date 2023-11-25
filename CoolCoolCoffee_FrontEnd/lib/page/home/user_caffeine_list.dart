@@ -24,7 +24,7 @@ class _UserCaffeineListState extends State<UserCaffeineList> {
     UserCaffeineService userCaffeineService = UserCaffeineService();
     userCaffeineService.checkExits(today);
     return StreamBuilder(
-      stream: userCaffeineService.userCaffeineCollection.doc(today).snapshots(),
+      stream: FirebaseFirestore.instance.collection('Users').doc(userCaffeineService.uid).collection('user_caffeine').doc(today).snapshots(),
       builder: (context, snapshot){
         if(snapshot.hasData){
           var userCaffeineSnapshot= snapshot.data!;

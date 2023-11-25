@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/page/menu/star_list_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,7 +17,7 @@ class StarPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final UserFavoriteDrinkService userFavoriteDrinkService = UserFavoriteDrinkService();
-
+    String uid = FirebaseAuth.instance.currentUser!.uid;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -39,7 +40,7 @@ class StarPage extends ConsumerWidget {
       ),
       body: StreamBuilder(
         stream:
-        userFavoriteDrinkService.userFavoriteDrinkCollection.doc('favorite_drink').snapshots(),
+        FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_favorite').doc('favorite_drink').snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var userFavoriteDrinkList = snapshot.data!;
@@ -121,7 +122,7 @@ class StarPage extends ConsumerWidget {
                                   ]
                               ),
                               onPressed: () {
-                                UserFavoriteDrinkService().deleteUserFavoriteDrink(userFavDrink);
+                                userFavoriteDrinkService.deleteUserFavoriteDrink(userFavDrink);
                                 starCallback('${userFavDrink.brand}_${userFavDrink.menuId}');
                                 //ref.watch(starsProvider.notifier).remove('${userFavDrink.brand}_${userFavDrink.menuId}');
                               },
