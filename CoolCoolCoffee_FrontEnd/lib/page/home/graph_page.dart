@@ -144,7 +144,7 @@ class _GraphPageState extends ConsumerState<GraphPage> {
       spots: points,
       dotData: FlDotData(show: false),
       color: Colors.purple,
-      barWidth: 5,
+      barWidth: 3,
       isCurved: true,
     );
   }
@@ -153,7 +153,7 @@ class _GraphPageState extends ConsumerState<GraphPage> {
       spots: points,
       dotData: FlDotData(show: false),
       color: Colors.blue,
-      barWidth: 5,
+      barWidth: 3,
       isCurved: true,
     );
   }
@@ -162,7 +162,7 @@ class _GraphPageState extends ConsumerState<GraphPage> {
       spots: points,
       dotData: FlDotData(show: false),
       color: Colors.greenAccent,
-      barWidth: 5,
+      barWidth: 3,
       isCurved: true,
     );
   }
