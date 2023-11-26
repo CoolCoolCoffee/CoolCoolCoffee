@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/page/home/user_caffeine_list.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_health_connect/flutter_health_connect.dart';
 
@@ -12,15 +14,38 @@ class DrinkListWidget extends StatefulWidget {
 }
 
 class _DrinkListWidgetState extends State<DrinkListWidget> {
+  String? userName;
+
+  Future<void> fetchUserName() async {
+    try {
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      DocumentSnapshot userSnapshot = await FirebaseFirestore.instance.collection('Users').doc(uid).get();
+
+      setState(() {
+        userName = userSnapshot['user_name'];
+      });
+    } catch (error) {
+      print('Error : $error');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserName();
+  }
+
 
   @override
   Widget build(BuildContext context){
     return Column(
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "    오늘 쿨쿨님이 마신 카페인 음료",
+              //"    오늘 쿨쿨님이 마신 카페인 음료",
+              "오늘 ${userName ?? '님'} 님이 마신 카페인 음료",
               style: TextStyle(
                   fontSize: 20
               ),

@@ -28,6 +28,16 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
   String selecteddate = '';
   String todaydate = '';
 
+  @override
+  void initState() {
+    super.initState();
+    // 값이 없는 경우에만 초기화
+    if (resultText_start_real.isEmpty || resultText_end_real.isEmpty) {
+      _fetchSleepTimeAndUpdateState();
+    }
+  }
+
+
   List<HealthConnectDataType> types = [HealthConnectDataType.SleepSession];
 
   @override
@@ -121,6 +131,20 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                       elevation: selecteddate == todaydate ? 5 : 0,
                     ),
                     child: Text(selecteddate == todaydate ? '가져오기' : ''),
+                  ),
+                SizedBox(width: 10),
+                if (selecteddate == todaydate)
+                  ElevatedButton(
+                    onPressed: () async {
+                      _showManualInputPopup(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.brown,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    child: Text('입력'),
                   ),
               ],
             ),
@@ -217,6 +241,22 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
         'user_sleep': {},
       });
     }
+    List<String> sleepTimeComponents = resultText_start_real.split(':');
+    int sleepHours = int.parse(sleepTimeComponents[0]);
+    if (sleepHours < 12 && resultText_start_real.toLowerCase().contains('pm')) {
+      sleepHours += 12;
+    }
+    String convertedSleepTime = '$sleepHours:${sleepTimeComponents[1]}';
+    convertedSleepTime = convertedSleepTime.replaceAll(RegExp(r'\s?[APMapm]{2}\s?$'), '');
+
+    // Convert selected wake time to 24-hour format
+    List<String> wakeTimeComponents = resultText_end_real.split(':');
+    int wakeHours = int.parse(wakeTimeComponents[0]);
+    if (wakeHours < 12 && resultText_end_real.toLowerCase().contains('pm')) {
+      wakeHours += 12;
+    }
+    String convertedWakeTime = '$wakeHours:${wakeTimeComponents[1]}';
+    convertedWakeTime = convertedWakeTime.replaceAll(RegExp(r'\s?[APMapm]{2}\s?$'), '');
 
     // 오늘날짜의 문서 가져오기
     DocumentSnapshot todayDocument = await userSleepCollection.doc(currentDate).get();
@@ -226,21 +266,351 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
     if (todayDocument.exists) {
       // 문서 있으면 sleep_time 및 wake_time 필드 업데이트
       await userSleepCollection.doc(currentDate).update({
-        'sleep_time': resultText_start_real,
-        'wake_time': resultText_end_real,
+        'sleep_time': convertedSleepTime,
+        'wake_time': convertedWakeTime,
       });
     } else {
       // 문서 없으면 경우 새로운 문서 생성
       await userSleepCollection.doc(currentDate).set({
-        'sleep_time': resultText_start_real,
-        'wake_time': resultText_end_real,
+        'sleep_time': convertedSleepTime,
+        'wake_time': convertedWakeTime,
       });
     }
-    print("sssssssssssssss $currentDate");
+    //print("sssssssssssssss $currentDate");
   }
 
 
   void _updateResultText() {
     setState(() {});
   }
+
+  String convertTo12HourFormat(String time) {
+    List<String> parts = time.split(':');
+    int hours = int.parse(parts[0]);
+    int minutes = int.parse(parts[1]);
+
+    String amPm = (hours >= 12) ? 'PM' : 'AM';
+
+    if (hours > 12) {
+      hours -= 12;
+    }
+
+    // Pad single-digit minutes with a leading zero
+    String formattedMinutes = (minutes < 10) ? '0$minutes' : '$minutes';
+
+    return '$hours:$formattedMinutes $amPm';
+  }
+
+
+  Future<void> _fetchSleepTimeAndUpdateState() async {
+    try {
+      tz.initializeTimeZones();
+      var startTime = widget.selectedDay.subtract(const Duration(days: 1));
+      var endTime = widget.selectedDay;
+
+      final requests = <Future>[];
+      Map<String, dynamic> typePoints = {};
+      for (var type in types) {
+        requests.add(
+          HealthConnectFactory.getRecord(
+            type: type,
+            startTime: startTime,
+            endTime: endTime,
+          ).then(
+                (value) => typePoints.addAll({type.name: value}),
+          ),
+        );
+      }
+      await Future.wait(requests);
+
+      final currentDate = widget.selectedDay.toLocal().toString().split(' ')[0];
+      final firestore = FirebaseFirestore.instance;
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+      final userDocRef = firestore.collection('Users').doc(uid);
+      final userSleepCollection = userDocRef.collection('user_sleep');
+
+      final todayDocument = await userSleepCollection.doc(currentDate).get();
+
+      if (todayDocument.exists) {
+        resultText_start_real = todayDocument['sleep_time'] ?? '';
+        resultText_end_real = todayDocument['wake_time'] ?? '';
+        resultText_start_real = convertTo12HourFormat(resultText_start_real);
+        resultText_end_real = convertTo12HourFormat(resultText_end_real);
+      } else {
+        // 문서가 없으면 빈 문자열로 설정
+        resultText_start_real = '';
+        resultText_end_real = '';
+      }
+
+      _updateResultText();
+      _updateFirestore();
+      print(resultText_start_real);
+      print(resultText_end_real);
+    } catch (e) {
+      resultText_start_real = '';
+      resultText_end_real = '';
+      _updateResultText();
+      print(e.toString());
+    }
+  }
+
+  Future<void> _showManualInputPopup(BuildContext context) async {
+    TextEditingController sleepHoursController = TextEditingController();
+    TextEditingController sleepMinutesController = TextEditingController();
+    TextEditingController wakeHoursController = TextEditingController();
+    TextEditingController wakeMinutesController = TextEditingController();
+    bool sleepIsAM = true;
+    bool wakeIsAM = true;
+
+    if (resultText_start_real.isNotEmpty && resultText_end_real.isNotEmpty) {
+      List<String> sleepTimeComponents = resultText_start_real.split(RegExp(r'[: ]'));
+      List<String> wakeTimeComponents = resultText_end_real.split(RegExp(r'[: ]'));
+
+      sleepHoursController.text = sleepTimeComponents[0];
+      sleepMinutesController.text = sleepTimeComponents[1];
+      sleepIsAM = sleepTimeComponents[2] == 'AM';
+
+      wakeHoursController.text = wakeTimeComponents[0];
+      wakeMinutesController.text = wakeTimeComponents[1];
+      wakeIsAM = wakeTimeComponents[2] == 'AM';
+    }
+
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text('입력'),
+              content: SingleChildScrollView( // Wrap with SingleChildScrollView
+                child: Column(
+                  children: [
+                    Text(
+                      '취침시간',
+                      textAlign: TextAlign.start,
+                    ),
+                    SizedBox(height: 5),
+                    Row(
+                      children: [
+                        Container(
+                          width: 60,
+                          height: 40,
+                          child: TextField(
+                            controller: sleepHoursController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              labelText: '시',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        Text(
+                          ' : ',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        Container(
+                          width: 60,
+                          height: 40,
+                          child: TextField(
+                            controller: sleepMinutesController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              labelText: '분',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              sleepIsAM = true;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: sleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
+                            minimumSize: Size(40, 40),
+                          ),
+                          child: Text('AM'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              sleepIsAM = false;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: !sleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
+                            minimumSize: Size(40, 40),
+                          ),
+                          child: Text('PM'),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      '기상시간',
+                      textAlign: TextAlign.start,
+                    ),
+                    SizedBox(height: 5),
+                    Row(
+                      children: [
+                        Container(
+                          width: 60,
+                          height: 40,
+                          child: TextField(
+                            controller: wakeHoursController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              labelText: '시',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        Text(
+                          ' : ',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        Container(
+                          width: 60,
+                          height: 40,
+                          child: TextField(
+                            controller: wakeMinutesController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              labelText: '분',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              wakeIsAM = true;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: wakeIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
+                            minimumSize: Size(40, 40),
+                          ),
+                          child: Text('AM'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              wakeIsAM = false;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: !wakeIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
+                            minimumSize: Size(40, 40),
+                          ),
+                          child: Text('PM'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog when cancel is pressed
+                  },
+                  child: Text('취소'),
+                  style: TextButton.styleFrom(
+                    minimumSize: Size(60, 40),
+                    primary: Colors.black,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    Navigator.of(context).pop();
+
+                    String selectedSleepTime = '${sleepHoursController.text}:${sleepMinutesController.text} ${sleepIsAM ? 'AM' : 'PM'}';
+                    String selectedWakeTime = '${wakeHoursController.text}:${wakeMinutesController.text} ${wakeIsAM ? 'AM' : 'PM'}';
+
+                    await _updateFirestoreWithManualInput(selectedSleepTime, selectedWakeTime);
+
+                    await _fetchSleepTimeAndUpdateState();
+
+                    print('Selected Sleep Time: $selectedSleepTime');
+                    print('Selected Wake Time: $selectedWakeTime');
+                  },
+                  child: Text('확인'),
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.brown,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    minimumSize: Size(60, 40),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+
+  Future<void> _updateFirestoreWithManualInput(String selectedSleepTime, String selectedWakeTime) async {
+    String currentDate = DateTime.now().toLocal().toString().split(' ')[0];
+
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    DocumentReference userDocRef = firestore.collection('Users').doc(uid);
+
+    // 오늘날짜의 user_sleep 컬렉션 가져오기
+    CollectionReference userSleepCollection = userDocRef.collection('user_sleep');
+
+    // user_sleep 컬렉션이 없는 경우 생성
+    if (!(await userDocRef.get()).exists) {
+      await userDocRef.set({
+        'user_sleep': {},
+      });
+    }
+    // Convert selected sleep time to 24-hour format
+    List<String> sleepTimeComponents = selectedSleepTime.split(':');
+    int sleepHours = int.parse(sleepTimeComponents[0]);
+    if (sleepHours < 12 && selectedSleepTime.toLowerCase().contains('pm')) {
+      sleepHours += 12;
+    }
+    String convertedSleepTime = '$sleepHours:${sleepTimeComponents[1]}';
+    convertedSleepTime = convertedSleepTime.replaceAll(RegExp(r'\s?[APMapm]{2}\s?$'), '');
+
+    // Convert selected wake time to 24-hour format
+    List<String> wakeTimeComponents = selectedWakeTime.split(':');
+    int wakeHours = int.parse(wakeTimeComponents[0]);
+    if (wakeHours < 12 && selectedWakeTime.toLowerCase().contains('pm')) {
+      wakeHours += 12;
+    }
+    String convertedWakeTime = '$wakeHours:${wakeTimeComponents[1]}';
+    convertedWakeTime = convertedWakeTime.replaceAll(RegExp(r'\s?[APMapm]{2}\s?$'), '');
+
+
+    // 오늘날짜의 문서 가져오기
+    DocumentSnapshot todayDocument = await userSleepCollection.doc(currentDate).get();
+
+    if (todayDocument.exists) {
+      // 문서 있으면 sleep_time 및 wake_time 필드 업데이트
+
+      await userSleepCollection.doc(currentDate).update({
+        'sleep_time': convertedSleepTime,
+        'wake_time': convertedWakeTime,
+      });
+    } else {
+      // 문서 없으면 경우 새로운 문서 생성
+      await userSleepCollection.doc(currentDate).set({
+        'sleep_time': convertedSleepTime,
+        'wake_time': convertedWakeTime,
+      });
+    }
+
+    print("sssssssssssssss $currentDate");
+  }
+
 }

@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_health_connect/flutter_health_connect.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:coolcoolcoffee_front/page/my_page/profile_change_page.dart';
 
 import '../login/login_page.dart';
@@ -253,13 +253,15 @@ class _MyPageState extends State<MyPage> {
               TextButton(
                 child: const Text("설치"),
                 onPressed: () async {
-                  try {
-                    await HealthConnectFactory.installHealthConnect();
-                    resultText = 'Install activity started';
-                  } catch (e) {
-                    resultText = e.toString();
+                  const String url = 'https://play.google.com/store/apps/details?id=com.google.android.apps.healthdata&pcampaignid=web_share';
+
+                  if (await canLaunch(url)) {
+                    await launch(url);
+                  } else {
+                    // Could not launch the URL
+                    resultText = 'Could not launch the Play Store';
+                    _updateResultText();
                   }
-                  _updateResultText();
                 },
               ),
               TextButton(

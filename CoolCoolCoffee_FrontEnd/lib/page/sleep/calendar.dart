@@ -68,12 +68,32 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       print('Error : $e');
     }
   }
+
+  String convertTo12HourFormat(String time) {
+    List<String> parts = time.split(':');
+    int hours = int.parse(parts[0]);
+    int minutes = int.parse(parts[1]);
+
+    String amPm = (hours >= 12) ? 'PM' : 'AM';
+
+    if (hours > 12) {
+      hours -= 12;
+    }
+
+    // Pad single-digit minutes with a leading zero
+    String formattedMinutes = (minutes < 10) ? '0$minutes' : '$minutes';
+
+    return '$hours:$formattedMinutes $amPm';
+  }
+
   Future<void> _updateSelectedDayInfo(DateTime selectedDay) async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     CollectionReference userSleepCollection = firestore.collection('Users').doc(uid).collection('user_sleep');
 
     try {
+      _sleepTime = null;
+      _wakeTime = null;
       QuerySnapshot<Map<String, dynamic>> userSleepData = await userSleepCollection.get() as QuerySnapshot<Map<String, dynamic>>;
 
       userSleepData.docs.forEach((doc) {
@@ -81,13 +101,15 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
         if (isSameDay(selectedDay, date)) {
           if (doc.data()!.containsKey('sleep_time') && doc.data()!.containsKey('wake_time')) {
-            _sleepTime = doc['sleep_time'];
-            _wakeTime = doc['wake_time'];
+            _sleepTime = convertTo12HourFormat(doc['sleep_time']);
+            _wakeTime = convertTo12HourFormat(doc['wake_time']);
           } else {
             if (!doc.data()!.containsKey('sleep_time')) {
+              _sleepTime = null;
               print('"sleep_time" 필드 없음: ${doc.id}');
             }
             if (!doc.data()!.containsKey('wake_time')) {
+              _wakeTime = null;
               print('"wake_time" 필드 없음: ${doc.id}');
             }
           }

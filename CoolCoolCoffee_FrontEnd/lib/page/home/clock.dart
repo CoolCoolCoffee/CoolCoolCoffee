@@ -6,7 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 class EditPopup extends StatefulWidget {
   final Function(String) onSave;
   final void Function(String) updateParentState;
@@ -49,73 +48,75 @@ class _EditPopupState extends State<EditPopup> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text('목표 수면 시간'),
-      content: Container(
-        constraints: BoxConstraints(maxHeight: 100, maxWidth: 300),
-        child: Column(
-          children: [
-            Text(
-              '취침시간',
-              textAlign: TextAlign.start,
-            ),
-            SizedBox(height: 5),
-            Row(
-              children: [
-                Container(
-                  width: 60,
-                  height: 40,
-                  child: TextField(
-                    controller: sleepHoursController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: '시',
-                      border: OutlineInputBorder(),
+      content: SingleChildScrollView(
+        child: Container(
+          //constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height - 100),
+          child: Column(
+            children: [
+              Text(
+                '취침시간',
+                textAlign: TextAlign.start,
+              ),
+              SizedBox(height: 5),
+              Row(
+                children: [
+                  Container(
+                    width: 60,
+                    height: 40,
+                    child: TextField(
+                      controller: sleepHoursController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: '시',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
                   ),
-                ),
-                Text(
-                  ' : ',
-                  style: TextStyle(fontSize: 20),
-                ),
-                Container(
-                  width: 60,
-                  height: 40,
-                  child: TextField(
-                    controller: sleepMinutesController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: '분',
-                      border: OutlineInputBorder(),
+                  Text(
+                    ' : ',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  Container(
+                    width: 60,
+                    height: 40,
+                    child: TextField(
+                      controller: sleepMinutesController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: '분',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      sleepIsAM = true;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: sleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
-                    minimumSize: Size(40, 40),
+                  SizedBox(width: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        sleepIsAM = true;
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: sleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
+                      minimumSize: Size(40, 40),
+                    ),
+                    child: Text('AM'),
                   ),
-                  child: Text('AM'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      sleepIsAM = false;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: !sleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
-                    minimumSize: Size(40, 40),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        sleepIsAM = false;
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: !sleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
+                      minimumSize: Size(40, 40),
+                    ),
+                    child: Text('PM'),
                   ),
-                  child: Text('PM'),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
       actions: [
@@ -221,8 +222,8 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
       String uid = FirebaseAuth.instance.currentUser!.uid;
       DocumentSnapshot<Map<String, dynamic>> userDoc =
       await FirebaseFirestore.instance.collection('Users').doc(uid).get();
-
       if(!userDoc.data()!.containsKey('goal_sleep_time')){
+        print("here");
         String storedTime = userDoc['avg_bed_time'];
         List<String> timeComponents = storedTime.split(':');
         int hours = int.parse(timeComponents[0]);
@@ -241,7 +242,9 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
       }
 
       if (userDoc.exists && userDoc.data()!.containsKey('goal_sleep_time')) {
+        print("hoal here!!");
         String storedTime = userDoc['goal_sleep_time'];
+        print(storedTime);
         List<String> timeComponents = storedTime.split(':');
         int hours = int.parse(timeComponents[0]);
         String minutes = timeComponents[1];
@@ -255,6 +258,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
         String formattedTime = '$hours:$minutes $amPm';
 
         setState(() {
+          print('sleepEnteredTime $sleepEnteredTime');
           sleepEnteredTime = formattedTime;
           ref.watch(sleepParmaProvider.notifier).changeGoalSleepTime(sleepEnteredTime);
           ref.watch(sleepParmaProvider.notifier).changeTw(userDoc['tw']);
@@ -368,7 +372,10 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '취침 시간\n $sleepEnteredTime',
+                    //'취침 시간\n $sleepEnteredTime',
+                    sleepEnteredTime.isNotEmpty
+                        ? '취침 시간\n $sleepEnteredTime'
+                        : '아직 목표 취침시간이 설정되지 않았네요!\n 목표 취침시간을 설정해볼까요?',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,

@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
+import 'package:coolcoolcoffee_front/notification/notification_global.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,11 +14,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
   );
-
-  // 로그인 상태 유지 -> authStateChanges로 감지해서 Stream으로 상태 확인하는 걸로 바꿈
-  // final auth = FirebaseAuth.instanceFor(app: Firebase.app(), persistence: Persistence.NONE);
-  // await auth.setPersistence(Persistence.LOCAL);
-
+  await NotificationGlobal.initializeNotifications();
   runApp(
       ProviderScope(
           child: CoolCoolCoffee()
@@ -47,7 +44,8 @@ class CoolCoolCoffee extends StatelessWidget {
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (ctx, userSnapshot) {
-          if(userSnapshot.hasData && userSnapshot.data != null){
+          if(userSnapshot.hasData && userSnapshot.data != null ){
+            NotificationGlobal.showDailyNotification();
             return PageStates();
           } else{
             return LoginPage();
