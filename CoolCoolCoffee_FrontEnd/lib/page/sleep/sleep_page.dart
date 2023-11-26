@@ -21,7 +21,7 @@ class _SleepPageState extends State<SleepPage> {
   String? _sleepTime;
   String? _wakeTime;
   DateTime today = DateTime.now();
-
+  bool future = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,8 @@ class _SleepPageState extends State<SleepPage> {
     String selecteddate = selectedDay!.toLocal().toIso8601String().split(
         'T')[0];
     String todaydate = today.toLocal().toIso8601String().split('T')[0];
-
+    if(DateTime.parse(selecteddate).isAfter(DateTime.parse(todaydate))) future = true;
+    else future = false;
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -61,6 +62,7 @@ class _SleepPageState extends State<SleepPage> {
                 });
               },
             ),
+            future? Container(color: Colors.white,):
             Container(
               color: Colors.white,
               child: Column(
