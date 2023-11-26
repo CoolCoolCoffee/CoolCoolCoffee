@@ -6,30 +6,19 @@ class NotificationGlobal {
   static FlutterLocalNotificationsPlugin _localNotification =
   FlutterLocalNotificationsPlugin();
 
-  static Future<void> initializeNotifications() async {
+  static initializeNotifications() async {
     AndroidInitializationSettings initSettingsAndroid =
     const AndroidInitializationSettings('@mipmap/ic_launcher');
-    DarwinInitializationSettings initSettingsIOS =
-    const DarwinInitializationSettings(
-      requestSoundPermission: false,
-      requestBadgePermission: false,
-      requestAlertPermission: false,
-    );
+
     InitializationSettings initSettings = InitializationSettings(
       android: initSettingsAndroid,
-      iOS: initSettingsIOS,
     );
     await _localNotification.initialize(initSettings);
   }
 
-  static Future<void> showDailyNotification() async {
+  static showDailyNotification() async {
     const NotificationDetails _details = const NotificationDetails(
       android: AndroidNotificationDetails('daily_notification', 'Daily Notification',channelShowBadge: true,),
-      iOS: DarwinNotificationDetails(
-        presentAlert: true,
-        presentBadge: true,
-        presentSound: true,
-      ),
     );
 
     await _localNotification.zonedSchedule(
@@ -54,21 +43,21 @@ class NotificationGlobal {
       _now.year,
       _now.month,
       _now.day,
-      13,
-      35,
+      10,
+      22,
     );
-    //tz.TZDateTime scheduledDate = _now.add(const Duration(seconds: 10));
-    if (scheduledDate.isBefore(_now)) {
-      scheduledDate = scheduledDate.add(const Duration(days: 1));
-    }
+    //tz.TZDateTime scheduledDate = _now.add(const Duration(minutes: 2));
+    // if (scheduledDate.isBefore(_now)) {
+    //   scheduledDate = scheduledDate.add(const Duration(days: 1));
+    // }
     return scheduledDate;
   }
 
-  static Future<void> cancelNotification(int id) async {
+  static cancelNotification(int id) async {
     await _localNotification.cancel(id);
   }
 
-  static Future<void> cancelAllNotifications() async {
+  static cancelAllNotifications() async {
     await _localNotification.cancelAll();
   }
 }
