@@ -26,7 +26,7 @@ class BrandBtn extends StatelessWidget {
       },
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(
-          isSelected ? Colors.blue : Colors.white,
+          isSelected ? Colors.brown.withOpacity(0.6) : Colors.white,
         ),
         foregroundColor: MaterialStateProperty.all<Color>(
           isSelected ? Colors.white : Colors.black,
