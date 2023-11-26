@@ -25,7 +25,7 @@ class UserCaffeineDetailPage extends StatelessWidget {
         ),
         centerTitle: true,
         title: Text(
-          "오늘 몇시에 마신 음료",
+          "오늘 ${formatTime(userCaffeine.drinkTime)}에 마신 음료",
           style: TextStyle(
               color: Colors.black
           ),
@@ -156,6 +156,19 @@ class UserCaffeineDetailPage extends StatelessWidget {
           ),
         ],
       ),
-    );;
+    );
   }
-}
+  String formatTime(String time){
+    bool isAM = false;
+    var split = time.split(' ');
+    var timeComponents = split[0].split(':');
+    String hour = timeComponents[0];
+    if(int.parse(hour)<12) {
+      isAM = true;
+    }else {
+      hour = (int.parse(hour)-12).toString();
+    }
+      String ret = hour +':'+ timeComponents[1] + (isAM ? ' AM':' PM');
+      return ret;
+    }
+  }

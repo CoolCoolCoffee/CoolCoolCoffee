@@ -33,12 +33,12 @@ class _GraphPageState extends ConsumerState<GraphPage> {
   }
   void setHGraph(){
     double t = 0;
-    double step = 0.05;
+    double step = 0.25;
     double h1 = 0.75;
     double h2 = 0.2469;
     double a = 0.09478;
 
-    timer = Timer.periodic(const Duration(milliseconds: 2), (timer) {
+    timer = Timer.periodic(const Duration(milliseconds: 5), (timer) {
       if(t>40) timer.cancel();
       setState((){
         H1Points.add(FlSpot(t, h1 + a * sin(2 * pi * timeMap(t))));
@@ -69,8 +69,9 @@ class _GraphPageState extends ConsumerState<GraphPage> {
     if(r_t>1) r_t -=1;
     if(r_t<0) r_t+=1;
     for(var key in caff_list.keys){
-      caff += calCaff(caff_list[key]!, key, t, half_time.toDouble());
+      caff += double.parse(calCaff(caff_list[key]!, key, t, half_time.toDouble()).toStringAsFixed(8));
     }
+    print(caff);
     if(caff <=caff_threshold)
       ret = 1-(1-user_wake_h_graph)*exp(-r_t/tw) +tiredness;
     else
@@ -78,6 +79,7 @@ class _GraphPageState extends ConsumerState<GraphPage> {
     return FlSpot(t, ret);
   }
   double calCaff(double caffeine, double eat_time,double now,double half_time){
+    print("caff : $caffeine");
     double scaling = 0.0012;
     double scaled_caff = caffeine *scaling;
     double ret = 0;
@@ -191,7 +193,6 @@ class _GraphPageState extends ConsumerState<GraphPage> {
       double drinkTime = double.parse((hour + min).toStringAsFixed(8));
       num caff = caff_list[i].caffeineContent;
       ret.addAll({drinkTime: caff.toDouble()});
-      print(ret);
     }
     return ret;
   }
