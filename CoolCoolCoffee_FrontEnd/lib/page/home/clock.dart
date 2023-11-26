@@ -256,10 +256,10 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
         }
 
         String formattedTime = '$hours:$minutes $amPm';
-
+        print(formattedTime);
         setState(() {
-          print('sleepEnteredTime $sleepEnteredTime');
           sleepEnteredTime = formattedTime;
+          print('sleepEnteredTime $sleepEnteredTime');
           ref.watch(sleepParmaProvider.notifier).changeGoalSleepTime(sleepEnteredTime);
           ref.watch(sleepParmaProvider.notifier).changeTw(userDoc['tw']);
           ref.watch(sleepParmaProvider.notifier).changeHalfTime(userDoc['caffeine_half_life']);
@@ -274,6 +274,8 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
 
   @override
   Widget build(BuildContext context){
+    final prov = ref.watch(sleepParmaProvider);
+    print('build ${prov.goal_sleep_time}');
     return Column(
       //crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -286,7 +288,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
               textAlign: TextAlign.start,
               text: TextSpan(
                 children: [
-                  if (sleepEnteredTime.isNotEmpty)
+                  if (prov.goal_sleep_time.isNotEmpty)
                     TextSpan(
                       text: "카페인 섭취 제한 시작까지\n",
                       style: TextStyle(
@@ -294,7 +296,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
                         fontSize: 20,
                       ),
                     ),
-                  if (sleepEnteredTime.isNotEmpty)
+                  if (prov.goal_sleep_time.isNotEmpty)
                     TextSpan(
                       text: "n시간 m분",
                       style: TextStyle(
@@ -302,7 +304,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
                         fontSize: 20,
                       ),
                     ),
-                  if (sleepEnteredTime.isNotEmpty)
+                  if (prov.goal_sleep_time.isNotEmpty)
                     TextSpan(
                       text: " 남았어요!",
                       style: TextStyle(
@@ -310,7 +312,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
                         fontSize: 20,
                       ),
                     ),
-                  if (sleepEnteredTime.isEmpty)
+                  if (prov.goal_sleep_time.isEmpty)
                     TextSpan(
                       text: "목표 수면 시간을 설정해주세요.",
                       style: TextStyle(
@@ -346,7 +348,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
                   ),
                   SizedBox(width: 3),
                   Text(
-                    sleepEnteredTime.isNotEmpty
+                    prov.goal_sleep_time.isNotEmpty
                         ? '수정'
                         : '설정',
                     style: TextStyle(
@@ -373,8 +375,8 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
                 children: [
                   Text(
                     //'취침 시간\n $sleepEnteredTime',
-                    sleepEnteredTime.isNotEmpty
-                        ? '취침 시간\n $sleepEnteredTime'
+                    prov.goal_sleep_time.isNotEmpty
+                        ? '취침 시간\n ${prov.goal_sleep_time}'
                         : '아직 목표 취침시간이 설정되지 않았네요!\n 목표 취침시간을 설정해볼까요?',
                     style: TextStyle(
                       color: Colors.white,
