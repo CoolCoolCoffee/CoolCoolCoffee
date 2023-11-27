@@ -23,8 +23,10 @@ class MenuAddPage extends StatefulWidget {
 }
 
 class _MenuAddPageState extends State<MenuAddPage> {
+  final timeController = TextEditingController();
   num _caffeine = 0;
   String _size = "";
+  bool isConfirm = false;
   _changeSizeCallback(String size, num caffeine) => setState((){
     _size = size;
     _caffeine = caffeine;
@@ -42,8 +44,11 @@ class _MenuAddPageState extends State<MenuAddPage> {
   late Map<String,dynamic> shotControl;
   late List<bool> shotSelected;
   late UserCaffeineService userCaffeineService;
+  late String today;
+  late String time;
   @override
   void initState() {
+    super.initState();
     userCaffeineService = UserCaffeineService();
     _size = widget.size;
     _shot = widget.shot;
@@ -77,7 +82,12 @@ class _MenuAddPageState extends State<MenuAddPage> {
         i++;
       }
     }
-    super.initState();
+    DateTime now = DateTime.now();
+    DateFormat dayFormatter = DateFormat('yyyy-MM-dd');
+    DateFormat timeFormatter = DateFormat('HH:mm:ss');
+    today = dayFormatter.format(now);
+    time = timeFormatter.format(now);
+    setState(() {});
   }
   @override
   Widget build(BuildContext context) {
@@ -108,9 +118,65 @@ class _MenuAddPageState extends State<MenuAddPage> {
             child: MenuImgNameTile(brandName: _brand,menuSnapshot: _menu, ),
           ),
           Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: Container(
+                        width: double.infinity,
+                        margin: EdgeInsets.all(10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(padding: EdgeInsets.only(left: 5,bottom: 10),child: Text('섭취 시간',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
+                            isConfirm?
+                            //이거 textfield만 시간:분 AM PM 으로 바꾸고 시간 입력해주세요! -> 이거는 화면 구성만 바꾸고 실제 time을 변경하는 건 아래 evaluated button onPressed에서!!
+                            TextField(
+                              controller: timeController,
+                            ):
+                            Container(padding: EdgeInsets.only(left: 5,bottom: 10),child: Text('$time')),
+                          ],
+                        )
+                    ),
+                  ),
+                  Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.only(right: 10,top: 5,bottom: 5,),
+                        child: ElevatedButton(
+                          onPressed: (){
+                            //여기!!!!!!!
+                            if(isConfirm){
+                              time = timeController.text;
+                              isConfirm = false;
+                              setState(() {
+                              });
+                            }
+                            else{
+                              isConfirm = true;
+                              setState(() {
+                              });
+                            }
+                          },
+                          child: Text(
+                            isConfirm? '확인':'수정',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                              minimumSize: const Size.fromHeight(50),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                              )
+                          ),
+                        ),
+                      )
+                  ),
+                ],
+              ),
+          ),
+          Expanded(
               child: Column(
                 children: [
-                  Container(height: 20,),
                   Container(
                     width: double.infinity,
                     margin: EdgeInsets.all(10),
@@ -176,11 +242,6 @@ class _MenuAddPageState extends State<MenuAddPage> {
                           padding: const EdgeInsets.only(left: 10,top: 5,bottom: 5,),
                           child: ElevatedButton(
                             onPressed: (){
-                              DateTime now = DateTime.now();
-                              DateFormat dayFormatter = DateFormat('yyyy-MM-dd');
-                              DateFormat timeFormatter = DateFormat('HH:mm:ss');
-                              String today = dayFormatter.format(now);
-                              String time = timeFormatter.format(now);
                               userCaffeineService.addNewUserCaffeine(today, UserCaffeine(drinkTime: time, menuId: _menu.id, brand: _brand, menuSize: _size, shotAdded: 0, caffeineContent: _caffeine, menuImg: _menu['menu_img']));
                               Navigator.popUntil(context, (route) => route.isFirst);
                             },
