@@ -5,6 +5,7 @@ import 'package:flutter_health_connect/flutter_health_connect.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart';
 
 class EditPopup extends StatefulWidget {
   final Function(String) onSave;
@@ -215,6 +216,13 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
   void initState() {
     super.initState();
     _getSleepEnteredTime();
+    //여기서부터 추가
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ref.watch(sleepParmaProvider);
+      if(ref.watch(sleepParmaProvider.notifier).state.goal_sleep_time.isNotEmpty){
+        setState(() {});
+      }
+    });
   }
 
   Future<void> _getSleepEnteredTime() async {
