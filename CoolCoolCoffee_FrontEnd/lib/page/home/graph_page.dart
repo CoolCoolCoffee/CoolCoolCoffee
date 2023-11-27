@@ -21,7 +21,7 @@ class _GraphPageState extends ConsumerState<GraphPage> {
   final H1Points = <FlSpot>[];
   final H2Points = <FlSpot>[];
   final SleepPoints = <FlSpot>[];
-
+  String bed_time ='';
   late Timer timer;
   @override
   void initState(){
@@ -33,19 +33,34 @@ class _GraphPageState extends ConsumerState<GraphPage> {
   }
   void setHGraph(){
     double t = 0;
-    double step = 0.25;
+    double step = 0.1666666;
     double h1 = 0.75;
     double h2 = 0.2469;
     double a = 0.09478;
+    int count = 0;
+    int predict = 0;
+    double minus = 0;
 
     timer = Timer.periodic(const Duration(milliseconds: 5), (timer) {
       if(t>40) timer.cancel();
       setState((){
-        H1Points.add(FlSpot(t, h1 + a * sin(2 * pi * timeMap(t))));
-        H2Points.add(FlSpot(t, h2 + a * sin(2 * pi * timeMap(t))));
-        if(calSleepGraph(t) != null) SleepPoints.add(calSleepGraph(t)!);
+        H1Points.add(FlSpot(t, 100 *(h1 + a * sin(2 * pi * timeMap(t)))));
+        H2Points.add(FlSpot(t, 100 * (h2 + a * sin(2 * pi * timeMap(t)))));
+        if(calSleepGraph(t) != null) {
+          SleepPoints.add(calSleepGraph(t)!);
+          minus = 100 *(h1 + a * sin(2 * pi * timeMap(t))) - calSleepGraph(t)!.y;
+          if(predict == 0 && minus < 0) {
+            predict++;
+          }
+          if(predict == 1){
+            predict = 2;
+            bed_time = t.toString();
+          }
+        }
       });
       t+=step;
+      count++;
+      if(count%6 == 0) t = t.ceilToDouble();
     });
   }
   FlSpot? calSleepGraph(double t){
@@ -53,6 +68,7 @@ class _GraphPageState extends ConsumerState<GraphPage> {
     double a = 0.09478;
     double tired_scale = 0.01;
     double ret = 0;
+
     var prov = ref.watch(sleepParmaProvider.notifier);
     var tiredness = prov.state.sleep_quality * tired_scale;
     var user_wake_time = formatTime(prov.state.wake_time);
@@ -60,26 +76,27 @@ class _GraphPageState extends ConsumerState<GraphPage> {
     var half_time = prov.state.half_time;
     var caff_list = formatCaff(prov.state.caff_list);
     var user_t0 = timeMap(user_wake_time);
+
     double caff_threshold = 50 * 0.0012;
     double caff = 0;
     if(t<user_wake_time) return null;
 
     var user_wake_h_graph = h2 + a * sin(2 * pi * timeMap(user_wake_time));
     var r_t = (timeMap(t) - user_t0);
-    if(r_t>1) r_t -=1;
     if(r_t<0) r_t+=1;
     for(var key in caff_list.keys){
       caff += double.parse(calCaff(caff_list[key]!, key, t, half_time.toDouble()).toStringAsFixed(8));
     }
-    print(caff);
-    if(caff <=caff_threshold)
+    if(caff <=caff_threshold) {
       ret = 1-(1-user_wake_h_graph)*exp(-r_t/tw) +tiredness;
-    else
-      ret = 1-1-(1-user_wake_h_graph)*exp(-r_t/tw) +tiredness - caff;
+    } else {
+      ret = 1-(1-user_wake_h_graph)*exp(-r_t/tw) +tiredness - caff;
+    }
+    ret = ret*100;
+    double minus = 100 *(0.75 + a * sin(2 * pi * timeMap(t))) - ret;
     return FlSpot(t, ret);
   }
   double calCaff(double caffeine, double eat_time,double now,double half_time){
-    print("caff : $caffeine");
     double scaling = 0.0012;
     double scaled_caff = caffeine *scaling;
     double ret = 0;
@@ -104,35 +121,45 @@ class _GraphPageState extends ConsumerState<GraphPage> {
         ),
       ),
       body: H1Points.isNotEmpty ?
-      Center(
-        child: AspectRatio(aspectRatio: 1,
-          child: Padding(
-            padding: const EdgeInsets.only(top:20, bottom: 20),
-            child: LineChart(
-              LineChartData(
-                minX: H1Points.first.x,
-                maxX: H1Points.last.x,
-                lineTouchData: LineTouchData(enabled: false),
-                clipData: FlClipData.all(),
-                borderData:  FlBorderData(
-                    show: true,
-                    border: Border(
-                      bottom: BorderSide(color: Colors.grey),
-                      left: const BorderSide(color: Colors.transparent),
-                      right: const BorderSide(color: Colors.transparent),
-                      top: const BorderSide(color: Colors.transparent),
-                    )
+      Column(
+        children: [
+          Center(
+            child: AspectRatio(aspectRatio: 1,
+              child: Padding(
+                padding: const EdgeInsets.only(top:20, bottom: 20),
+                child: LineChart(
+                  LineChartData(
+                    minX: H1Points.first.x,
+                    maxX: H1Points.last.x,
+                    lineTouchData: LineTouchData(enabled: false),
+                    clipData: FlClipData.all(),
+                    borderData:  FlBorderData(
+                        show: true,
+                        border: Border(
+                          bottom: BorderSide(color: Colors.grey),
+                          left: const BorderSide(color: Colors.transparent),
+                          right: const BorderSide(color: Colors.transparent),
+                          top: const BorderSide(color: Colors.transparent),
+                        )
+                    ),
+                    titlesData: FlTitlesData(show: false),
+                    lineBarsData: [
+                      h1Line(H1Points),
+                      h2Line(H2Points),
+                      sleepLine(SleepPoints),
+                    ]
+                  )
                 ),
-                titlesData: FlTitlesData(show: false),
-                lineBarsData: [
-                  h1Line(H1Points),
-                  h2Line(H2Points),
-                  sleepLine(SleepPoints),
-                ]
-              )
+              ),
             ),
           ),
-        ),
+          Container(
+            margin: EdgeInsets.all(10),
+            child: Text(
+              bed_time
+            ),
+          )
+        ],
       )
       :Center(
         child:retGoalSleepTime(context),
@@ -163,7 +190,7 @@ class _GraphPageState extends ConsumerState<GraphPage> {
       dotData: FlDotData(show: false),
       color: Colors.greenAccent,
       barWidth: 3,
-      isCurved: true,
+      //isCurved: true,
     );
   }
   Widget retGoalSleepTime(BuildContext context){
@@ -198,25 +225,11 @@ class _GraphPageState extends ConsumerState<GraphPage> {
   }
   double timeMap(double t) {
     double C = 0.45145833333;
-    if(t>24) t = t-24;
+    //if(t>24) t = t-24;
     if(t>10.835) t= t/24-C;
     else t=(t+24)/24 -C;
     return t;
   }
-  /*LineChartBarData h1LineChartBarData() {
-
-    return LineChartBarData(
-        isCurved: true,
-        color: Colors.purple,
-        barWidth: 6,
-        isStrokeCapRound: true,
-        dotData: FlDotData(show: false),
-        belowBarData: BarAreaData(show: false),
-        spots: [
-          for(double t = 0;t<36;(t+0.1))
-            ),
-        ]);
-  }*/
   Widget bottimTitleWidgets(double value, TitleMeta meta){
     const style = TextStyle(
         fontWeight: FontWeight.bold,

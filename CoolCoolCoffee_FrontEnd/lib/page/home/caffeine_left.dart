@@ -63,8 +63,10 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
             ElevatedButton(
               onPressed: () {
                 final prov = ref.watch(sleepParmaProvider.notifier);
-                if(prov.state.wake_time == ""|| prov.state.sleep_quality == -1) {
-                  _showPopup(context);
+                if(prov.state.goal_sleep_time == ""){
+                  _showGoalSleepTimeUpdatePopup(context);
+                }else if(prov.state.wake_time == ""|| prov.state.sleep_quality == -1) {
+                  _showSleepDataUpdatePopup(context);
                 }else{
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>GraphPage()));
                 }
@@ -102,22 +104,35 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
       ),
     );
   }
+  void _showGoalSleepTimeUpdatePopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular((10.0))),
+          content: const Text("목표 수면 시간을 설정해주세요!"),
+          insetPadding: const EdgeInsets.fromLTRB(10, 100, 10, 10),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('닫기'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
-  void _showPopup(BuildContext context) {
+  void _showSleepDataUpdatePopup(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('카페인 반감기 그래프'),
-            content: Container(
-              width: double.maxFinite,
-              height: 250,
-              color: Colors.brown[100],
-              child:
-              Center(
-                child: Text('오늘의 수면 정보를 업데이트 해주세요!')
-              ),
-            ),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular((10.0))),
+            content: const Text("오늘의 수면 정보를 업데이트 해주세요!"),
+            insetPadding: const EdgeInsets.fromLTRB(10, 100, 10, 10),
             actions: [
               TextButton(
                 onPressed: () {

@@ -30,8 +30,8 @@ class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
       builder: (context, snapshot){
         if(snapshot.hasData){
           var userCaffeineSnapshot= snapshot.data!;
-          if(userCaffeineSnapshot['caffeine_list'].length == 0) ref.watch(sleepParmaProvider.notifier).clearCaffList();
           if(userCaffeineSnapshot['caffeine_list'].length != 0){
+            ref.watch(sleepParmaProvider.notifier).clearCaffList();
             return ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: userCaffeineSnapshot['caffeine_list'].length,

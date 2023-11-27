@@ -25,7 +25,18 @@ class NotificationGlobal {
       1,
       '쿨쿨 커피',
       '오늘의 카페인 다 입력하셨나요?',
-      _timeZoneSetting(),
+      _timeZoneSetting1(),
+      _details,
+      uiLocalNotificationDateInterpretation:
+      UILocalNotificationDateInterpretation.absoluteTime,
+      androidAllowWhileIdle: true,
+      matchDateTimeComponents: DateTimeComponents.time,
+    );
+    await _localNotification.zonedSchedule(
+      2,
+      '에헤이!!!',
+      '오늘의 카페인 다 입력하셨나요?',
+      _timeZoneSetting2(),
       _details,
       uiLocalNotificationDateInterpretation:
       UILocalNotificationDateInterpretation.absoluteTime,
@@ -34,7 +45,8 @@ class NotificationGlobal {
     );
   }
 
-  static tz.TZDateTime _timeZoneSetting() {
+
+  static tz.TZDateTime _timeZoneSetting1() {
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
     tz.TZDateTime _now = tz.TZDateTime.now(tz.local);
@@ -43,8 +55,26 @@ class NotificationGlobal {
       _now.year,
       _now.month,
       _now.day,
-      10,
-      22,
+      21,
+      50,
+    );
+    //tz.TZDateTime scheduledDate = _now.add(const Duration(minutes: 2));
+    // if (scheduledDate.isBefore(_now)) {
+    //   scheduledDate = scheduledDate.add(const Duration(days: 1));
+    // }
+    return scheduledDate;
+  }
+  static tz.TZDateTime _timeZoneSetting2() {
+    tz.initializeTimeZones();
+    tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
+    tz.TZDateTime _now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduledDate = tz.TZDateTime(
+      tz.local,
+      _now.year,
+      _now.month,
+      _now.day,
+      21,
+      52,
     );
     //tz.TZDateTime scheduledDate = _now.add(const Duration(minutes: 2));
     // if (scheduledDate.isBefore(_now)) {
