@@ -1,4 +1,5 @@
 
+import 'package:coolcoolcoffee_front/page/menu/general_menu_add_page.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_list_view.dart';
 import 'package:coolcoolcoffee_front/page/menu/star_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -80,7 +81,28 @@ class _MenuPageState extends ConsumerState<MenuPage> {
           )
         ],
       ),
-      floatingActionButton: CameraButton(),
+      floatingActionButton: Stack(
+        children: [
+          Align(
+            alignment: Alignment(
+              Alignment.bottomRight.x,Alignment.bottomRight.y - 0.25,
+            ),
+            child:CameraButton(),
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: FloatingActionButton(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50))),
+              backgroundColor: Colors.blue,
+              focusColor: Colors.white,
+              child: Icon(Icons.add,color: Colors.white,),
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>GeneralMenuAddPage()));
+              },
+            ),
+          )
+        ],
+      )
     );
   }
 }
