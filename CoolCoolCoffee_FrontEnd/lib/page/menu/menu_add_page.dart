@@ -84,7 +84,7 @@ class _MenuAddPageState extends State<MenuAddPage> {
     }
     DateTime now = DateTime.now();
     DateFormat dayFormatter = DateFormat('yyyy-MM-dd');
-    DateFormat timeFormatter = DateFormat('HH:mm:ss');
+    DateFormat timeFormatter = DateFormat('HH:mm');
     today = dayFormatter.format(now);
     time = timeFormatter.format(now);
     setState(() {});
