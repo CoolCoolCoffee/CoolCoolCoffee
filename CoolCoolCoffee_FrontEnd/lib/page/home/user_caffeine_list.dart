@@ -19,6 +19,7 @@ class UserCaffeineList extends ConsumerStatefulWidget {
 class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
   @override
   Widget build(BuildContext context) {
+    print('caff build');
     DateTime now = DateTime.now();
     DateFormat dayFormatter = DateFormat('yyyy-MM-dd');
     DateFormat timeFormatter = DateFormat('HH:mm:ss');

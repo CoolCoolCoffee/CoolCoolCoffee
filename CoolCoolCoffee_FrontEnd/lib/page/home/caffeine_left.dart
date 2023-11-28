@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:math';
 
+import 'package:coolcoolcoffee_front/function/sleep_cal_functions.dart';
 import 'package:coolcoolcoffee_front/page/home/graph_page.dart';
 import 'package:coolcoolcoffee_front/provider/sleep_param_provider.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -17,8 +19,85 @@ class CaffeineLeftWidget extends ConsumerStatefulWidget {
 }
 
 class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
+  SleepCalFunc sleepCalFunc = SleepCalFunc();
+  String bedTime = '';
+  late Timer timer;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _calPredictSleepTime();
+  }
+  void _calPredictSleepTime(){
+    double t = 0;
+    double step = 0.1666666;
+    double h1 = 0.75;
+    double h2 = 0.2469;
+    double a = 0.09478;
+    int count = 0;
+    int predict = 0;
+    double minus = 0;
+
+    timer = Timer.periodic(const Duration(milliseconds: 5), (timer) {
+      if(t>40) {
+        timer.cancel();
+      }
+      if(calSleepGraph(t) != -1) {
+          minus = 100 *(h1 + a * sin(2 * pi * sleepCalFunc.timeMap(t))) - calSleepGraph(t);
+          if(predict == 0 && minus < 0) {
+            predict++;
+          }
+          if(predict == 1){
+            predict = 2;
+            setState(() {
+              bedTime = sleepCalFunc.setPredictedBedTime(t);
+            });
+          }
+        }
+      t+=step;
+      count++;
+      if(count%6 == 0) t = t.ceilToDouble();
+    });
+  }
+  double calSleepGraph(double t){
+    double h2 = 0.2469;
+    double a = 0.09478;
+    double tired_scale = 0.01;
+    double ret = -1;
+
+    var prov = ref.watch(sleepParmaProvider.notifier);
+    var tiredness = prov.state.sleep_quality * tired_scale;
+    var user_wake_time = sleepCalFunc.formatTime(prov.state.wake_time);
+    var tw = prov.state.tw;
+    var half_time = prov.state.half_time;
+    var caff_list = sleepCalFunc.formatCaff(prov.state.caff_list);
+    var user_t0 = sleepCalFunc.timeMap(user_wake_time);
+
+    double caff_threshold = 50 * 0.0012;
+    double caff = 0;
+    if(t<user_wake_time) return ret;
+
+    var user_wake_h_graph = h2 + a * sin(2 * pi * sleepCalFunc.timeMap(user_wake_time));
+    var r_t = (sleepCalFunc.timeMap(t) - user_t0);
+    if(r_t<0) r_t+=1;
+    for(var key in caff_list.keys){
+      caff += double.parse(sleepCalFunc.calCaff(caff_list[key]!, key, t, half_time.toDouble()).toStringAsFixed(8));
+    }
+    if(caff <=caff_threshold) {
+      ret = 1-(1-user_wake_h_graph)*exp(-r_t/tw) +tiredness;
+    } else {
+      ret = 1-(1-user_wake_h_graph)*exp(-r_t/tw) +tiredness - caff;
+    }
+    ret = ret*100;
+    double minus = 100 *(0.75 + a * sin(2 * pi * sleepCalFunc.timeMap(t))) - ret;
+    return ret;
+  }
   @override
   Widget build(BuildContext context) {
+    final prov = ref.watch(sleepParmaProvider.notifier);
+    bool sleepNotYet = (prov.state.goal_sleep_time == "" ||prov.state.wake_time == ""|| prov.state.sleep_quality == -1);
+    //listen으로 바꾸는 거 고려해야할듯
+    _calPredictSleepTime();
     return Container(
       child: Center(
         child: Row(
@@ -39,36 +118,16 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
                   ),
                 ],
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '체내 잔여 카페인 양',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20.0,
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                  Text(
-                    '230/320 (mg)',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20.0,
-                    ),
-                  )
-                ],
-              ),
+              child: setText(sleepNotYet, bedTime),
             ),
             ElevatedButton(
               onPressed: () {
-                final prov = ref.watch(sleepParmaProvider.notifier);
                 if(prov.state.goal_sleep_time == ""){
                   _showGoalSleepTimeUpdatePopup(context);
                 }else if(prov.state.wake_time == ""|| prov.state.sleep_quality == -1) {
                   _showSleepDataUpdatePopup(context);
                 }else{
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>GraphPage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>GraphPage(bedTime: bedTime,)));
                 }
                  // 버튼을 누르면 팝업 창 표시
               },
@@ -103,6 +162,71 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
         ),
       ),
     );
+  }
+  Widget setText(bool sleepNotYet, String bedTime){
+    if(sleepNotYet){
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+          '수면 정보 입력을',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20.0,
+          ),
+        ),
+        SizedBox(height: 15),
+        Text(
+          '완료해주세요!',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20.0,
+          ),
+        )
+      ],
+      );
+    }
+    else{
+      if(bedTime == ''){
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Text(
+            '예상 수면 시간',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20.0,
+            ),
+          ),
+            SizedBox(height: 15),
+            Text(
+              '계산중....',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20.0,
+              ),
+            )],
+        );
+      }else{
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Text(
+            '예상 수면 시간',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20.0,
+            ),
+          ),
+            SizedBox(height: 15),
+            Text(
+              bedTime,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20.0,
+              ),
+            )],
+        );
+      }
+    }
   }
   void _showGoalSleepTimeUpdatePopup(BuildContext context) {
     showDialog(
