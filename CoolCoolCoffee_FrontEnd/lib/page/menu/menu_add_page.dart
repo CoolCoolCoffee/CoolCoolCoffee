@@ -23,12 +23,15 @@ class MenuAddPage extends StatefulWidget {
 }
 
 class _MenuAddPageState extends State<MenuAddPage> {
-  final timeController = TextEditingController();
+  //final timeController = TextEditingController();
   num _caffeine = 0;
   String _size = "";
   bool isConfirm = false;
   TextEditingController hoursController = TextEditingController();
   TextEditingController minutesController = TextEditingController();
+  FocusNode hoursFocusNode = FocusNode();
+  FocusNode minutesFocusNode = FocusNode();
+
   bool isAM = true;
   _changeSizeCallback(String size, num caffeine) => setState((){
     _size = size;
@@ -140,64 +143,68 @@ class _MenuAddPageState extends State<MenuAddPage> {
                             ),
                             isConfirm
                                 ? Row(
-                                  children: [
-                                    Container(
-                                      width: 60,
-                                      height: 40,
-                                      child: TextField(
-                                        controller: hoursController,
-                                        keyboardType: TextInputType.number,
-                                        decoration: InputDecoration(
-                                        labelText: '시',
-                                        border: OutlineInputBorder(),
-                                        ),
-                                      ),
+                              children: [
+                                Container(
+                                  width: 60,
+                                  height: 40,
+                                  child: TextField(
+                                    controller: hoursController,
+                                    focusNode: hoursFocusNode,
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      labelText: '시',
+                                      border: OutlineInputBorder(),
                                     ),
-                                    Text(
-                                      ' : ',
-                                      style: TextStyle(fontSize: 20),
+                                  ),
+                                ),
+                                Text(
+                                  ' : ',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                Container(
+                                  width: 60,
+                                  height: 40,
+                                  child: TextField(
+                                    controller: minutesController,
+                                    focusNode: minutesFocusNode,
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      labelText: '분',
+                                      border: OutlineInputBorder(),
                                     ),
-                                    Container(
-                                      width: 60,
-                                      height: 40,
-                                      child: TextField(
-                                        controller: minutesController,
-                                        keyboardType: TextInputType.number,
-                                        decoration: InputDecoration(
-                                          labelText: '분',
-                                          border: OutlineInputBorder(),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          isAM = true;
-                                        });
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        primary: isAM
-                                            ? Colors.brown.withOpacity(0.6)
-                                            : Colors.brown.withOpacity(0.2),
-                                        minimumSize: Size(40, 40),
-                                      ),
-                                      child: Text('AM'),
-                                    ),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          isAM = false;
-                                        });
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        primary: !isAM
-                                            ? Colors.brown.withOpacity(0.6)
-                                            : Colors.brown.withOpacity(0.2),
-                                        minimumSize: Size(40, 40),
-                                      ),
-                                      child: Text('PM'),
-                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      // 확인 모드에서 분 입력 상태로 전환
+                                      isAM = true;
+                                    });
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: isAM
+                                        ? Colors.brown.withOpacity(0.6)
+                                        : Colors.brown.withOpacity(0.2),
+                                    minimumSize: Size(40, 40),
+                                  ),
+                                  child: Text('AM'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      // 확인 모드에서 분 입력 상태로 전환
+                                      isAM = false;
+                                    });
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: !isAM
+                                        ? Colors.brown.withOpacity(0.6)
+                                        : Colors.brown.withOpacity(0.2),
+                                    minimumSize: Size(40, 40),
+                                  ),
+                                  child: Text('PM'),
+                                ),
                               ],
                             )
                                 : Container(
