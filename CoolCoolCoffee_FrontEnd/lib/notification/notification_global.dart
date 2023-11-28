@@ -1,6 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:coolcoolcoffee_front/page/recommend/recommend_page.dart';
 
 class NotificationGlobal {
   static FlutterLocalNotificationsPlugin _localNotification =
@@ -13,8 +14,10 @@ class NotificationGlobal {
     InitializationSettings initSettings = InitializationSettings(
       android: initSettingsAndroid,
     );
-    await _localNotification.initialize(initSettings);
+    //await _localNotification.initialize(initSettings);
+
   }
+
 
   static showDailyNotification() async {
     const NotificationDetails _details = const NotificationDetails(
@@ -25,16 +28,29 @@ class NotificationGlobal {
       1,
       '쿨쿨 커피',
       '오늘의 카페인 다 입력하셨나요?',
-      _timeZoneSetting(),
+      _timeZoneSetting_record(),
       _details,
       uiLocalNotificationDateInterpretation:
       UILocalNotificationDateInterpretation.absoluteTime,
       androidAllowWhileIdle: true,
       matchDateTimeComponents: DateTimeComponents.time,
     );
+
+    await _localNotification.zonedSchedule(
+      2,
+      '쿨쿨 커피',
+      '추천 음료를 볼까요?',
+      _timeZoneSetting_recommend(),
+      _details,
+      uiLocalNotificationDateInterpretation:
+      UILocalNotificationDateInterpretation.absoluteTime,
+      androidAllowWhileIdle: true,
+      matchDateTimeComponents: DateTimeComponents.time,
+        payload: 'recommendation_notification'
+    );
   }
 
-  static tz.TZDateTime _timeZoneSetting() {
+  static tz.TZDateTime _timeZoneSetting_record() {
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
     tz.TZDateTime _now = tz.TZDateTime.now(tz.local);
@@ -50,6 +66,24 @@ class NotificationGlobal {
     // if (scheduledDate.isBefore(_now)) {
     //   scheduledDate = scheduledDate.add(const Duration(days: 1));
     // }
+    return scheduledDate;
+  }
+
+  static tz.TZDateTime _timeZoneSetting_recommend() {
+    tz.initializeTimeZones();
+    tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
+    tz.TZDateTime _now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduledDate = tz.TZDateTime(
+      tz.local,
+      _now.year,
+      _now.month,
+      _now.day,
+      15,
+      0, // 3 PM
+    );
+    if (scheduledDate.isBefore(_now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
     return scheduledDate;
   }
 
