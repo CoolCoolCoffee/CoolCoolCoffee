@@ -417,17 +417,19 @@ class _UserFormState extends State<SignUpSecondPage> {
                 ],
               ),
             ),
-            const SizedBox(height: 55),
-            Container(
-              height: 70,
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.only(top: 8.0),
-              child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.brown.withOpacity(0.6)),
-                  ),
-                  onPressed: _onNextButtonPressed,
-                  child: const Text('다음', style: TextStyle(fontSize: 22),)),
+            const SizedBox(height: 5),
+            Center(
+              child: Container(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.brown.withOpacity(0.6),
+                      minimumSize: const Size.fromHeight(70),
+                      shape: const BeveledRectangleBorder(),
+                    ),
+                    onPressed: _onNextButtonPressed,
+                    child: const Text('다음', style: TextStyle(fontSize: 22, color: Colors.white),)),
+              ),
             ),
           ],
         ),

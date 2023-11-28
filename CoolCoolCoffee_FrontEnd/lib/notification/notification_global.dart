@@ -43,8 +43,8 @@ class NotificationGlobal {
       _now.year,
       _now.month,
       _now.day,
-      10,
-      22,
+      17,
+      20,
     );
     //tz.TZDateTime scheduledDate = _now.add(const Duration(minutes: 2));
     // if (scheduledDate.isBefore(_now)) {

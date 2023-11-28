@@ -96,6 +96,7 @@ class _RecommendPageState extends State<RecommendPage> {
                                     stream: db.collection('Cafe_brand').doc(brand)
                                         .collection('menus')
                                         .where('caffeine', isLessThanOrEqualTo: userCaffeine)
+                                        .where('caffeine',isGreaterThan: userCaffeine-50)
                                         .limit(3).snapshots(),
                                     builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot){
                                       if(streamSnapshot.hasData){

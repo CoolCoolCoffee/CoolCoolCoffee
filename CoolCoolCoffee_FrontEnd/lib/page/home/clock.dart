@@ -298,7 +298,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
                     ),
                   if (prov.goal_sleep_time.isNotEmpty)
                     TextSpan(
-                      text: "n시간 m분",
+                      text: "!!!새버전 완료!!!",
                       style: TextStyle(
                         color: Colors.orange,
                         fontSize: 20,

@@ -24,18 +24,15 @@ class BrandBtn extends StatelessWidget {
           onPressed(!isSelected);
         }
       },
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
+      style: ElevatedButton.styleFrom(
+        backgroundColor:
           isSelected ? Colors.brown.withOpacity(0.6) : Colors.white,
-        ),
-        foregroundColor: MaterialStateProperty.all<Color>(
+        foregroundColor:
           isSelected ? Colors.white : Colors.black,
-        ),
-        shadowColor: MaterialStateProperty.all(Colors.grey),
-        textStyle: MaterialStateProperty.all(
-          const TextStyle(fontSize: 20),
-        ),
-        padding: MaterialStateProperty.all(const EdgeInsets.all(12)),
+        shadowColor: Colors.grey,
+        textStyle: const TextStyle(fontSize: 20),
+        padding: const EdgeInsets.all(12),
+        shape: const BeveledRectangleBorder(),
       ),
       child: Text(brandName),
     );

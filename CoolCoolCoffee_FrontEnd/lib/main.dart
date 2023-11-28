@@ -37,10 +37,11 @@ class CoolCoolCoffee extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primaryColor: Colors.brown.withOpacity(0.6),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.brown,
+        brightness: Brightness.light),
       ),
       debugShowCheckedModeBanner: false,
-      // theme: ThemeData(scaffoldBackgroundColor: Colors.brown.withOpacity(0.1)),
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (ctx, userSnapshot) {
