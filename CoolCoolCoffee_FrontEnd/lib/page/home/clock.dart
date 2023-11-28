@@ -230,24 +230,6 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
       String uid = FirebaseAuth.instance.currentUser!.uid;
       DocumentSnapshot<Map<String, dynamic>> userDoc =
       await FirebaseFirestore.instance.collection('Users').doc(uid).get();
-      if(!userDoc.data()!.containsKey('goal_sleep_time')){
-        print("here");
-        String storedTime = userDoc['avg_bed_time'];
-        List<String> timeComponents = storedTime.split(':');
-        int hours = int.parse(timeComponents[0]);
-        String minutes = timeComponents[1];
-
-        String amPm = (hours >= 12) ? 'PM' : 'AM';
-
-        if (hours > 12) {
-          hours -= 12;
-        }
-
-        String formattedTime = '$hours:$minutes $amPm';
-        ref.watch(sleepParmaProvider.notifier).changeGoalSleepTime(formattedTime);
-        ref.watch(sleepParmaProvider.notifier).changeTw(userDoc['tw']);
-        ref.watch(sleepParmaProvider.notifier).changeHalfTime(userDoc['caffeine_half_life']);
-      }
 
       if (userDoc.exists && userDoc.data()!.containsKey('goal_sleep_time')) {
         print("hoal here!!");

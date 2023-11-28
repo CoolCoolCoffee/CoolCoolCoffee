@@ -19,6 +19,7 @@ class UserCaffeineList extends ConsumerStatefulWidget {
 class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
   @override
   Widget build(BuildContext context) {
+    print('caff build');
     DateTime now = DateTime.now();
     DateFormat dayFormatter = DateFormat('yyyy-MM-dd');
     DateFormat timeFormatter = DateFormat('HH:mm:ss');
@@ -30,8 +31,8 @@ class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
       builder: (context, snapshot){
         if(snapshot.hasData){
           var userCaffeineSnapshot= snapshot.data!;
-          if(userCaffeineSnapshot['caffeine_list'].length == 0) ref.watch(sleepParmaProvider.notifier).clearCaffList();
           if(userCaffeineSnapshot['caffeine_list'].length != 0){
+            ref.watch(sleepParmaProvider.notifier).clearCaffList();
             return ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: userCaffeineSnapshot['caffeine_list'].length,
