@@ -27,12 +27,14 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
   DateTime today = DateTime.now();
   String selecteddate = '';
   String todaydate = '';
+  String today_wake_time = '';
+  String today_sleep_time = '';
 
   @override
   void initState() {
     super.initState();
     // 값이 없는 경우에만 초기화
-    if (resultText_start_real.isEmpty || resultText_end_real.isEmpty) {
+    if (today_wake_time.isEmpty || today_sleep_time.isEmpty) {
       _fetchSleepTimeAndUpdateState();
     }
   }
@@ -110,7 +112,9 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
 
                         final formatter = DateFormat('h:mm a');
                         resultText_start_real = formatter.format(resultText_start);
+                        today_wake_time=resultText_start_real;
                         resultText_end_real = formatter.format(resultText_end);
+                        today_sleep_time=resultText_end_real;
                       } catch (e) {
                         print(e.toString());
                       }
@@ -174,7 +178,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                       ),
                       SizedBox(height: 10),
                       Text(
-                        selecteddate == todaydate ? resultText_start_real : widget.sleepTime ?? '',
+                        selecteddate == todaydate ? today_sleep_time : widget.sleepTime ?? '',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 23.0,
@@ -207,7 +211,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                       ),
                       SizedBox(height: 10),
                       Text(
-                        selecteddate == todaydate ? resultText_end_real : widget.wakeTime ?? '',
+                        selecteddate == todaydate ? today_wake_time : widget.wakeTime ?? '',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 23.0,
@@ -241,18 +245,18 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
         'user_sleep': {},
       });
     }
-    List<String> sleepTimeComponents = resultText_start_real.split(':');
+    List<String> sleepTimeComponents = today_sleep_time.split(':');
     int sleepHours = int.parse(sleepTimeComponents[0]);
-    if (sleepHours < 12 && resultText_start_real.toLowerCase().contains('pm')) {
+    if (sleepHours < 12 && today_sleep_time.toLowerCase().contains('pm')) {
       sleepHours += 12;
     }
     String convertedSleepTime = '$sleepHours:${sleepTimeComponents[1]}';
     convertedSleepTime = convertedSleepTime.replaceAll(RegExp(r'\s?[APMapm]{2}\s?$'), '');
 
     // Convert selected wake time to 24-hour format
-    List<String> wakeTimeComponents = resultText_end_real.split(':');
+    List<String> wakeTimeComponents = today_wake_time.split(':');
     int wakeHours = int.parse(wakeTimeComponents[0]);
-    if (wakeHours < 12 && resultText_end_real.toLowerCase().contains('pm')) {
+    if (wakeHours < 12 && today_wake_time.toLowerCase().contains('pm')) {
       wakeHours += 12;
     }
     String convertedWakeTime = '$wakeHours:${wakeTimeComponents[1]}';
@@ -260,7 +264,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
 
     // 오늘날짜의 문서 가져오기
     DocumentSnapshot todayDocument = await userSleepCollection.doc(currentDate).get();
-    ref.watch(sleepParmaProvider.notifier).changeWakeTime(resultText_end_real);
+    ref.watch(sleepParmaProvider.notifier).changeWakeTime(today_wake_time);
     final prov = ref.watch(sleepParmaProvider.notifier);
     print(prov.state.wake_time);
     if (todayDocument.exists) {
@@ -321,36 +325,38 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
           ),
         );
       }
-      await Future.wait(requests);
-
+      //print("??????");
+      //await Future.wait(requests);
+      print("??????");
       final currentDate = widget.selectedDay.toLocal().toString().split(' ')[0];
       final firestore = FirebaseFirestore.instance;
       final uid = FirebaseAuth.instance.currentUser!.uid;
       final userDocRef = firestore.collection('Users').doc(uid);
       final userSleepCollection = userDocRef.collection('user_sleep');
-
+      //print("??????");
       final todayDocument = await userSleepCollection.doc(currentDate).get();
 
+
       if (todayDocument.exists) {
-        resultText_start_real = todayDocument['sleep_time'] ?? '';
-        resultText_end_real = todayDocument['wake_time'] ?? '';
-        resultText_start_real = convertTo12HourFormat(resultText_start_real);
-        resultText_end_real = convertTo12HourFormat(resultText_end_real);
+        today_sleep_time = todayDocument['sleep_time'] ?? '';
+        today_wake_time = todayDocument['wake_time'] ?? '';
+        today_sleep_time = convertTo12HourFormat(today_sleep_time);
+        today_wake_time = convertTo12HourFormat(today_wake_time);
       } else {
         // 문서가 없으면 빈 문자열로 설정
-        resultText_start_real = '';
-        resultText_end_real = '';
+        today_sleep_time = '';
+        today_wake_time = '';
       }
 
       _updateResultText();
       _updateFirestore();
-      print(resultText_start_real);
-      print(resultText_end_real);
+      print(today_sleep_time);
+      print(today_wake_time);
     } catch (e) {
-      resultText_start_real = '';
-      resultText_end_real = '';
+      today_sleep_time = '';
+      today_wake_time = '';
       _updateResultText();
-      print(e.toString());
+      print('Error!: $e');
     }
   }
 
@@ -362,9 +368,9 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
     bool sleepIsAM = true;
     bool wakeIsAM = true;
 
-    if (resultText_start_real.isNotEmpty && resultText_end_real.isNotEmpty) {
-      List<String> sleepTimeComponents = resultText_start_real.split(RegExp(r'[: ]'));
-      List<String> wakeTimeComponents = resultText_end_real.split(RegExp(r'[: ]'));
+    if (today_sleep_time.isNotEmpty && today_wake_time.isNotEmpty) {
+      List<String> sleepTimeComponents = today_sleep_time.split(RegExp(r'[: ]'));
+      List<String> wakeTimeComponents = today_wake_time.split(RegExp(r'[: ]'));
 
       sleepHoursController.text = sleepTimeComponents[0];
       sleepMinutesController.text = sleepTimeComponents[1];
