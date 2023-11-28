@@ -5,6 +5,9 @@ import 'package:flutter_health_connect/flutter_health_connect.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:theme_provider/theme_provider.dart';
+import '../../app_theme.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 class EditPopup extends StatefulWidget {
   final Function(String) onSave;
@@ -210,6 +213,7 @@ class ClockWidget extends ConsumerStatefulWidget {
 class _ClockWidgetState extends ConsumerState<ClockWidget>{
   String sleepEnteredTime = '';
   String resultText = '';
+  bool isNightMode = false;
 
   @override
   void initState() {
