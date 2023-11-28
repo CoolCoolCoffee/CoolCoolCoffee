@@ -132,7 +132,6 @@ class CameraFunc{
     }
     return ret;
   }
-  //mega 아직 안 됨
   Future<Map<String,dynamic>> megaCoffeeMenuCheck(RecognizedText recText) async{
     Map<String,dynamic> ret = {};
     var collection = FirebaseFirestore.instance.collection("Cafe_brand").doc("메가커피").collection("menus");
@@ -278,20 +277,55 @@ class CameraFunc{
     }
     return ret;
   }
-  //더벤티 아직 안 됨
   Future<Map<String,dynamic>> theVentiMenuCheck(RecognizedText recText) async{
     Map<String,dynamic> ret = {};
     var collection = FirebaseFirestore.instance.collection("Cafe_brand").doc("더벤티").collection("menus");
     String menu = "";
-    String size = "";
+    String size = "Venti";
     String shot = "";
+    bool flag = false;
     ret.addAll({"success":false});
-    return ret;
+
     for (TextBlock block in recText.blocks) {
       for (TextLine line in block.lines) {
-
+        if(line.text.contains('(32oz)')||line.text.contains('(320z)')||line.text.contains('(3202)')) size = "theVenti";
+        if(line.text.contains('샷추가')) shot = "샷 추가";
+        if(line.text.contains('연하게')) shot = "연하게";
       }
     }
+    ret.addAll({"size":size});
+    ret.addAll({"shot":shot});
+    for (TextBlock block in recText.blocks) {
+      if(flag) break;
+      for (TextLine line in block.lines) {
+        if(line.text.contains('[')&&line.text.contains('개]')){
+          var extract_menu_num = line.text.split('[');
+          menu = extract_menu_num[0].trim();
+          if(size == "theVenti"){
+            if(menu.contains('아이스')){
+              var arr = menu.split('(');
+              if(arr[0].contains('아이스')) {
+                menu = '(${arr[0]}(32oz)';
+              } else {
+                menu = '${arr[0]}(${arr[1]}(32oz)';
+              }
+            }
+            else{
+              var arr = menu.split('(');
+              menu = '${arr[0]}(32oz)';
+            }
+          }
+          DocumentSnapshot<Map<String, dynamic>> doc = await collection.doc(menu).get();
+          if (doc.exists) {
+            flag = true;
+            ret.addAll({"document": doc});
+            ret["success"] = true;
+            break;
+          }
+        }
+      }
+    }
+    return ret;
   }
   Future<Map<String,dynamic>> twosomeMenuCheck(RecognizedText recText) async{
     Map<String,dynamic> ret = {};
