@@ -27,6 +27,9 @@ class _MenuAddPageState extends State<MenuAddPage> {
   num _caffeine = 0;
   String _size = "";
   bool isConfirm = false;
+  TextEditingController hoursController = TextEditingController();
+  TextEditingController minutesController = TextEditingController();
+  bool isAM = true;
   _changeSizeCallback(String size, num caffeine) => setState((){
     _size = size;
     _caffeine = caffeine;
@@ -129,13 +132,77 @@ class _MenuAddPageState extends State<MenuAddPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(padding: EdgeInsets.only(left: 5,bottom: 10),child: Text('섭취 시간',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
-                            isConfirm?
-                            //이거 textfield만 시간:분 AM PM 으로 바꾸고 시간 입력해주세요! -> 이거는 화면 구성만 바꾸고 실제 time을 변경하는 건 아래 evaluated button onPressed에서!!
-                            TextField(
-                              controller: timeController,
-                            ):
-                            Container(padding: EdgeInsets.only(left: 5,bottom: 10),child: Text('$time')),
+                            Container(
+                              padding: EdgeInsets.only(left: 5, bottom: 10),
+                              child: Text('섭취 시간',
+                                  style: TextStyle(
+                                      fontSize: 20, fontWeight: FontWeight.bold)),
+                            ),
+                            isConfirm
+                                ? Row(
+                                  children: [
+                                    Container(
+                                      width: 60,
+                                      height: 40,
+                                      child: TextField(
+                                        controller: hoursController,
+                                        keyboardType: TextInputType.number,
+                                        decoration: InputDecoration(
+                                        labelText: '시',
+                                        border: OutlineInputBorder(),
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      ' : ',
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                    Container(
+                                      width: 60,
+                                      height: 40,
+                                      child: TextField(
+                                        controller: minutesController,
+                                        keyboardType: TextInputType.number,
+                                        decoration: InputDecoration(
+                                          labelText: '분',
+                                          border: OutlineInputBorder(),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          isAM = true;
+                                        });
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        primary: isAM
+                                            ? Colors.brown.withOpacity(0.6)
+                                            : Colors.brown.withOpacity(0.2),
+                                        minimumSize: Size(40, 40),
+                                      ),
+                                      child: Text('AM'),
+                                    ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          isAM = false;
+                                        });
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        primary: !isAM
+                                            ? Colors.brown.withOpacity(0.6)
+                                            : Colors.brown.withOpacity(0.2),
+                                        minimumSize: Size(40, 40),
+                                      ),
+                                      child: Text('PM'),
+                                    ),
+                              ],
+                            )
+                                : Container(
+                                padding: EdgeInsets.only(left: 5, bottom: 10),
+                                child: Text('$time')),
                           ],
                         )
                     ),
@@ -146,17 +213,16 @@ class _MenuAddPageState extends State<MenuAddPage> {
                         child: ElevatedButton(
                           onPressed: (){
                             //여기!!!!!!!
-                            if(isConfirm){
-                              time = timeController.text;
-                              isConfirm = false;
-                              setState(() {
-                              });
+                            if (isConfirm) {
+                              // 확인 모드에서 수정 버튼을 누른 경우
+                              int hours = int.parse(hoursController.text);
+                              if (!isAM && hours < 12) {
+                                hours += 12;
+                              }
+                              time = '${hours.toString().padLeft(2, '0')}:${minutesController.text}';
                             }
-                            else{
-                              isConfirm = true;
-                              setState(() {
-                              });
-                            }
+                            isConfirm = !isConfirm;
+                            setState(() {});
                           },
                           child: Text(
                             isConfirm? '확인':'수정',

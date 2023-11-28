@@ -112,9 +112,9 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
 
                         final formatter = DateFormat('h:mm a');
                         resultText_start_real = formatter.format(resultText_start);
-                        today_wake_time=resultText_start_real;
+                        today_sleep_time=resultText_start_real;
                         resultText_end_real = formatter.format(resultText_end);
-                        today_sleep_time=resultText_end_real;
+                        today_wake_time=resultText_end_real;
                       } catch (e) {
                         print(e.toString());
                       }
