@@ -6,13 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="873e7c14-3694-4bd9-9645-17be87d3022e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/ios/Runner/GeneratedPluginRegistrant.m" beforeDir="false" afterPath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/ios/Runner/GeneratedPluginRegistrant.m" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/lib/page/menu/general_menu_add_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/lib/page/menu/general_menu_add_page.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/macos/Flutter/GeneratedPluginRegistrant.swift" beforeDir="false" afterPath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/macos/Flutter/GeneratedPluginRegistrant.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/CoolCoolCoffee_FrontEnd/windows/flutter/generated_plugins.cmake" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
