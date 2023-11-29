@@ -87,7 +87,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       },
                     );
                   },
-                  child: Text('LhortTerm_B Feedback'),
+                  child: Text('LongTerm_B Feedback'),
                 ),
               ],
             ),
