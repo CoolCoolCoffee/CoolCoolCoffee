@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coolcoolcoffee_front/provider/sleep_param_provider.dart';
+import 'dart:math';
+
 
 class LongPopup_B extends StatelessWidget {
   @override
@@ -195,7 +198,7 @@ class _ChangeDialogState extends State<_ChangeDialog> {
             Row(
               children: [
                 Container(
-                  width: 55,
+                  width: 65,
                   height: 40,
                   child: TextField(
                     controller: goodSleepHoursController,
@@ -211,7 +214,7 @@ class _ChangeDialogState extends State<_ChangeDialog> {
                   style: TextStyle(fontSize: 20),
                 ),
                 Container(
-                  width: 55,
+                  width: 65,
                   height: 40,
                   child: TextField(
                     controller: goodSleepMinutesController,
@@ -222,31 +225,6 @@ class _ChangeDialogState extends State<_ChangeDialog> {
                     ),
                   ),
                 ),
-                SizedBox(width: 5),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      goodSleepIsAM = true;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: goodSleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
-                    minimumSize: Size(40, 40),
-                  ),
-                  child: Text('AM'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      goodSleepIsAM = false;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: !goodSleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
-                    minimumSize: Size(40, 40),
-                  ),
-                  child: Text('PM'),
-                ),
               ],
             ),
 
@@ -254,7 +232,20 @@ class _ChangeDialogState extends State<_ChangeDialog> {
 
             ElevatedButton(
               onPressed: () {
-                //DB에 바뀐 값들 저장 시키기
+                int averageSleepHours = int.parse(averageSleepHoursController.text);
+                int averageSleepMinutes = int.parse(averageSleepMinutesController.text);
+                int goodSleepHours = int.parse(goodSleepHoursController.text);
+                int goodSleepMinutes = int.parse(goodSleepMinutesController.text);
+
+                if (!averageSleepIsAM) {
+                  averageSleepHours += 12;
+                }
+
+                String avgBedTime = '$averageSleepHours:${averageSleepMinutes.toString().padLeft(2, '0')}';
+                String goodSleepTime = '$goodSleepHours:${goodSleepMinutes.toString().padLeft(2, '0')}';
+
+                updateFirestoreDocument(avgBedTime, goodSleepTime);
+
                 Navigator.of(context).pop();
               },
               child: Text('저장'),
@@ -263,5 +254,21 @@ class _ChangeDialogState extends State<_ChangeDialog> {
         ),
       ),
     );
+  }
+
+  void updateFirestoreDocument(String avgBedTime, String goodSleepTime) {
+    try {
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      DocumentReference userDoc = firestore.collection('Users').doc(uid);
+
+      final data = {'avg_bed_time': avgBedTime, 'good_sleep_time': goodSleepTime};
+      userDoc.set(data, SetOptions(merge: true));
+
+      print('평균 취침 시간: $avgBedTime');
+      print('적정 수면 시간: $goodSleepTime');
+    } catch (e) {
+      print('Error : $e');
+    }
   }
 }
