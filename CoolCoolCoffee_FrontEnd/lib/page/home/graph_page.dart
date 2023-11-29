@@ -186,7 +186,10 @@ class _GraphPageState extends ConsumerState<GraphPage> {
 
     var user_wake_h_graph = h2 + a * sin(2 * pi * sleepCalFunc.timeMap(user_wake_time));
     var r_t = (sleepCalFunc.timeMap(t) - user_t0);
+    print('user 일어난 시간 $user_t0 sleepCal ${sleepCalFunc.timeMap(t)}');
     if(r_t<0) r_t+=1;
+    if(t>=user_wake_time+24) r_t+=1;
+    print('t : $t r_t : $r_t');
     for(var key in caff_list.keys){
       caff += double.parse(sleepCalFunc.calCaff(caff_list[key]!, key, t, half_time.toDouble()).toStringAsFixed(8));
     }
@@ -196,7 +199,7 @@ class _GraphPageState extends ConsumerState<GraphPage> {
       ret = 1-(1-user_wake_h_graph)*exp(-r_t/tw) +tiredness - caff;
     }
     ret = ret*100;
-
+    print('ret : $ret');
     return FlSpot(t, ret);
   }
 
