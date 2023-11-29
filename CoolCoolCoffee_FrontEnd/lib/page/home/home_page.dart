@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:theme_provider/theme_provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'caffeine_left.dart';
 import 'drink_list.dart';
@@ -22,6 +21,7 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   late bool _isControlMode;
+  int selectedIndex = 0;
 
   @override
   void initState(){
@@ -64,7 +64,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
             child: ToggleSwitch(
               minWidth: 50.0,
-              initialLabelIndex: 0,
+              initialLabelIndex: selectedIndex,
               cornerRadius: 10.0,
               activeFgColor: Colors.white,
               activeBgColors: [[Colors.brown.withOpacity(0.4)], const [Colors.brown]],
@@ -73,14 +73,13 @@ class _HomePageState extends ConsumerState<HomePage> {
               totalSwitches: 2,
               labels: const ['조절', '밤샘'],
               onToggle: (index) {
-                print('switched to: $index');
                 setState(() {
                   if(index == 0){
                     _isControlMode = true;
-                    print('조절모드 : $_isControlMode');
+                    selectedIndex = index!;
                   } else{
                     _isControlMode = false;
-                    print('밤샘모드 : ${!_isControlMode}');
+                    selectedIndex = index!;
                   }
                 });
               },
@@ -92,15 +91,18 @@ class _HomePageState extends ConsumerState<HomePage> {
         iconTheme: const IconThemeData(color: Colors.white),
     ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-            ClockWidget(isControlMode: _isControlMode),
-            const SizedBox(height: 10),
-            CaffeineLeftWidget(isControlMode: _isControlMode),
-            const SizedBox(height: 20),
-            DrinkListWidget(isControlMode: _isControlMode),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              ClockWidget(isControlMode: _isControlMode),
+              const SizedBox(height: 10),
+              CaffeineLeftWidget(isControlMode: _isControlMode),
+              const SizedBox(height: 20),
+              DrinkListWidget(isControlMode: _isControlMode),
+            ],
+          ),
         ),
       )
     );

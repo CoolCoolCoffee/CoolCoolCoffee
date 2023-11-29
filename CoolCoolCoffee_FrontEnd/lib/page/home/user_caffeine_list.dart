@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../menu/menu_page.dart';
+
 class UserCaffeineList extends ConsumerStatefulWidget {
   const UserCaffeineList({super.key});
 
@@ -54,7 +56,6 @@ class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
                       );
                     },
                     child: Container(
-                      //color: Colors.blue,
                       child: Stack(
                         children: [
                             Container(
@@ -143,19 +144,14 @@ class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
                     ),
                   );
                 });
-          }else{
-            return Center(
-              child: Text(
-                  '아직 커피를 안 마셨어요!',
-                style: TextStyle(
-                  fontSize: 20
-                ),
-              ),
+          } else {
+            return const Center(
+              child: Text('오늘 마신 음료가 없어요!', style: TextStyle(fontSize: 20),),
             );
           }
         }
         else{
-          return CircularProgressIndicator(color: Colors.blue,);
+          return const CircularProgressIndicator(color: Colors.blue,);
         }
       },
     );

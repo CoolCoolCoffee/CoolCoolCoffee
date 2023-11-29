@@ -55,21 +55,23 @@ class _DrinkListWidgetState extends State<DrinkListWidget> {
                       "오늘 ",
                       style: TextStyle(
                         fontSize: 20,
+                        fontWeight: FontWeight.w500,
                         color: widget.isControlMode ? Colors.black : Colors.white,
                       ),
                     ),
                     Text(
                       '$userName',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
                         color: Color(0xffD4936F),
                       ),
                     ),
                     Text(
-                      " 님이 마신 카페인 음료",
+                      "님이 마신 카페인 음료",
                       style: TextStyle(
                         fontSize: 20,
+                        fontWeight: FontWeight.w500,
                         color: widget.isControlMode ? Colors.black : Colors.white,
                       ),
                     ),
@@ -103,11 +105,13 @@ class _DrinkListWidgetState extends State<DrinkListWidget> {
                         text: "앞으로 ",
                         style: TextStyle(
                           color: widget.isControlMode? Colors.black : Colors.white,
+                          fontSize: 16,
                         ),
                       ),
-                      TextSpan(
-                        text: "300mg ",
+                      const TextSpan(
+                        text: "300 mg ",
                         style: TextStyle(
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Color(0xffD4936F),
                         ),
@@ -115,6 +119,7 @@ class _DrinkListWidgetState extends State<DrinkListWidget> {
                       TextSpan(
                         text: "마실 수 있어요!",
                         style: TextStyle(
+                          fontSize: 16,
                           color: widget.isControlMode? Colors.black : Colors.white,
                         ),
                       ),
@@ -124,17 +129,17 @@ class _DrinkListWidgetState extends State<DrinkListWidget> {
             ],
           ),
         ),
-        SizedBox(height: 7),
+        const SizedBox(height: 7),
         Center(
           child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 5),
+            margin: const EdgeInsets.symmetric(horizontal: 5),
             width: MediaQuery.of(context).size.width ,
             height: 130,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: UserCaffeineList(),
+            child: const UserCaffeineList(),
           ),
         ),
       ],

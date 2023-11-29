@@ -103,16 +103,6 @@ class _LoginPageState extends State<LoginPage> {
       );
       print('사용자 로그인 완료: ${userCredential.user!.email}');
 
-      // if(!mounted) return;
-      // Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
-      // Navigator.push(context, MaterialPageRoute(builder: (context) => const PageStates()),);
-
-      // if(!mounted) return;
-      // Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) => const PageStates(),
-      //     ));
     } on FirebaseAuthException catch (e) {
       //로그인 예외처리
       switch (e.code) {

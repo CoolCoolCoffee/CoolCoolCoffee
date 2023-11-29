@@ -38,6 +38,9 @@ class CoolCoolCoffee extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+            theme: ThemeData(
+                primarySwatch: Colors.brown,
+            ),
             debugShowCheckedModeBanner: false,
             home: StreamBuilder<User?>(
               stream: FirebaseAuth.instance.authStateChanges(),
