@@ -13,15 +13,15 @@ class ShortTermNotiNotifier extends StateNotifier<ShortTermParam>{
     state.todayAlarm = false;
   }
   //short term1
-  void setIsCaffTooMuch(){
+  /*void setIsCaffTooMuch(){
     state.isCaffTooMuch = true;
     state.isCaffOk = false;
-  }
+  }*/
   //short term2
-  void setIsCaffOk(){
+  /*void setIsCaffOk(){
     state.isCaffTooMuch = false;
     state.isCaffOk = true;
-  }
+  }*/
   void resetCaffCompare(){
     state.isCaffTooMuch = false;
     state.isCaffOk = false;
@@ -32,7 +32,7 @@ class ShortTermNotiNotifier extends StateNotifier<ShortTermParam>{
   void setPredictSleepTime(String predict_sleep_time){
     state.predict_sleep_time = predict_sleep_time;
   }
-  void setCaffCompare(){
+  void setCaffCompare(int drinkNum){
     print('provider predict ${state.predict_sleep_time}');
     print('provider goal ${state.goal_sleep_time}');
     if(state.predict_sleep_time != ""&&state.goal_sleep_time != ""){
@@ -64,19 +64,40 @@ class ShortTermNotiNotifier extends StateNotifier<ShortTermParam>{
       predict_sleep_time_hour = double.parse(arr[0]);
       if(isAm) predict_sleep_time_hour += 24;
       predict_sleep_time_min = double.parse(arr[1])/60.0;
-
-
+      DateTime dt = DateTime.now();
+      int hour = dt.hour;
+      int minute = dt.minute + 2;
+      if(minute >= 60){
+        hour +=1;
+        minute -=60;
+      }
+      print('today Alramr ${state.todayAlarm}');
       if((goal_sleep_time_hour+goal_sleep_time_min)>(predict_sleep_time_hour+predict_sleep_time_min)){
         //short term 2
         print('short term 2');
         state.isCaffOk = true;
         state.isCaffTooMuch = false;
-        //NotificationGlobal.shortTermFeedBackNoti(state.isCaffOk, state.isCaffTooMuch, caff_length, hour, minute, delayed_hour, delayed_minutes)
+        if(!state.todayAlarm){
+          print('set short term 2');
+          state.todayAlarm = true;
+          print('hour : $hour minute : $minute');
+          NotificationGlobal.shortTermFeedBackNoti(state.isCaffOk, state.isCaffTooMuch, drinkNum, hour, minute, 0, 0);
+        }
       }else{
         //short term 1
         print('short term 1');
         state.isCaffOk = false;
         state.isCaffTooMuch = true;
+        double delayed_time = (predict_sleep_time_hour+predict_sleep_time_min) - (goal_sleep_time_hour+goal_sleep_time_min);
+        int delayed_hour = delayed_time.toInt();
+        int delayed_minutes = ((delayed_time - delayed_hour) * 60).toInt();
+        print('$delayed_hour : $delayed_minutes');
+        if(!state.todayAlarm){
+          print('set short term 1');
+          state.todayAlarm = true;
+          print('hour : $hour minute : $minute');
+          NotificationGlobal.shortTermFeedBackNoti(state.isCaffOk, state.isCaffTooMuch, drinkNum, hour, minute, delayed_hour, delayed_minutes);
+        }
       }
     }
   }

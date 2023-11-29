@@ -58,6 +58,7 @@ class NotificationGlobal {
     );
     //short term 2
     if(isCaffOk){
+      print('숏ㅊ텀 2번째 $hour $minute에 보내질 예정');
       await _localNotification.zonedSchedule(
         2,
         '쿨쿨 커피',
@@ -74,6 +75,7 @@ class NotificationGlobal {
     if(isCaffTooMuch){
       //short term 1 중에 카페인을 마시지 않았을 때
       if(caff_length != 0){
+        print('숏텀 1 $hour $minute에 보낼거임 수면 시간 밀렸다잉 카페인 먹어서');
         await _localNotification.zonedSchedule(
           3,
           '쿨쿨 커피',
@@ -88,6 +90,7 @@ class NotificationGlobal {
         );
       }
       else{
+        print('숏텀 1 $hour $minute에 카페인은 안 마심');
         await _localNotification.zonedSchedule(
           3,
           '쿨쿨 커피',
@@ -144,13 +147,9 @@ class NotificationGlobal {
       _now.year,
       _now.month,
       _now.day,
-      10,
+      20,
       22,
     );
-    //tz.TZDateTime scheduledDate = _now.add(const Duration(minutes: 2));
-    // if (scheduledDate.isBefore(_now)) {
-    //   scheduledDate = scheduledDate.add(const Duration(days: 1));
-    // }
     return scheduledDate;
   }
 

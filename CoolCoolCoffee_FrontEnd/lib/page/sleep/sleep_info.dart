@@ -116,6 +116,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                         today_sleep_time=resultText_start_real;
                         resultText_end_real = formatter.format(resultText_end);
                         today_wake_time=resultText_end_real;
+                        ref.watch(shortTermNotiProvider.notifier).resetTodayAlarm();
                       } catch (e) {
                         print(e.toString());
                       }
@@ -544,7 +545,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                     ref.watch(shortTermNotiProvider.notifier).resetCaffCompare();
                     ref.watch(shortTermNotiProvider.notifier).resetTodayAlarm();
                     await _fetchSleepTimeAndUpdateState();
-
+                    ref.watch(shortTermNotiProvider.notifier).resetTodayAlarm();
                     print('Selected Sleep Time: $selectedSleepTime');
                     print('Selected Wake Time: $selectedWakeTime');
                   },

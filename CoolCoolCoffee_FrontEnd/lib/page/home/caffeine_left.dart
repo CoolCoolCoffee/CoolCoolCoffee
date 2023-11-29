@@ -43,12 +43,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
       //_setWidget();
     });
   }
-  @override
-  void dispose(){
-    super.dispose();
-    print('dispose~~~~~~~~~');
-    timer.cancel();
-  }
+
   Future<void> _getSleepEnteredTime() async {
     try {
       String uid = FirebaseAuth.instance.currentUser!.uid;
@@ -108,11 +103,12 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
                 ref.watch(shortTermNotiProvider.notifier).setPredictSleepTime(bedTime);
                 print('set!!! ${ref.watch(shortTermNotiProvider).predict_sleep_time}');
                 print('${ref.watch(shortTermNotiProvider).goal_sleep_time}');
-                ref.watch(shortTermNotiProvider.notifier).setCaffCompare();
+                ref.watch(shortTermNotiProvider.notifier).setCaffCompare(ref.watch(sleepParmaProvider).caff_list.length);
                 _setWidget();
                 //여기서 이제 todayAlarm이 false 면 short term alarm 보내기
                 //hour 랑 Minute 잘 생각하고 설정해야함!!!!!!!!!11
                 print('잘 시간이다 임마 $bedTime');
+                print('잘자라 ${ref.watch(shortTermNotiProvider).predict_sleep_time}');
               }
           }
       }
@@ -124,7 +120,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
   void _setWidget(){
     final provider = ref.watch(sleepParmaProvider);
     sleepNotYet = (provider.goal_sleep_time == "" ||provider.wake_time == ""|| provider.sleep_quality == -1);
-    setState(() {});
+    setState(() { bedTime = ref.watch(shortTermNotiProvider).predict_sleep_time;});
   }
   double calSleepGraph(double t){
     double h2 = 0.2469;
