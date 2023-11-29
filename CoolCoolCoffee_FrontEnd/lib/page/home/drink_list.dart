@@ -7,7 +7,8 @@ import 'package:flutter_health_connect/flutter_health_connect.dart';
 import '../menu/menu_page.dart';
 
 class DrinkListWidget extends StatefulWidget {
-  const DrinkListWidget({Key? key}) : super(key: key);
+  final Function callback;
+  const DrinkListWidget({Key? key, required this.callback}) : super(key: key);
 
   @override
   _DrinkListWidgetState createState() => _DrinkListWidgetState();
@@ -95,7 +96,7 @@ class _DrinkListWidgetState extends State<DrinkListWidget> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: UserCaffeineList(),
+            child: UserCaffeineList(callback: widget.callback,),
           ),
         ),
       ],

@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/function/sleep_cal_functions.dart';
+import 'package:coolcoolcoffee_front/model/sleep_param.dart';
 import 'package:coolcoolcoffee_front/page/home/graph_page.dart';
 import 'package:coolcoolcoffee_front/provider/short_term_noti_provider.dart';
 import 'package:coolcoolcoffee_front/provider/sleep_param_provider.dart';
@@ -17,7 +18,8 @@ import '../../model/user_caffeine.dart';
 import '../../service/user_caffeine_service.dart';
 
 class CaffeineLeftWidget extends ConsumerStatefulWidget {
-  const CaffeineLeftWidget({Key? key}) : super(key: key);
+  final dynamic snapshots;
+  const CaffeineLeftWidget({Key? key, required this.snapshots}) : super(key: key);
 
   @override
   _CaffeineLeftWidgetState createState() => _CaffeineLeftWidgetState();
@@ -29,6 +31,8 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
   late Timer timer;
   bool sleepNotYet = true;
   bool temp = false;
+  late SleepParam provider;
+  late dynamic snapshots;
   @override
   void initState() {
     // TODO: implement initState
@@ -39,34 +43,17 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
       //_setWidget();
     });
   }
+  @override
+  void dispose(){
+    super.dispose();
+    print('dispose~~~~~~~~~');
+    timer.cancel();
+  }
   Future<void> _getSleepEnteredTime() async {
     try {
       String uid = FirebaseAuth.instance.currentUser!.uid;
       DocumentSnapshot<Map<String, dynamic>> userDoc =
       await FirebaseFirestore.instance.collection('Users').doc(uid).get();
-      /*DateTime now = DateTime.now();
-      DateFormat dayFormatter = DateFormat('yyyy-MM-dd');
-      DateFormat timeFormatter = DateFormat('HH:mm:ss');
-      String today = dayFormatter.format(now);
-      UserCaffeineService userCaffeineService = UserCaffeineService();
-      userCaffeineService.checkExits(today);
-      DocumentSnapshot<Map<String,dynamic>> caffDoc =
-          await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_caffeine').doc(today).get();
-      if(caffDoc.exists && caffDoc.data()!.containsKey('caffeine_list')){
-        ref.watch(sleepParmaProvider.notifier).clearCaffList();
-        for(int i = 0;i<caffDoc['caffeine_list'].length;i++){
-          var temp = caffDoc['caffeine_list'][i];
-          UserCaffeine userCaffeine = UserCaffeine(
-              drinkTime: temp['drink_time'],
-              menuId: temp['menu_id'],
-              brand: temp['brand'],
-              menuImg: temp['menu_img'],
-              menuSize: temp['menu_size'],
-              shotAdded: temp['shot_added'],
-              caffeineContent: temp['caffeine_content']);
-          ref.watch(sleepParmaProvider.notifier).addCaffList(userCaffeine);
-        }
-      }*/
       if (userDoc.exists && userDoc.data()!.containsKey('goal_sleep_time')) {
         String storedTime = userDoc['goal_sleep_time'];
         List<String> timeComponents = storedTime.split(':');
@@ -137,7 +124,6 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
   void _setWidget(){
     final provider = ref.watch(sleepParmaProvider);
     sleepNotYet = (provider.goal_sleep_time == "" ||provider.wake_time == ""|| provider.sleep_quality == -1);
-    print('slee???????? $sleepNotYet');
     setState(() {});
   }
   double calSleepGraph(double t){
@@ -176,7 +162,8 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
   @override
   Widget build(BuildContext context) {
     final prov = ref.watch(sleepParmaProvider.notifier);
-
+    print('제발요');
+    _calPredictSleepTime();
     //listen으로 바꾸는 거 고려해야할듯
     return Container(
       child: Center(
@@ -326,7 +313,6 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
       },
     );
   }
-
   void _showSleepDataUpdatePopup(BuildContext context) {
     showDialog(
       context: context,

@@ -10,7 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 class UserCaffeineList extends ConsumerStatefulWidget {
-  const UserCaffeineList({super.key});
+  final Function callback;
+  const UserCaffeineList({super.key, required this.callback});
 
   @override
   _UserCaffeineListState createState() => _UserCaffeineListState();
@@ -29,15 +30,18 @@ class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
     return StreamBuilder(
       stream: FirebaseFirestore.instance.collection('Users').doc(userCaffeineService.uid).collection('user_caffeine').doc(today).snapshots(),
       builder: (context, snapshot){
+        ref.watch(sleepParmaProvider.notifier).clearCaffList();
+        print('바뀜???????????/');
         if(snapshot.hasData){
           var userCaffeineSnapshot= snapshot.data!;
           if(userCaffeineSnapshot['caffeine_list'].length != 0){
-            ref.watch(sleepParmaProvider.notifier).clearCaffList();
+            print('카페인 리스트 삭제');
             return ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: userCaffeineSnapshot['caffeine_list'].length,
                 itemBuilder: (context, index) {
                   var temp = userCaffeineSnapshot['caffeine_list'][index];
+                  print('카페인 추가요~~ , ${temp['menu_id']}');
                   UserCaffeine userCaffeine = UserCaffeine(
                       drinkTime: temp['drink_time'],
                       menuId: temp['menu_id'],
@@ -47,6 +51,7 @@ class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
                       shotAdded: temp['shot_added'],
                       caffeineContent: temp['caffeine_content']);
                   ref.watch(sleepParmaProvider.notifier).addCaffList(userCaffeine);
+                  print('${temp['menu_id']} 추가함요');
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(builder: (
