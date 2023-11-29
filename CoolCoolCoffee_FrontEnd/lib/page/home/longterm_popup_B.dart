@@ -10,8 +10,9 @@ class LongPopup_B extends StatelessWidget {
       content: Text('지난 한 주 카페인의 영향을 많이 받으셨나요?'),
       actions: <Widget>[
         TextButton(
-          onPressed: () {
+          onPressed: () async {
             Navigator.of(context).pop();
+            await _updateCaffeineHalfTime();
             _showB2Dialog(context);
             // 카페인 반감기 늘려주기
           },
@@ -76,10 +77,10 @@ class LongPopup_B extends StatelessWidget {
           content: Text('카페인 반감기를 늘렸어요!'),
           actions: <Widget>[
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop();
+                //await _updateCaffeineHalfTime();
                 //DB 카페인 반감기 늘려주기
-                _ChangeDialog();
               },
               child: Text('닫기'),
             ),
@@ -87,6 +88,24 @@ class LongPopup_B extends StatelessWidget {
         );
       },
     );
+  }
+
+
+  Future<void> _updateCaffeineHalfTime() async {
+    try {
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      DocumentReference userDoc = firestore.collection('Users').doc(uid);
+
+      DocumentSnapshot userSnapshot = await userDoc.get();
+      num currentCaffeineHalfTime = userSnapshot.get('caffeine_half_life') ?? 0.0;
+
+      await userDoc.update({
+        'caffeine_half_life': currentCaffeineHalfTime + 0.5,
+      });
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 }
 
