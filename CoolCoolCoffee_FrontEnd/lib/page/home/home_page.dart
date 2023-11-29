@@ -21,11 +21,15 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  late bool _isControlMode;
+
   @override
   void initState(){
     super.initState();
     _initializeSleepParam();
+    _isControlMode = true;
   }
+
   Future<void> _initializeSleepParam() async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     DateTime today = DateTime.now();
@@ -44,11 +48,11 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.brown.withOpacity(0.1),
+      backgroundColor: _isControlMode? Color(0xffF9F8F7) : Color(0xff93796A),
         appBar: AppBar(
           centerTitle: true,
           title: const Text(
-            '홈 화면',
+            '쿨쿨커피',
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.w600,
@@ -63,18 +67,22 @@ class _HomePageState extends ConsumerState<HomePage> {
               initialLabelIndex: 0,
               cornerRadius: 10.0,
               activeFgColor: Colors.white,
-              activeBgColors: [[Colors.brown.withOpacity(0.6)], const [Colors.brown]],
+              activeBgColors: [[Colors.brown.withOpacity(0.4)], const [Colors.brown]],
               inactiveFgColor: Colors.white,
               inactiveBgColor: Colors.grey,
               totalSwitches: 2,
               labels: const ['조절', '밤샘'],
               onToggle: (index) {
                 print('switched to: $index');
-                if(index == 0){
-                  ThemeProvider.controllerOf(context).setTheme("조절모드");
-                } else if(index == 1){
-                  ThemeProvider.controllerOf(context).setTheme("밤샘모드");
-                }
+                setState(() {
+                  if(index == 0){
+                    _isControlMode = true;
+                    print('조절모드 : $_isControlMode');
+                  } else{
+                    _isControlMode = false;
+                    print('밤샘모드 : ${!_isControlMode}');
+                  }
+                });
               },
             ),
           ),
@@ -86,12 +94,12 @@ class _HomePageState extends ConsumerState<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 10),
-            ClockWidget(),
-            SizedBox(height: 10),
-            CaffeineLeftWidget(),
-            SizedBox(height: 20),
-            DrinkListWidget(),
+            const SizedBox(height: 10),
+            ClockWidget(isControlMode: _isControlMode),
+            const SizedBox(height: 10),
+            CaffeineLeftWidget(isControlMode: _isControlMode),
+            const SizedBox(height: 20),
+            DrinkListWidget(isControlMode: _isControlMode),
           ],
         ),
       )

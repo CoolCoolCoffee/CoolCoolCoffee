@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:coolcoolcoffee_front/provider/sleep_param_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:analog_clock/analog_clock.dart';
@@ -6,7 +8,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:theme_provider/theme_provider.dart';
-import '../../app_theme.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class EditPopup extends StatefulWidget {
@@ -50,76 +51,68 @@ class _EditPopupState extends State<EditPopup> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('목표 수면 시간'),
+      title: const Center(child: Text('오늘의 목표 취침 시간을 입력해주세요!', style: TextStyle(fontSize: 16),)),
       content: SingleChildScrollView(
-        child: Container(
-          //constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height - 100),
-          child: Column(
-            children: [
-              Text(
-                '취침시간',
-                textAlign: TextAlign.start,
-              ),
-              SizedBox(height: 5),
-              Row(
-                children: [
-                  Container(
-                    width: 60,
-                    height: 40,
-                    child: TextField(
-                      controller: sleepHoursController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: '시',
-                        border: OutlineInputBorder(),
-                      ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                SizedBox(
+                  width: 60,
+                  height: 40,
+                  child: TextField(
+                    controller: sleepHoursController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: '시',
+                      border: OutlineInputBorder(),
                     ),
                   ),
-                  Text(
-                    ' : ',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Container(
-                    width: 60,
-                    height: 40,
-                    child: TextField(
-                      controller: sleepMinutesController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: '분',
-                        border: OutlineInputBorder(),
-                      ),
+                ),
+                Text(
+                  ' : ',
+                  style: TextStyle(fontSize: 20),
+                ),
+                Container(
+                  width: 60,
+                  height: 40,
+                  child: TextField(
+                    controller: sleepMinutesController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: '분',
+                      border: OutlineInputBorder(),
                     ),
                   ),
-                  SizedBox(width: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        sleepIsAM = true;
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: sleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
-                      minimumSize: Size(40, 40),
-                    ),
-                    child: Text('AM'),
+                ),
+                SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      sleepIsAM = true;
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: sleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
+                    minimumSize: Size(40, 40),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        sleepIsAM = false;
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: !sleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
-                      minimumSize: Size(40, 40),
-                    ),
-                    child: Text('PM'),
+                  child: Text('AM'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      sleepIsAM = false;
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: !sleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
+                    minimumSize: Size(40, 40),
                   ),
-                ],
-              ),
-            ],
-          ),
+                  child: Text('PM'),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
       actions: [
@@ -204,7 +197,8 @@ class _EditPopupState extends State<EditPopup> {
 
 
 class ClockWidget extends ConsumerStatefulWidget {
-  const ClockWidget({Key? key}) : super(key: key);
+  final bool isControlMode;
+  const ClockWidget({required this.isControlMode, Key? key}) : super(key: key);
 
   @override
   _ClockWidgetState createState() => _ClockWidgetState();
@@ -280,6 +274,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
   Widget build(BuildContext context){
     final prov = ref.watch(sleepParmaProvider);
     print('build ${prov.goal_sleep_time}');
+
     return Column(
       //crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -296,23 +291,24 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
                     TextSpan(
                       text: "카페인 섭취 제한 시작까지\n",
                       style: TextStyle(
-                        color: Colors.black,
+                        color: widget.isControlMode? Colors.black : Colors.white,
                         fontSize: 20,
                       ),
                     ),
                   if (prov.goal_sleep_time.isNotEmpty)
-                    TextSpan(
-                      text: "!!!새버전 완료!!!",
+                    const TextSpan(
+                      text: "n시간 m분",
                       style: TextStyle(
-                        color: Colors.orange,
-                        fontSize: 20,
+                        color:  Color(0xffD4936F),
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   if (prov.goal_sleep_time.isNotEmpty)
                     TextSpan(
                       text: " 남았어요!",
                       style: TextStyle(
-                        color: Colors.black,
+                        color: widget.isControlMode? Colors.black : Colors.white,
                         fontSize: 20,
                       ),
                     ),
@@ -320,7 +316,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
                     TextSpan(
                       text: "목표 수면 시간을 설정해주세요.",
                       style: TextStyle(
-                        color: Colors.black,
+                        color: widget.isControlMode? Colors.black : Colors.white,
                         fontSize: 20,
                       ),
                     ),
@@ -346,7 +342,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
                 children: [
                   Icon(
                     Icons.edit, // 연필 아이콘
-                    color: Colors.brown,
+                    color: widget.isControlMode? Color(0xff707070) : Colors.white,
                     size: 18,
 
                   ),
@@ -354,9 +350,9 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
                   Text(
                     prov.goal_sleep_time.isNotEmpty
                         ? '수정'
-                        : '설정',
+                        : '입력',
                     style: TextStyle(
-                      color: Colors.brown,
+                      color: widget.isControlMode? Color(0xff707070) : Colors.white,
                       fontSize: 17,
                       decoration: TextDecoration.underline,
                     ),
@@ -372,7 +368,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
           child: Container(
             width: 250,
             height: 250,
-            color: Colors.brown.withOpacity(0.6),
+            color: widget.isControlMode ? Color(0xff93796A) : Color(0xffF9F8F7),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -383,11 +379,11 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
                         ? '취침 시간\n ${prov.goal_sleep_time}'
                         : '아직 목표 취침시간이 설정되지 않았네요!\n 목표 취침시간을 설정해볼까요?',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: widget.isControlMode? Colors.white : Colors.black,
                       fontSize: 20,
                     ),
                   ),
-                  SizedBox(height: 10,),
+                  const SizedBox(height: 10,),
                 ],
               ),
             ),
