@@ -7,6 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'caffeine_left.dart';
 import 'drink_list.dart';
 import 'clock.dart';
+import 'package:coolcoolcoffee_front/page/home/longterm_popup_A.dart';
+import 'package:coolcoolcoffee_front/page/home/longterm_popup_B.dart';
 
 import '../menu/menu_page.dart';
 
@@ -63,6 +65,32 @@ class _HomePageState extends ConsumerState<HomePage> {
             SizedBox(height: 10),
             ClockWidget(),
             SizedBox(height: 10),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return LongPopup_A();
+                      },
+                    );
+                  },
+                  child: Text('LongTerm_A Feedback'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return LongPopup_B();
+                      },
+                    );
+                  },
+                  child: Text('LhortTerm_B Feedback'),
+                ),
+              ],
+            ),
             CaffeineLeftWidget(),
             SizedBox(height: 20),
             DrinkListWidget(),
