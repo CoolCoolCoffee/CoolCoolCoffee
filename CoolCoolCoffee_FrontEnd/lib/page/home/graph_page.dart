@@ -196,7 +196,7 @@ class _GraphPageState extends ConsumerState<GraphPage> {
       ret = 1-(1-user_wake_h_graph)*exp(-r_t/tw) +tiredness - caff;
     }
     ret = ret*100;
-    double minus = 100 *(0.75 + a * sin(2 * pi * sleepCalFunc.timeMap(t))) - ret;
+
     return FlSpot(t, ret);
   }
 

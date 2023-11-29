@@ -1,3 +1,4 @@
+import 'package:coolcoolcoffee_front/provider/short_term_noti_provider.dart';
 import 'package:coolcoolcoffee_front/provider/sleep_param_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:analog_clock/analog_clock.dart';
@@ -249,8 +250,10 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
         print(formattedTime);
         setState(() {
           sleepEnteredTime = formattedTime;
-          print('sleepEnteredTime $sleepEnteredTime');
+          print('goal sleep time $sleepEnteredTime');
           ref.watch(sleepParmaProvider.notifier).changeGoalSleepTime(sleepEnteredTime);
+          ref.watch(shortTermNotiProvider.notifier).setGoalSleepTime(sleepEnteredTime);
+          print('set short nori, ${ref.watch(shortTermNotiProvider).goal_sleep_time}');
           ref.watch(sleepParmaProvider.notifier).changeTw(userDoc['tw']);
           ref.watch(sleepParmaProvider.notifier).changeHalfTime(userDoc['caffeine_half_life']);
         });
@@ -265,7 +268,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
   @override
   Widget build(BuildContext context){
     final prov = ref.watch(sleepParmaProvider);
-    print('build ${prov.goal_sleep_time}');
+
     return Column(
       //crossAxisAlignment: CrossAxisAlignment.start,
       children: [

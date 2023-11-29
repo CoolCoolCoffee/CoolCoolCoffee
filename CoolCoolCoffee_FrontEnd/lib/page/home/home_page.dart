@@ -32,9 +32,11 @@ class _HomePageState extends ConsumerState<HomePage> {
     await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(todaydate).get();
     if(userSleepDoc.exists && userSleepDoc.data()!.containsKey('wake_time')&&userSleepDoc.data()!.containsKey('sleep_quality_score')){
       ref.watch(sleepParmaProvider.notifier).changeWakeTime(userSleepDoc['wake_time']);
+      print('wake time ${userSleepDoc['wake_time']}');
       ref.watch(sleepParmaProvider.notifier).changeSleepQuality(userSleepDoc['sleep_quality_score']);
     }else{
       ref.watch(sleepParmaProvider.notifier).changeWakeTime("");
+      print('no wake time~~~');
       ref.watch(sleepParmaProvider.notifier).changeSleepQuality(-1);
     }
   }

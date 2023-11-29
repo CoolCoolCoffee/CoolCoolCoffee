@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coolcoolcoffee_front/page/menu/conveni_add_page.dart';
 import 'package:coolcoolcoffee_front/page/menu/star_list_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -64,12 +65,17 @@ class StarPage extends ConsumerWidget {
                 UserFavoriteDrink userFavDrink = UserFavoriteDrink(menuId: temp['menu_id'], brand: temp['brand'], menuImg: temp['menu_img']);
                 return GestureDetector(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (
-                        context) =>
-                        MenuAddPage(menuSnapshot: documentSnapshot,
-                          brandName: temp['brand'],
-                          size: '',
-                          shot: '',)));
+                    if(temp['brand']=='편의점'){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ConveniAddPage(menuSnapshot: documentSnapshot, brandName: temp['brand'])));
+                    }
+                    else{
+                      Navigator.push(context, MaterialPageRoute(builder: (
+                          context) =>
+                          MenuAddPage(menuSnapshot: documentSnapshot,
+                            brandName: temp['brand'],
+                            size: '',
+                            shot: '',)));
+                    }
                   },
                   child: //SingleChildScrollView(
                   //scrollDirection: Axis.vertical,

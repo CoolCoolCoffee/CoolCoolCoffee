@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/model/user_favorite_drink.dart';
+import 'package:coolcoolcoffee_front/page/menu/conveni_add_page.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_add_page.dart';
 import 'package:coolcoolcoffee_front/provider/star_provider.dart';
 import 'package:coolcoolcoffee_front/service/user_favorite_drink_service.dart';
@@ -56,12 +57,17 @@ class MenuListViewState extends ConsumerState<MenuListView>{
               UserFavoriteDrink userFavDrink = UserFavoriteDrink(menuId: documentSnapshot.id, brand: brandName, menuImg: documentSnapshot['menu_img']);
               return GestureDetector(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (
-                      context) =>
-                      MenuAddPage(menuSnapshot: documentSnapshot,
-                        brandName: brandName,
-                        size: '',
-                        shot: '',)));
+                  if(brandName =='편의점'){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ConveniAddPage(menuSnapshot: documentSnapshot, brandName: brandName)));
+                  }
+                  else{
+                    Navigator.push(context, MaterialPageRoute(builder: (
+                        context) =>
+                        MenuAddPage(menuSnapshot: documentSnapshot,
+                          brandName: brandName,
+                          size: '',
+                          shot: '',)));
+                  }
                 },
                 child:
                 Container(

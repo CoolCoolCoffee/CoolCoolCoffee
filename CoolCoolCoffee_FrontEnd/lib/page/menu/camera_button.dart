@@ -80,12 +80,6 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
         _failedDialogBuilder(context);
       }
     }
-    else{
-      await fetchMenuFromConveni(korRecognizedText);
-    }
-  }
-  Future<void> fetchMenuFromConveni(RecognizedText recText) async{
-    print("Hi!!!conveni");
   }
   @override
   Widget build(BuildContext context) {
@@ -109,16 +103,6 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
             titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
             onPress: () {
               _dialogBuilder(context, "App Capture");
-            },
-          ),
-          Bubble(
-            title: "conveni",
-            iconColor: Colors.white,
-            bubbleColor: Colors.blue,
-            icon: Icons.local_convenience_store_rounded,
-            titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
-            onPress: () {
-              _dialogBuilder(context, "conveni");
             },
           ),
         ],
@@ -172,11 +156,7 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
               TextButton(
                 child: const Text("갤러리"),
                 onPressed: () {
-                  if(cameraMode == "conveni"){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => CameraPage(cameraMode: cameraMode, cameraGallery: 'gallery')));
-                  }else{
                     getImage(ImageSource.gallery, cameraMode);
-                  }
                 },
               ),
             ],

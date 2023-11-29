@@ -1,3 +1,4 @@
+import 'package:coolcoolcoffee_front/provider/short_term_noti_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_health_connect/flutter_health_connect.dart';
@@ -122,7 +123,8 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                       _updateFirestore();
                       print(resultText_start_real);
                       print(resultText_end_real);
-
+                      ref.watch(shortTermNotiProvider.notifier).resetCaffCompare();
+                      ref.watch(shortTermNotiProvider.notifier).resetTodayAlarm();
                       setState(() {});
                     },
                     style: ElevatedButton.styleFrom(
@@ -539,7 +541,8 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                     String selectedWakeTime = '${wakeHoursController.text}:${wakeMinutesController.text} ${wakeIsAM ? 'AM' : 'PM'}';
 
                     await _updateFirestoreWithManualInput(selectedSleepTime, selectedWakeTime);
-
+                    ref.watch(shortTermNotiProvider.notifier).resetCaffCompare();
+                    ref.watch(shortTermNotiProvider.notifier).resetTodayAlarm();
                     await _fetchSleepTimeAndUpdateState();
 
                     print('Selected Sleep Time: $selectedSleepTime');

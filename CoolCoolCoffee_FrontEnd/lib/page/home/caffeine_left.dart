@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:coolcoolcoffee_front/function/sleep_cal_functions.dart';
 import 'package:coolcoolcoffee_front/page/home/graph_page.dart';
+import 'package:coolcoolcoffee_front/provider/short_term_noti_provider.dart';
 import 'package:coolcoolcoffee_front/provider/sleep_param_provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 //import 'package:fl_chart/fl_chart.dart';
@@ -22,11 +23,16 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
   SleepCalFunc sleepCalFunc = SleepCalFunc();
   String bedTime = '';
   late Timer timer;
+  bool sleepNotYet = true;
+  bool temp = false;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _calPredictSleepTime();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _setWidget();
+    });
   }
   void _calPredictSleepTime(){
     double t = 0;
@@ -49,15 +55,35 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
           }
           if(predict == 1){
             predict = 2;
-            setState(() {
-              bedTime = sleepCalFunc.setPredictedBedTime(t);
-            });
+            if(bedTime != sleepCalFunc.setPredictedBedTime(t)){
+              setState(() {
+                bedTime = sleepCalFunc.setPredictedBedTime(t);
+                ref.watch(shortTermNotiProvider.notifier).setPredictSleepTime(bedTime);
+                print('set!!! ${ref.watch(shortTermNotiProvider).predict_sleep_time}');
+                print('${ref.watch(shortTermNotiProvider).goal_sleep_time}');
+                ref.watch(shortTermNotiProvider.notifier).setCaffCompare();
+                //여기서 이제 todayAlarm이 false 면 short term alarm 보내기
+                //hour 랑 Minute 잘 생각하고 설정해야함!!!!!!!!!11
+                print(bedTime);
+              });
+            }
           }
         }
       t+=step;
       count++;
       if(count%6 == 0) t = t.ceilToDouble();
     });
+  }
+  void _setWidget(){
+    final provider = ref.watch(sleepParmaProvider);
+    sleepNotYet = (provider.goal_sleep_time == "" ||provider.wake_time == ""|| provider.sleep_quality == -1);
+    print('slleep $sleepNotYet temp $temp');
+    if(temp != sleepNotYet) {
+      print('temp $temp');
+      setState(() {
+        temp = sleepNotYet;
+      });
+    }
   }
   double calSleepGraph(double t){
     double h2 = 0.2469;
@@ -95,9 +121,10 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
   @override
   Widget build(BuildContext context) {
     final prov = ref.watch(sleepParmaProvider.notifier);
-    bool sleepNotYet = (prov.state.goal_sleep_time == "" ||prov.state.wake_time == ""|| prov.state.sleep_quality == -1);
+
     //listen으로 바꾸는 거 고려해야할듯
     _calPredictSleepTime();
+    _setWidget();
     return Container(
       child: Center(
         child: Row(
@@ -177,7 +204,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
         ),
         SizedBox(height: 15),
         Text(
-          '완료해주세요!',
+          '완료해주jj세요!',
           style: TextStyle(
             color: Colors.black,
             fontSize: 20.0,
@@ -191,7 +218,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [Text(
-            '예상 수면 시간',
+            '예상 jj수면 시간',
             style: TextStyle(
               color: Colors.black,
               fontSize: 20.0,
@@ -210,7 +237,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [Text(
-            '예상 수면 시간',
+            '예상 jj수면 시간',
             style: TextStyle(
               color: Colors.black,
               fontSize: 20.0,

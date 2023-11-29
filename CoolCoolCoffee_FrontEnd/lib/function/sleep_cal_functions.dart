@@ -57,11 +57,15 @@ class SleepCalFunc{
       t -= 24;
     }
     if(t>12) {
+      if(t.toInt() == 24){
+        isAm = true;
+      }else{
+        isAm = false;
+      }
       t -= 12;
-      isAm = false;
     }
     hour = t.toInt();
-    print('$min_temp $step ${min_temp/step}');
+    //print('$min_temp $step ${min_temp/step}');
     minute = 10 * (min_temp/step).ceil();
     if(minute == 0){
       ret = '$hour:00 ${isAm?'AM':'PM'}';
