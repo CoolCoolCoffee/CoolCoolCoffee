@@ -268,7 +268,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
   @override
   Widget build(BuildContext context){
     final prov = ref.watch(sleepParmaProvider);
-
+    final short_term = ref.watch(shortTermNotiProvider);
     return Column(
       //crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -277,45 +277,39 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.ideographic,
           children: [
-            RichText(
-              textAlign: TextAlign.start,
-              text: TextSpan(
-                children: [
-                  if (prov.goal_sleep_time.isNotEmpty)
-                    TextSpan(
-                      text: "카페인 섭취 제한 시작까지\n",
+            if(short_term.isCaffOk)
+              RichText(
+                textAlign: TextAlign.start,
+                  text: TextSpan(
+                      text: "목표한 취침 시간에 수면이 가능합니다!",
                       style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                      ),
+                      color: Colors.black,
+                      fontSize: 15,
                     ),
-                  if (prov.goal_sleep_time.isNotEmpty)
-                    TextSpan(
-                      text: "n시간 ddfsfd",
+                  )
+              ),
+            if(short_term.isCaffTooMuch)
+              RichText(
+                textAlign: TextAlign.start,
+                  text: TextSpan(
+                      text: "취침 시간이 !시간 !분 밀릴 예정입니다!",
                       style: TextStyle(
-                        color: Colors.orange,
-                        fontSize: 20,
+                      color: Colors.black,
+                      fontSize: 15,
                       ),
-                    ),
-                  if (prov.goal_sleep_time.isNotEmpty)
-                    TextSpan(
-                      text: " 남았어요!",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                      ),
-                    ),
-                  if (prov.goal_sleep_time.isEmpty)
-                    TextSpan(
+                  )
+              ),
+              if (prov.goal_sleep_time.isEmpty)
+                RichText(
+                    textAlign: TextAlign.start,
+                    text: TextSpan(
                       text: "목표 수면 시간을 설정해주세요.",
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 20,
+                        fontSize: 15,
                       ),
                     ),
-                ],
               ),
-            ),
             //SizedBox(width: 55),
             ElevatedButton(
               onPressed: () {

@@ -545,7 +545,6 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                     ref.watch(shortTermNotiProvider.notifier).resetCaffCompare();
                     ref.watch(shortTermNotiProvider.notifier).resetTodayAlarm();
                     await _fetchSleepTimeAndUpdateState();
-                    ref.watch(shortTermNotiProvider.notifier).resetTodayAlarm();
                     print('Selected Sleep Time: $selectedSleepTime');
                     print('Selected Wake Time: $selectedWakeTime');
                   },
