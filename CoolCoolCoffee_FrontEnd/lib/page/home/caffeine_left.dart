@@ -105,6 +105,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
                 print('set!!! ${ref.watch(shortTermNotiProvider).predict_sleep_time}');
                 print('${ref.watch(shortTermNotiProvider).goal_sleep_time}');
                 ref.watch(shortTermNotiProvider.notifier).setCaffCompare(ref.watch(sleepParmaProvider).caff_list.length);
+                _updateFirestore();
                 _setWidget();
                 //여기서 이제 todayAlarm이 false 면 short term alarm 보내기
                 //hour 랑 Minute 잘 생각하고 설정해야함!!!!!!!!!11
@@ -363,5 +364,39 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
           );
       },
     );
+  }
+  Future<void> _updateFirestore() async {
+    String temp = ref.watch(shortTermNotiProvider).predict_sleep_time;
+    String predict_sleep_time = '';
+    if(temp.contains('AM')){
+      temp = temp.split(' ')[0];
+      predict_sleep_time = temp;
+    }else{
+      temp = temp.split(' ')[0];
+      int hour = int.parse(temp.split(':')[0]);
+      int minute = int.parse(temp.split(':')[1]);
+      hour+=12;
+      predict_sleep_time = '$hour:$minute';
+    }
+    String today = DateTime.now().toLocal().toIso8601String().split('T')[0];
+    String yesterday = DateTime.now().subtract(Duration(days: 1)).toLocal().toIso8601String().split('T')[0];
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+
+    DocumentSnapshot<Map<String, dynamic>> userSleepDoc =
+    await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(today).get();
+
+    DocumentSnapshot<Map<String, dynamic>> yesUserSleepDoc =
+    await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(yesterday).get();
+    bool isToday = userSleepDoc.exists && userSleepDoc.data()!.containsKey('wake_time')&&userSleepDoc.data()!.containsKey('sleep_quality_score');
+    if(isToday){
+        await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(today).set(
+            {'predict_sleep_time': predict_sleep_time}, SetOptions(merge: true)
+        );
+    }else{
+      await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(yesterday).set(
+          {'predict_sleep_time': predict_sleep_time}, SetOptions(merge: true)
+      );
+    }
+    //print("sssssssssssssss $currentDate");
   }
 }
