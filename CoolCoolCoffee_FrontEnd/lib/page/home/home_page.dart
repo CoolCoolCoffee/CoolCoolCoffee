@@ -19,6 +19,9 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  _setState(){
+    setState(() {});
+  }
   @override
   void initState(){
     super.initState();

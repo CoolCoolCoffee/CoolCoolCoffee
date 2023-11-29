@@ -233,9 +233,9 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
       await FirebaseFirestore.instance.collection('Users').doc(uid).get();
 
       if (userDoc.exists && userDoc.data()!.containsKey('goal_sleep_time')) {
-        print("hoal here!!");
+
         String storedTime = userDoc['goal_sleep_time'];
-        print(storedTime);
+
         List<String> timeComponents = storedTime.split(':');
         int hours = int.parse(timeComponents[0]);
         String minutes = timeComponents[1];
@@ -250,10 +250,10 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
         print(formattedTime);
         setState(() {
           sleepEnteredTime = formattedTime;
-          print('goal sleep time $sleepEnteredTime');
+
           ref.watch(sleepParmaProvider.notifier).changeGoalSleepTime(sleepEnteredTime);
           ref.watch(shortTermNotiProvider.notifier).setGoalSleepTime(sleepEnteredTime);
-          print('set short nori, ${ref.watch(shortTermNotiProvider).goal_sleep_time}');
+
           ref.watch(sleepParmaProvider.notifier).changeTw(userDoc['tw']);
           ref.watch(sleepParmaProvider.notifier).changeHalfTime(userDoc['caffeine_half_life']);
         });

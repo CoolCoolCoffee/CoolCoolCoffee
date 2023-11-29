@@ -1,16 +1,20 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/function/sleep_cal_functions.dart';
 import 'package:coolcoolcoffee_front/page/home/graph_page.dart';
 import 'package:coolcoolcoffee_front/provider/short_term_noti_provider.dart';
 import 'package:coolcoolcoffee_front/provider/sleep_param_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 //import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 import '../../model/user_caffeine.dart';
+import '../../service/user_caffeine_service.dart';
 
 class CaffeineLeftWidget extends ConsumerStatefulWidget {
   const CaffeineLeftWidget({Key? key}) : super(key: key);
@@ -29,9 +33,66 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _calPredictSleepTime();
+    //_calPredictSleepTime();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _setWidget();
+      _getSleepEnteredTime();
+      //_setWidget();
+    });
+  }
+  Future<void> _getSleepEnteredTime() async {
+    try {
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      DocumentSnapshot<Map<String, dynamic>> userDoc =
+      await FirebaseFirestore.instance.collection('Users').doc(uid).get();
+      /*DateTime now = DateTime.now();
+      DateFormat dayFormatter = DateFormat('yyyy-MM-dd');
+      DateFormat timeFormatter = DateFormat('HH:mm:ss');
+      String today = dayFormatter.format(now);
+      UserCaffeineService userCaffeineService = UserCaffeineService();
+      userCaffeineService.checkExits(today);
+      DocumentSnapshot<Map<String,dynamic>> caffDoc =
+          await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_caffeine').doc(today).get();
+      if(caffDoc.exists && caffDoc.data()!.containsKey('caffeine_list')){
+        ref.watch(sleepParmaProvider.notifier).clearCaffList();
+        for(int i = 0;i<caffDoc['caffeine_list'].length;i++){
+          var temp = caffDoc['caffeine_list'][i];
+          UserCaffeine userCaffeine = UserCaffeine(
+              drinkTime: temp['drink_time'],
+              menuId: temp['menu_id'],
+              brand: temp['brand'],
+              menuImg: temp['menu_img'],
+              menuSize: temp['menu_size'],
+              shotAdded: temp['shot_added'],
+              caffeineContent: temp['caffeine_content']);
+          ref.watch(sleepParmaProvider.notifier).addCaffList(userCaffeine);
+        }
+      }*/
+      if (userDoc.exists && userDoc.data()!.containsKey('goal_sleep_time')) {
+        String storedTime = userDoc['goal_sleep_time'];
+        List<String> timeComponents = storedTime.split(':');
+        int hours = int.parse(timeComponents[0]);
+        String minutes = timeComponents[1];
+
+        String amPm = (hours >= 12) ? 'PM' : 'AM';
+
+        if (hours > 12) {
+          hours -= 12;
+        }
+
+        String formattedTime = '$hours:$minutes $amPm';
+
+        ref.watch(sleepParmaProvider.notifier).changeGoalSleepTime(formattedTime);
+        ref.watch(shortTermNotiProvider.notifier).setGoalSleepTime(formattedTime);
+        ref.watch(sleepParmaProvider.notifier).changeTw(userDoc['tw']);
+        ref.watch(sleepParmaProvider.notifier).changeHalfTime(userDoc['caffeine_half_life']);
+      } else {
+        print('error1');
+      }
+    } catch (e) {
+      print('error2 : $e');
+    }
+    setState(() {
+      _calPredictSleepTime();
     });
   }
   void _calPredictSleepTime(){
@@ -56,19 +117,18 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
           if(predict == 1){
             predict = 2;
             if(bedTime != sleepCalFunc.setPredictedBedTime(t)){
-              setState(() {
                 bedTime = sleepCalFunc.setPredictedBedTime(t);
                 ref.watch(shortTermNotiProvider.notifier).setPredictSleepTime(bedTime);
                 print('set!!! ${ref.watch(shortTermNotiProvider).predict_sleep_time}');
                 print('${ref.watch(shortTermNotiProvider).goal_sleep_time}');
                 ref.watch(shortTermNotiProvider.notifier).setCaffCompare();
+                _setWidget();
                 //여기서 이제 todayAlarm이 false 면 short term alarm 보내기
                 //hour 랑 Minute 잘 생각하고 설정해야함!!!!!!!!!11
-                print(bedTime);
-              });
-            }
+                print('잘 시간이다 임마 $bedTime');
+              }
           }
-        }
+      }
       t+=step;
       count++;
       if(count%6 == 0) t = t.ceilToDouble();
@@ -77,13 +137,8 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
   void _setWidget(){
     final provider = ref.watch(sleepParmaProvider);
     sleepNotYet = (provider.goal_sleep_time == "" ||provider.wake_time == ""|| provider.sleep_quality == -1);
-    print('slleep $sleepNotYet temp $temp');
-    if(temp != sleepNotYet) {
-      print('temp $temp');
-      setState(() {
-        temp = sleepNotYet;
-      });
-    }
+    print('slee???????? $sleepNotYet');
+    setState(() {});
   }
   double calSleepGraph(double t){
     double h2 = 0.2469;
@@ -123,8 +178,6 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
     final prov = ref.watch(sleepParmaProvider.notifier);
 
     //listen으로 바꾸는 거 고려해야할듯
-    _calPredictSleepTime();
-    _setWidget();
     return Container(
       child: Center(
         child: Row(
@@ -213,7 +266,6 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
       ],
       );
     }
-    else{
       if(bedTime == ''){
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -253,7 +305,6 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
             )],
         );
       }
-    }
   }
   void _showGoalSleepTimeUpdatePopup(BuildContext context) {
     showDialog(
