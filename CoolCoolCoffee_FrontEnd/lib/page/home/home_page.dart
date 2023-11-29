@@ -22,10 +22,9 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  _setState(){
-    print('다시 만든다??');
-    setState(() {});
-  }
+  DateTime now = DateTime.now();
+  DateFormat dayFormatter = DateFormat('yyyy-MM-dd');
+  String date = '';
   @override
   void initState(){
     super.initState();
@@ -35,13 +34,30 @@ class _HomePageState extends ConsumerState<HomePage> {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     DateTime today = DateTime.now();
     String todaydate = today.toLocal().toIso8601String().split('T')[0];
+    DateTime yesterday = today.subtract(Duration(days: 1));
+    String yesterdaydate = yesterday.toLocal().toIso8601String().split('T')[0];
     DocumentSnapshot<Map<String, dynamic>> userSleepDoc =
     await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(todaydate).get();
+
+    DocumentSnapshot<Map<String, dynamic>> yesUserSleepDoc =
+    await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(yesterdaydate).get();
+    //오늘의 수면 정보 받아오기
     if(userSleepDoc.exists && userSleepDoc.data()!.containsKey('wake_time')&&userSleepDoc.data()!.containsKey('sleep_quality_score')){
+      print('!!!!!!!오늘???');
       ref.watch(sleepParmaProvider.notifier).changeWakeTime(userSleepDoc['wake_time']);
-      print('wake time ${userSleepDoc['wake_time']}');
+      //print('wake time ${userSleepDoc['wake_time']}');
       ref.watch(sleepParmaProvider.notifier).changeSleepQuality(userSleepDoc['sleep_quality_score']);
-    }else{
+    }
+    //오늘 꺼가 없으면 어제꺼로
+    else if(yesUserSleepDoc.exists&&yesUserSleepDoc.data()!.containsKey('wake_time')&&yesUserSleepDoc.data()!.containsKey('sleep_quality_score')){
+      ref.watch(sleepParmaProvider.notifier).changeWakeTime(yesUserSleepDoc['wake_time']);
+      print('!!!!!!1어제꺼다잉 wake time ${userSleepDoc['wake_time']}');
+      ref.watch(sleepParmaProvider.notifier).changeSleepQuality(yesUserSleepDoc['sleep_quality_score']);
+      setState(() {
+        now = yesterday;
+      });
+    }
+    else{
       ref.watch(sleepParmaProvider.notifier).changeWakeTime("");
       print('no wake time~~~');
       ref.watch(sleepParmaProvider.notifier).changeSleepQuality(-1);
@@ -49,12 +65,11 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    DateFormat dayFormatter = DateFormat('yyyy-MM-dd');
-    DateFormat timeFormatter = DateFormat('HH:mm:ss');
-    String today = dayFormatter.format(now);
+
+    //DateFormat timeFormatter = DateFormat('HH:mm:ss');
+    date = dayFormatter.format(now);
     UserCaffeineService userCaffeineService = UserCaffeineService();
-    userCaffeineService.checkExits(today);
+    userCaffeineService.checkExits(date);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.brown.withOpacity(0.1),
@@ -79,13 +94,13 @@ class _HomePageState extends ConsumerState<HomePage> {
             ClockWidget(),
             SizedBox(height: 10),
             StreamBuilder(
-                stream: FirebaseFirestore.instance.collection('Users').doc(userCaffeineService.uid).collection('user_caffeine').doc(today).snapshots(),
+                stream: FirebaseFirestore.instance.collection('Users').doc(userCaffeineService.uid).collection('user_caffeine').doc(date).snapshots(),
                 builder: (context,snapshot){
                   print('좀 바뀌어라 ㅅㅂ');
                   return CaffeineLeftWidget(snapshots: snapshot,);
                 }),
             SizedBox(height: 20),
-            DrinkListWidget( callback: _setState,),
+            DrinkListWidget(),
           ],
         ),
       )

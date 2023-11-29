@@ -132,7 +132,7 @@ class _UserFormState extends State<SignUpThirdPage> {
 
       // Get the current user after sign up
       User? user = FirebaseAuth.instance.currentUser;
-
+      Map<String,dynamic> longterm_feedback= {"same":0, "over":0, "less":0};
       // Check if the user is not null
       if (user != null) {
         // Save data to the database
@@ -148,6 +148,7 @@ class _UserFormState extends State<SignUpThirdPage> {
           'good_sleep_time': widget.goodSleepTime,
           'caffeine_half_life' : widget.caffeineHalfLife,
           'tw' : widget.tw,
+          'longterm_feedback':longterm_feedback,
         }, SetOptions(merge: true));
 
         // Create nested collections

@@ -42,6 +42,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
       _getSleepEnteredTime();
       //_setWidget();
     });
+    _initializeSleepParam();
   }
 
   Future<void> _getSleepEnteredTime() async {
@@ -122,43 +123,44 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
     sleepNotYet = (provider.goal_sleep_time == "" ||provider.wake_time == ""|| provider.sleep_quality == -1);
     setState(() { bedTime = ref.watch(shortTermNotiProvider).predict_sleep_time;});
   }
-  double calSleepGraph(double t){
-    double h2 = 0.2469;
-    double a = 0.09478;
-    double tired_scale = 0.01;
-    double ret = -1;
+  Future<void> _initializeSleepParam() async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    DateTime today = DateTime.now();
+    String todaydate = today.toLocal().toIso8601String().split('T')[0];
+    DateTime yesterday = today.subtract(Duration(days: 1));
+    String yesterdaydate = yesterday.toLocal().toIso8601String().split('T')[0];
 
-    var prov = ref.watch(sleepParmaProvider.notifier);
-    var tiredness = prov.state.sleep_quality * tired_scale;
-    var user_wake_time = sleepCalFunc.formatTime(prov.state.wake_time);
-    var tw = prov.state.tw;
-    var half_time = prov.state.half_time;
-    var caff_list = sleepCalFunc.formatCaff(prov.state.caff_list);
-    var user_t0 = sleepCalFunc.timeMap(user_wake_time);
+    DocumentSnapshot<Map<String, dynamic>> userSleepDoc =
+    await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(todaydate).get();
 
-    double caff_threshold = 50 * 0.0012;
-    double caff = 0;
-    if(t<user_wake_time) return ret;
+    DocumentSnapshot<Map<String, dynamic>> yesUserSleepDoc =
+    await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(yesterdaydate).get();
+    //오늘의 수면 정보 받아오기
+    bool isToday = userSleepDoc.exists && userSleepDoc.data()!.containsKey('wake_time')&&userSleepDoc.data()!.containsKey('sleep_quality_score');
+    bool isYesterday = yesUserSleepDoc.exists&&yesUserSleepDoc.data()!.containsKey('wake_time')&&yesUserSleepDoc.data()!.containsKey('sleep_quality_score');
 
-    var user_wake_h_graph = h2 + a * sin(2 * pi * sleepCalFunc.timeMap(user_wake_time));
-    var r_t = (sleepCalFunc.timeMap(t) - user_t0);
-    if(r_t<0) r_t+=1;
-    for(var key in caff_list.keys){
-      caff += double.parse(sleepCalFunc.calCaff(caff_list[key]!, key, t, half_time.toDouble()).toStringAsFixed(8));
+    if(isToday){
+      ref.watch(sleepParmaProvider.notifier).changeWakeTime(userSleepDoc['wake_time']);
+      //print('wake time ${userSleepDoc['wake_time']}');
+      ref.watch(sleepParmaProvider.notifier).changeSleepQuality(userSleepDoc['sleep_quality_score']);
     }
-    if(caff <=caff_threshold) {
-      ret = 1-(1-user_wake_h_graph)*exp(-r_t/tw) +tiredness;
-    } else {
-      ret = 1-(1-user_wake_h_graph)*exp(-r_t/tw) +tiredness - caff;
+    //오늘 꺼가 없으면 어제꺼로
+    else if(isYesterday){
+      ref.watch(sleepParmaProvider.notifier).changeWakeTime(yesUserSleepDoc['wake_time']);
+      ref.watch(sleepParmaProvider.notifier).changeSleepQuality(yesUserSleepDoc['sleep_quality_score']);
     }
-    ret = ret*100;
-    double minus = 100 *(0.75 + a * sin(2 * pi * sleepCalFunc.timeMap(t))) - ret;
-    return ret;
+    else{
+      ref.watch(sleepParmaProvider.notifier).changeWakeTime("");
+      ref.watch(sleepParmaProvider.notifier).changeSleepQuality(-1);
+    }
+    setState(() {
+      _calPredictSleepTime();
+    });
   }
   @override
   Widget build(BuildContext context) {
     final prov = ref.watch(sleepParmaProvider.notifier);
-    print('제발요');
+
     _calPredictSleepTime();
     //listen으로 바꾸는 거 고려해야할듯
     return Container(
@@ -225,6 +227,39 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
         ),
       ),
     );
+  }
+  double calSleepGraph(double t){
+    double h2 = 0.2469;
+    double a = 0.09478;
+    double tired_scale = 0.01;
+    double ret = -1;
+
+    var prov = ref.watch(sleepParmaProvider.notifier);
+    var tiredness = prov.state.sleep_quality * tired_scale;
+    var user_wake_time = sleepCalFunc.formatTime(prov.state.wake_time);
+    var tw = prov.state.tw;
+    var half_time = prov.state.half_time;
+    var caff_list = sleepCalFunc.formatCaff(prov.state.caff_list);
+    var user_t0 = sleepCalFunc.timeMap(user_wake_time);
+
+    double caff_threshold = 50 * 0.0012;
+    double caff = 0;
+    if(t<user_wake_time) return ret;
+
+    var user_wake_h_graph = h2 + a * sin(2 * pi * sleepCalFunc.timeMap(user_wake_time));
+    var r_t = (sleepCalFunc.timeMap(t) - user_t0);
+    if(r_t<0) r_t+=1;
+    for(var key in caff_list.keys){
+      caff += double.parse(sleepCalFunc.calCaff(caff_list[key]!, key, t, half_time.toDouble()).toStringAsFixed(8));
+    }
+    if(caff <=caff_threshold) {
+      ret = 1-(1-user_wake_h_graph)*exp(-r_t/tw) +tiredness;
+    } else {
+      ret = 1-(1-user_wake_h_graph)*exp(-r_t/tw) +tiredness - caff;
+    }
+    ret = ret*100;
+    double minus = 100 *(0.75 + a * sin(2 * pi * sleepCalFunc.timeMap(t))) - ret;
+    return ret;
   }
   Widget setText(bool sleepNotYet, String bedTime){
     if(sleepNotYet){

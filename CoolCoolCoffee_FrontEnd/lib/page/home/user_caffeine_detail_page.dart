@@ -25,7 +25,7 @@ class UserCaffeineDetailPage extends StatelessWidget {
         ),
         centerTitle: true,
         title: Text(
-          "오늘 ${formatTime(userCaffeine.drinkTime)}에 마신 음료",
+          "${formatTime(userCaffeine.drinkTime)}에 마신 음료",
           style: TextStyle(
               color: Colors.black
           ),

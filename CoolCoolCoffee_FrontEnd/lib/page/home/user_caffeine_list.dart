@@ -4,31 +4,64 @@ import 'package:coolcoolcoffee_front/page/home/user_caffeine_detail_page.dart';
 import 'package:coolcoolcoffee_front/provider/sleep_param_provider.dart';
 import 'package:coolcoolcoffee_front/provider/user_caffeine_provider.dart';
 import 'package:coolcoolcoffee_front/service/user_caffeine_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 class UserCaffeineList extends ConsumerStatefulWidget {
-  final Function callback;
-  const UserCaffeineList({super.key, required this.callback});
+  const UserCaffeineList({super.key,});
 
   @override
   _UserCaffeineListState createState() => _UserCaffeineListState();
 }
 
 class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
+  DateTime now = DateTime.now();
+  DateFormat dayFormatter = DateFormat('yyyy-MM-dd');
+  String date = '';
+  //DateFormat timeFormatter = DateFormat('HH:mm:ss');
+  @override
+  void initState() {
+    super.initState();
+    _initializeSleepParam();
+  }
+  Future<void> _initializeSleepParam() async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    DateTime today = DateTime.now();
+    String todaydate = today.toLocal().toIso8601String().split('T')[0];
+    DateTime yesterday = today.subtract(Duration(days: 1));
+    String yesterdaydate = yesterday.toLocal().toIso8601String().split('T')[0];
+
+    DocumentSnapshot<Map<String, dynamic>> userSleepDoc =
+    await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(todaydate).get();
+
+    DocumentSnapshot<Map<String, dynamic>> yesUserSleepDoc =
+    await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(yesterdaydate).get();
+    //오늘의 수면 정보 받아오기
+    if(userSleepDoc.exists && userSleepDoc.data()!.containsKey('wake_time')&&userSleepDoc.data()!.containsKey('sleep_quality_score')){
+
+    }
+    //오늘 꺼가 없으면 어제꺼로
+    else if(yesUserSleepDoc.exists&&yesUserSleepDoc.data()!.containsKey('wake_time')&&yesUserSleepDoc.data()!.containsKey('sleep_quality_score')){
+      setState(() {
+        now = yesterday;
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
+    date = dayFormatter.format(now);
     print('caff build');
-    DateTime now = DateTime.now();
+    /*DateTime now = DateTime.now();
     DateFormat dayFormatter = DateFormat('yyyy-MM-dd');
     DateFormat timeFormatter = DateFormat('HH:mm:ss');
-    String today = dayFormatter.format(now);
+    String today = dayFormatter.format(now);*/
     UserCaffeineService userCaffeineService = UserCaffeineService();
-    userCaffeineService.checkExits(today);
+    userCaffeineService.checkExits(date);
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('Users').doc(userCaffeineService.uid).collection('user_caffeine').doc(today).snapshots(),
+      stream: FirebaseFirestore.instance.collection('Users').doc(userCaffeineService.uid).collection('user_caffeine').doc(date).snapshots(),
       builder: (context, snapshot){
         ref.watch(sleepParmaProvider.notifier).clearCaffList();
         print('바뀜???????????/');
@@ -56,7 +89,7 @@ class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
                     onTap: () {
                       Navigator.push(context, MaterialPageRoute(builder: (
                           context) =>
-                          UserCaffeineDetailPage(userCaffeine: userCaffeine, date: today,))
+                          UserCaffeineDetailPage(userCaffeine: userCaffeine, date: date,))
                       );
                     },
                     child: Container(
@@ -89,12 +122,11 @@ class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
                                 height: 10,
                                 width: 10,
                                 child:
-                                //StarIconButton(isStared: _isStared[index], callback: _changeStaredCallback, index: index, userFavoriteDrink: userFavDrink,),
                                 IconButton(
                                   icon: Icon(Icons.delete,color: Colors.white,), onPressed: () {
                                   Navigator.push(context, MaterialPageRoute(builder: (
                                       context) =>
-                                      UserCaffeineDetailPage(userCaffeine: userCaffeine, date: today,))
+                                      UserCaffeineDetailPage(userCaffeine: userCaffeine, date: date,))
                                   );
                                 },
                                 ),
