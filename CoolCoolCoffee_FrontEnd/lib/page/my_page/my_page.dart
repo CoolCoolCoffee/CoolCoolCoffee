@@ -66,10 +66,10 @@ class _MyPageState extends State<MyPage> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-        backgroundColor: Colors.brown.withOpacity(0.1),
+        backgroundColor:  Color(0xffF9F8F7),
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: Text('마이 페이지', style: TextStyle(color: Colors.black),),
+          title: const Text('마이 페이지', style: TextStyle(color: Colors.black),),
           centerTitle: true,
         ),
         body: Center(
@@ -89,7 +89,7 @@ class _MyPageState extends State<MyPage> {
                         height: 100.0, // 원의 지름
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle, // 원 모양 지정
-                          color: Color(0xff93796A), // 원의 색상 지정
+                          color: Color(0xff725F51), // 원의 색상 지정
                         ),
                       ),
                     ),
@@ -189,28 +189,23 @@ class _MyPageState extends State<MyPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('로그아웃'),
+          backgroundColor: Colors.white,
+          title: const Text('로그아웃', style: TextStyle(fontSize: 20),),
           content: const Text('정말 로그아웃 하시겠어요?'),
           actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // 다이얼로그 닫기
-              },
-              child: const Text('아니오', style: TextStyle(color: Colors.black),),
-            ),
             TextButton(
               onPressed: () {
                 // 로그아웃 처리
                 Navigator.of(context).pop();
                 _auth.signOut();
-
-                // if(!mounted) return;
-                // // 다이얼로그 닫기
-                // Navigator.of(context).pop();
-                // Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()),);
               },
-              child: const Text('예', style: TextStyle(color: Colors.redAccent),),
+              child: const Text('예', style: TextStyle(color: Colors.red),),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // 다이얼로그 닫기
+              },
+              child: const Text('아니오', style: TextStyle(color: Colors.black),),
             ),
           ],
         );
@@ -224,25 +219,26 @@ class _MyPageState extends State<MyPage> {
         barrierDismissible: false,
         builder: (BuildContext context){
           return AlertDialog(
+            backgroundColor: Colors.white,
             // RoundedRectangleBorder - Dialog 화면 모서리 둥글게 조절
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)),
             //Dialog Main Title
             title: const Column(
               children: [
-                Text("앱 권한 설정"),
+                Text("앱 권한 설정", style: TextStyle(fontSize: 20),),
               ],
             ),
-            content: Container(
+            content: const SizedBox(
               height: 200,
-              child: const Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children:[
-                  Text("사용자의 수면 정보 자동 입력을 위하여     '헬스 커넥트' 어플 설치 및 접근 권한 설정이 필요합니다"),
+                  Text("사용자의 수면 정보 자동 입력을 위하여\n'헬스 커넥트' 어플 설치 및 접근 권한 설정이 필요합니다"),
                   SizedBox(height: 20),
                   Text("* 헬스 커넥트 어플을 설치하시려면"),
-                  Text("'설치'버튼을 눌러주세요"),
+                  Text("'설치' 버튼을 눌러주세요"),
                   SizedBox(height: 10),
                   Text("* 헬스 커넥트 접근 권한을 설정하시려면"),
                   Text("'설정' 버튼을 눌러주세요"),
@@ -251,7 +247,7 @@ class _MyPageState extends State<MyPage> {
             ),
             actions: [
               TextButton(
-                child: const Text("설치"),
+                child: const Text("설치", style: TextStyle(color: Colors.brown,  fontWeight: FontWeight.bold),),
                 onPressed: () async {
                   const String url = 'https://play.google.com/store/apps/details?id=com.google.android.apps.healthdata&pcampaignid=web_share';
 
@@ -265,7 +261,7 @@ class _MyPageState extends State<MyPage> {
                 },
               ),
               TextButton(
-                child: const Text("설정"),
+                child: const Text("설정", style: TextStyle(color: Colors.brown, fontWeight: FontWeight.bold)),
                 onPressed: () async {
                   try {
                     await HealthConnectFactory.openHealthConnectSettings();
@@ -277,7 +273,7 @@ class _MyPageState extends State<MyPage> {
                 },
               ),
               TextButton(
-                child: const Text("취소", style: TextStyle(color: Colors.black)),
+                child: const Text("취소", style: TextStyle(color: Colors.grey)),
                 onPressed: () {
                   Navigator.pop(context);
                 },

@@ -73,17 +73,19 @@ class _EditSleepDialogState extends ConsumerState<EditSleepDialog> {
       });
     }
 
-    return AlertDialog(// RoundedRectangleBorder - Dialog 화면 모서리 둥글게 조절
+    return AlertDialog(
+            backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)),
             //Dialog Main Title
-            title: const Center(child: Text('수면 정보 수정')),
+            title: const Center(child: Text('수면 정보 수정', style: TextStyle(fontSize: 18),)),
             content: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('평균 취침 시간'),
+                  const SizedBox(height: 5,),
+                  const Text('평균 취침 시간', ),
                   const SizedBox(height: 5,),
                   Row(
                     children: [
@@ -152,7 +154,7 @@ class _EditSleepDialogState extends ConsumerState<EditSleepDialog> {
                       const SizedBox(width: 10,),
                     ],
                   ),
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 30),
 
                   // 적정 수면 시간을 입력받는 위젯
                   const Text('적정 수면 시간'),
@@ -212,7 +214,7 @@ class _EditSleepDialogState extends ConsumerState<EditSleepDialog> {
             ),
             actions: [
               TextButton(
-                child: const Text("취소", style: TextStyle(color: Colors.black)),
+                child: const Text("취소", style: TextStyle(color: Colors.grey)),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -222,7 +224,7 @@ class _EditSleepDialogState extends ConsumerState<EditSleepDialog> {
                   updateSleepInfo(isAm, bedHour, bedMin, goodSleepHour, goodSleepMin);
                   Navigator.pop(context);
                 },
-                child: const Text('수정', style: TextStyle(color: Colors.redAccent),),
+                child: const Text('수정', style: TextStyle(color: Colors.brown, fontWeight: FontWeight.bold),),
               ),
             ],
           );
@@ -276,7 +278,7 @@ class _SleepInfoState extends State<SleepInfo> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(' 수면 정보', style: TextStyle(
-                fontSize: 15, fontWeight: FontWeight.w500),),
+                fontSize: 14, fontWeight: FontWeight.bold),),
             IconButton(
               onPressed: () {
                 // 수정화면 보여주는 함수
@@ -291,7 +293,7 @@ class _SleepInfoState extends State<SleepInfo> {
         Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.7),
+            color: Colors.white,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
@@ -306,13 +308,13 @@ class _SleepInfoState extends State<SleepInfo> {
                     const Text(
                       '평균 취침 시간',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 17,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     Text(avg_bed_time,
                       style: const TextStyle(
-                        fontSize: 18,
+                        fontSize: 17,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -337,13 +339,13 @@ class _SleepInfoState extends State<SleepInfo> {
                     const Text(
                       '적정 수면 시간',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 17,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     Text(good_sleep_time,
                       style: const TextStyle(
-                        fontSize: 18,
+                        fontSize: 17,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
