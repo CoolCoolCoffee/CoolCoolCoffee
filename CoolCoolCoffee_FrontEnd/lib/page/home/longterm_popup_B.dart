@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/provider/sleep_param_provider.dart';
 import 'dart:math';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
 class LongPopup_B extends StatelessWidget {
@@ -112,12 +113,12 @@ class LongPopup_B extends StatelessWidget {
   }
 }
 
-class _ChangeDialog extends StatefulWidget {
+class _ChangeDialog extends ConsumerStatefulWidget {
   @override
   _ChangeDialogState createState() => _ChangeDialogState();
 }
 
-class _ChangeDialogState extends State<_ChangeDialog> {
+class _ChangeDialogState extends ConsumerState<_ChangeDialog> {
   TextEditingController averageSleepHoursController = TextEditingController();
   TextEditingController averageSleepMinutesController = TextEditingController();
   TextEditingController goodSleepHoursController = TextEditingController();
@@ -244,7 +245,7 @@ class _ChangeDialogState extends State<_ChangeDialog> {
                 String avgBedTime = '$averageSleepHours:${averageSleepMinutes.toString().padLeft(2, '0')}';
                 String goodSleepTime = '$goodSleepHours:${goodSleepMinutes.toString().padLeft(2, '0')}';
 
-                updateFirestoreDocument(avgBedTime, goodSleepTime);
+                updateSleepInfo(averageSleepIsAM, averageSleepHours, averageSleepMinutes, goodSleepHours, goodSleepMinutes);
 
                 Navigator.of(context).pop();
               },
@@ -256,19 +257,36 @@ class _ChangeDialogState extends State<_ChangeDialog> {
     );
   }
 
-  void updateFirestoreDocument(String avgBedTime, String goodSleepTime) {
-    try {
-      String uid = FirebaseAuth.instance.currentUser!.uid;
-      FirebaseFirestore firestore = FirebaseFirestore.instance;
-      DocumentReference userDoc = firestore.collection('Users').doc(uid);
-
-      final data = {'avg_bed_time': avgBedTime, 'good_sleep_time': goodSleepTime};
-      userDoc.set(data, SetOptions(merge: true));
-
-      print('평균 취침 시간: $avgBedTime');
-      print('적정 수면 시간: $goodSleepTime');
-    } catch (e) {
-      print('Error : $e');
+  void updateSleepInfo(bool am, int bedHour, int bedMin, int goodSleepHour, int goodSleepMin) {
+    int bedH = bedHour; int bedM = bedMin; int sleepH = goodSleepHour; int sleepM = goodSleepMin;
+    double h1 = 0.75; double h2 = 0.2469; double a = 0.09478; double C = 0.45145833333;
+    if(!am){
+      bedH = bedH + 12;
     }
+    var good_sleep = sleepH + sleepM/60;
+    var t0 = bedH + bedM/60 + good_sleep;
+    if(t0 >= 24.0) t0 = t0 - 24.0;
+    t0 = t0/24-C;
+
+    var delta = (24 - good_sleep)/24;
+
+    var x0 = h2 + a*sin(2*pi*t0);
+    var x1 = h1 + a*sin(2*pi*(t0 + delta));
+    var tw = double.parse((-delta / (log(1-x1)-log(1-x0))).toStringAsFixed(10));
+
+    String bedTime = '${bedH.toString()}:${bedM.toString().padLeft(2, '0')}';
+    String goodSleepTime = '${sleepH.toString()}:${sleepM.toString().padLeft(2, '0')}';
+
+    final data = {'avg_bed_time' : bedTime, "good_sleep_time" : goodSleepTime, "tw": tw};
+    ref.watch(sleepParmaProvider.notifier).changeTw(tw);
+    var db = FirebaseFirestore.instance;
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    db.collection("Users").doc(uid).set(data, SetOptions(merge: true));
+
+    print('업데이트 완료');
+    print('취침 시간: $bedHour시 $bedMin분');
+    print('적정 수면 시간: $goodSleepHour시 $goodSleepMin분');
+    print('tw값 : $tw');
   }
+
 }
