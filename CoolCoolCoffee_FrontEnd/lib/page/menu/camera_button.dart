@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/function/camera_functions.dart';
-import 'package:coolcoolcoffee_front/page/menu/brand_check.dart';
 import 'package:coolcoolcoffee_front/page/menu/loading_menu.dart';
-import 'package:coolcoolcoffee_front/page/menu/menu_add_page.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_add_page_shot.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';

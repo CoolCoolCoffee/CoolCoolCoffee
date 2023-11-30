@@ -8,7 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../function/mode_color.dart';
 import '../../provider/color_mode_provider.dart';
 import '../menu/conveni_add_page.dart';
-import '../menu/menu_add_page.dart';
 import '../menu/menu_add_page_shot.dart';
 
 class RecommendPage extends ConsumerStatefulWidget {

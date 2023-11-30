@@ -9,7 +9,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../model/user_favorite_drink.dart';
 import '../../provider/star_provider.dart';
 import '../../service/user_favorite_drink_service.dart';
-import 'menu_add_page.dart';
 import 'menu_add_page_shot.dart';
 
 class StarPage extends ConsumerWidget {

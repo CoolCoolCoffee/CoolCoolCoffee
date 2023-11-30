@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/model/user_favorite_drink.dart';
 import 'package:coolcoolcoffee_front/page/menu/conveni_add_page.dart';
-import 'package:coolcoolcoffee_front/page/menu/menu_add_page.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_add_page_shot.dart';
 import 'package:coolcoolcoffee_front/provider/star_provider.dart';
 import 'package:coolcoolcoffee_front/service/user_favorite_drink_service.dart';
