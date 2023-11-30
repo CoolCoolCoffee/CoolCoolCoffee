@@ -3,6 +3,24 @@ import 'dart:math';
 import '../model/user_caffeine.dart';
 
 class SleepCalFunc{
+  int calRecommend(double sleep_graph, double high_graph, double now, double goal_sleep_time,num half_time){
+    double scaling = 0.0012;
+    double recommendCaff = 0;
+    double abstract = (sleep_graph - high_graph)/100;
+    double time_left = goal_sleep_time - now - 1;
+    //공식 : abstract = scaling * (x) * pow(0.5,(time_left/half_time))
+    recommendCaff = abstract * pow(2, (time_left/half_time.toDouble()))* 833.33333;
+    int ret = 0;
+    int remain = recommendCaff.toInt() % 10;
+    if(remain == 0){
+      ret = recommendCaff.toInt();
+    }else{
+      ret = (recommendCaff.toInt()~/10)+1;
+      ret*=10;
+    }
+    print('returen caffeine $ret');
+    return ret;
+  }
   double calCaff(double caffeine, double eat_time,double now,double half_time){
     double scaling = 0.0012;
     double scaled_caff = caffeine *scaling;

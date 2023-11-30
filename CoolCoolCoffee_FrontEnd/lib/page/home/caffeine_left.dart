@@ -76,6 +76,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
     }
     setState(() {
       _calPredictSleepTime();
+      _calRecommendCaff();
     });
   }
   void _calPredictSleepTime(){
@@ -118,6 +119,64 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
       count++;
       if(count%6 == 0) t = t.ceilToDouble();
     });
+  }
+  void _calRecommendCaff(){
+    double h1 = 0.75;
+    double h2 = 0.2469;
+    double a = 0.09478;
+    double step = 0.1666666;
+    String goal_time = ref.watch(sleepParmaProvider).goal_sleep_time;
+    //goal 이랑 predict 모두 AM , PM 형태임
+    //am이면 24더해야함 -> 새벽 2시 26시간
+    double goal_time_double = 0;
+    String predict_time = ref.watch(shortTermNotiProvider).predict_sleep_time;
+    double predict_time_double = 0;
+
+    if(goal_time.contains('AM')){
+      var arr = goal_time.split(' ');
+      var hour_min = arr[0].split(':');
+      double hour = double.parse(hour_min[0])+24;
+      double min = (int.parse(hour_min[1])/10) * step;
+      goal_time_double = hour+min;
+    }else{
+      var arr = goal_time.split(' ');
+      var hour_min = arr[0].split(':');
+      double hour = double.parse(hour_min[0])+12;
+      double min = (int.parse(hour_min[1])~/10) * step;
+      goal_time_double = hour+min;
+    }
+    if(predict_time.contains('AM')){
+      var arr = predict_time.split(' ');
+      var hour_min = arr[0].split(':');
+      double hour = double.parse(hour_min[0])+24;
+      double min = (int.parse(hour_min[1])/10) * step;
+      predict_time_double = hour+min;
+    }else{
+      var arr = predict_time.split(' ');
+      var hour_min = arr[0].split(':');
+      double hour = double.parse(hour_min[0])+12;
+      double min = (int.parse(hour_min[1])~/10) * step;
+      predict_time_double = hour+min;
+    }
+
+    if(goal_time_double - predict_time_double>0){
+      DateTime dt = DateTime.now();
+      int hour = dt.hour;
+      int minute = dt.minute;
+      double min_scale = minute~/10 * step;
+      if(hour < 12){
+        hour+=24;
+      }
+      double now = hour + min_scale;
+      print('recomment = $goal_time : $goal_time_double, $dt : $now');
+      int recommend = sleepCalFunc.calRecommend(calSleepGraph(goal_time_double), 100 *(h1 + a * sin(2 * pi * sleepCalFunc.timeMap(goal_time_double))), now, goal_time_double, ref.watch(sleepParmaProvider).half_time);
+      ref.watch(sleepParmaProvider.notifier).changeRecommendCaff(recommend);
+      print('recommend : ${ref.watch(sleepParmaProvider).recommendCaff}');
+    }
+    else{
+      ref.watch(sleepParmaProvider.notifier).changeRecommendCaff(0);
+      print('닌 커피 마시지 마라');
+    }
   }
   void _setWidget(){
     final provider = ref.watch(sleepParmaProvider);
@@ -163,6 +222,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
     final prov = ref.watch(sleepParmaProvider.notifier);
 
     _calPredictSleepTime();
+    _calRecommendCaff();
     //listen으로 바꾸는 거 고려해야할듯
     return Container(
       child: Center(
