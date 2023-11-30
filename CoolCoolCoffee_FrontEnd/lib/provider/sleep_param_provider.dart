@@ -11,7 +11,7 @@ final sleepParmaProvider = StateNotifierProvider<SleepParamNotifier,SleepParam>(
 
 class SleepParamNotifier extends StateNotifier<SleepParam>{
   SleepParamNotifier():super(SleepParam(goal_sleep_time: "", tw: 0, caff_list: [], wake_time: "", sleep_quality: -1,half_time: 5));
-  void changeHalfTime(int halfTime){
+  void changeHalfTime(num halfTime){
     state.half_time = halfTime;
   }
   void changeGoalSleepTime(String goal_sleep_time){

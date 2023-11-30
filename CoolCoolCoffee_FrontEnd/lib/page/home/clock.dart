@@ -220,6 +220,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
     //여기서부터 추가
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ref.watch(sleepParmaProvider);
+      ref.watch(shortTermNotiProvider);
       if(ref.watch(sleepParmaProvider.notifier).state.goal_sleep_time.isNotEmpty){
         setState(() {});
       }
@@ -269,6 +270,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
   Widget build(BuildContext context){
     final prov = ref.watch(sleepParmaProvider);
     final short_term = ref.watch(shortTermNotiProvider);
+
     return Column(
       //crossAxisAlignment: CrossAxisAlignment.start,
       children: [
