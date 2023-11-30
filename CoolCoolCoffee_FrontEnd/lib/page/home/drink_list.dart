@@ -92,7 +92,7 @@ class _DrinkListWidgetState extends ConsumerState<DrinkListWidget> {
                       backgroundColor: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['main_color']:modeColor.noSleepModeColor['main_color'],
                       minimumSize: const Size(20, 20),
                     ),
-                    child: Text('+', style: TextStyle(color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['background_color']:modeColor.noSleepModeColor['background_color'], fontSize: 22),)),
+                    child: Center(child: Text('+', style: TextStyle(color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['background_color']:modeColor.noSleepModeColor['background_color'], fontSize: 22),))),
               ),
             ],
           ),

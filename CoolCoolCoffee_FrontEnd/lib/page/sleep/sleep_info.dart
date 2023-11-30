@@ -573,84 +573,148 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, setState) {
+
+            List<bool> _isSelected1 = [sleepIsAM, !sleepIsAM];
+            void toggleSelect1(value) {
+              print(value);
+
+              if(value == 0){
+                sleepIsAM = true;
+              } else{
+                sleepIsAM = false;
+              }
+
+              setState(() {
+                _isSelected1 = [sleepIsAM, !sleepIsAM];
+                print(_isSelected1);
+              });
+            }
+
+            List<bool> _isSelected2 = [wakeIsAM, !wakeIsAM];
+            void toggleSelect2(value) {
+              print(value);
+
+              if(value == 0){
+                wakeIsAM = true;
+              } else{
+                wakeIsAM = false;
+              }
+
+              setState(() {
+                _isSelected2 = [wakeIsAM, !wakeIsAM];
+                print(_isSelected2);
+              });
+            }
+
+
             return AlertDialog(
-              title: Text('입력'),
+              title: Center(child: Text('수면 정보 입력')),
               content: SingleChildScrollView( // Wrap with SingleChildScrollView
                 child: Column(
                   children: [
-                    Text(
-                      '취침시간',
-                      textAlign: TextAlign.start,
-                    ),
-                    SizedBox(height: 5),
-                    Row(
+                    Column(
                       children: [
-                        Container(
-                          width: 60,
-                          height: 40,
-                          child: TextField(
-                            controller: sleepHoursController,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              labelText: '시',
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                        ),
                         Text(
-                          ' : ',
-                          style: TextStyle(fontSize: 20),
+                          '취침시간',
+                          textAlign: TextAlign.start,
                         ),
-                        Container(
-                          width: 60,
-                          height: 40,
-                          child: TextField(
-                            controller: sleepMinutesController,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              labelText: '분',
-                              border: OutlineInputBorder(),
+                        SizedBox(height: 5),
+                        Row(
+                          children: [
+                            Column(
+                              children: [
+                                ToggleButtons(
+                                    direction: Axis.vertical,
+                                    isSelected: _isSelected1,
+                                    onPressed: toggleSelect1,
+                                    selectedColor: Colors.white,
+                                    fillColor: Colors.brown.withOpacity(0.6),
+                                    borderRadius: const BorderRadius.all(Radius.circular(4)),
+                                    constraints: const BoxConstraints(
+                                      minHeight: 45.0,
+                                      minWidth: 60.0,
+                                    ),
+                                    children: const [
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 8),
+                                        child: Text('AM', style: TextStyle(fontSize: 16),),),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(horizontal: 8),
+                                        child: Text('PM', style: TextStyle(fontSize: 16),),),
+                                    ]
+                                ),
+                              ],
                             ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              sleepIsAM = true;
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: sleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
-                            minimumSize: Size(40, 40),
-                          ),
-                          child: Text('AM'),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              sleepIsAM = false;
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: !sleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
-                            minimumSize: Size(40, 40),
-                          ),
-                          child: Text('PM'),
+                            Container(
+                              margin: const EdgeInsets.only(left: 30, right: 10),
+                              width: 60,
+                              height: 60,
+                              child: TextField(
+                                controller: sleepHoursController,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  labelText: '시',
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                            Text(
+                              ' : ',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(left: 10, right: 10),
+                              width: 60,
+                              height: 60,
+                              child: TextField(
+                                controller: sleepMinutesController,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  labelText: '분',
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    SizedBox(height: 10),
-                    Text(
+                    const SizedBox(height: 10),
+                    const Text(
                       '기상시간',
                       textAlign: TextAlign.start,
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     Row(
                       children: [
+                        Column(
+                          children: [
+                            ToggleButtons(
+                                direction: Axis.vertical,
+                                isSelected: _isSelected2,
+                                onPressed: toggleSelect2,
+                                selectedColor: Colors.white,
+                                fillColor: Colors.brown.withOpacity(0.6),
+                                borderRadius: const BorderRadius.all(Radius.circular(4)),
+                                constraints: const BoxConstraints(
+                                  minHeight: 45.0,
+                                  minWidth: 60.0,
+                                ),
+                                children: const [
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 8),
+                                    child: Text('AM', style: TextStyle(fontSize: 16),),),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 8),
+                                    child: Text('PM', style: TextStyle(fontSize: 16),),),
+                                ]
+                            ),
+                          ],
+                        ),
                         Container(
+                          margin: const EdgeInsets.only(left: 30, right: 10),
                           width: 60,
-                          height: 40,
+                          height: 60,
                           child: TextField(
                             controller: wakeHoursController,
                             keyboardType: TextInputType.number,
@@ -665,8 +729,9 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                           style: TextStyle(fontSize: 20),
                         ),
                         Container(
+                          margin: const EdgeInsets.only(left: 10, right: 10),
                           width: 60,
-                          height: 40,
+                          height: 60,
                           child: TextField(
                             controller: wakeMinutesController,
                             keyboardType: TextInputType.number,
@@ -675,31 +740,6 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                               border: OutlineInputBorder(),
                             ),
                           ),
-                        ),
-                        SizedBox(width: 10),
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              wakeIsAM = true;
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: wakeIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
-                            minimumSize: Size(40, 40),
-                          ),
-                          child: Text('AM'),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              wakeIsAM = false;
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: !wakeIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
-                            minimumSize: Size(40, 40),
-                          ),
-                          child: Text('PM'),
                         ),
                       ],
                     ),
@@ -714,10 +754,10 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                   child: Text('취소'),
                   style: TextButton.styleFrom(
                     minimumSize: Size(60, 40),
-                    primary: Colors.black,
+                    primary: Colors.grey,
                   ),
                 ),
-                ElevatedButton(
+                TextButton(
                   onPressed: () async {
                     Navigator.of(context).pop();
                     _showConfirmationDialog_manual();
@@ -733,13 +773,10 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                     print('Selected Sleep Time: $selectedSleepTime');
                     print('Selected Wake Time: $selectedWakeTime');
                   },
-                  child: Text('확인'),
+                  child: Text('입력', style: TextStyle(color: Color(0xff93796A)),),
                   style: TextButton.styleFrom(
-                    backgroundColor: Colors.brown,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
                     minimumSize: Size(60, 40),
+                    primary: Colors.grey,
                   ),
                 ),
               ],

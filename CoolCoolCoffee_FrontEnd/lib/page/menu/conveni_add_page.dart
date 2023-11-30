@@ -208,64 +208,59 @@ class _ConveniAddPageState extends State<ConveniAddPage> {
           Expanded(
             child: Container(),
           ),
-          Expanded(
-            child: Container(),
-          ),
-          Expanded(
-              child: Container(
-                margin: EdgeInsets.all(10),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 20,bottom: 20),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                '카페인 함량',
-                                style: TextStyle(
-                                    fontSize: 10
-                                ),
-                              ),
-                              Container(height: 5,),
-                              Text(_menu['caffeine_content'].toString(),
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                    ),
-                    Expanded(
-                        flex: 4,
-                        child: Container(
-                          padding: const EdgeInsets.only(left: 10,top: 5,bottom: 5,),
-                          child: ElevatedButton(
-                            onPressed: (){
-                              userCaffeineService.addNewUserCaffeine(today, UserCaffeine(drinkTime: time, menuId: _menu.id, brand: _brand, menuSize: "", shotAdded: -3, caffeineContent: _menu['caffeine_content'], menuImg: _menu['menu_img']));
-                              Navigator.popUntil(context, (route) => route.isFirst);
-                            },
-                            child: Text(
-                              '기록하기',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                                minimumSize: const Size.fromHeight(50),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)
-                                )
+          Container(
+            margin: EdgeInsets.only(left: 10,top: 10, right: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20,bottom: 20),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            '카페인 함량',
+                            style: TextStyle(
+                                fontSize: 10
                             ),
                           ),
-                        )
+                          Container(height: 5,),
+                          Text(_menu['caffeine_content'].toString(),
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold
+                            ),
+                          )
+                        ],
+                      ),
                     )
-                  ],
                 ),
-              )
+                Expanded(
+                    flex: 4,
+                    child: Container(
+                      padding: const EdgeInsets.only(left: 10,top: 5,right: 5,),
+                      child: ElevatedButton(
+                        onPressed: (){
+                          userCaffeineService.addNewUserCaffeine(today, UserCaffeine(drinkTime: time, menuId: _menu.id, brand: _brand, menuSize: "", shotAdded: -3, caffeineContent: _menu['caffeine_content'], menuImg: _menu['menu_img']));
+                          Navigator.popUntil(context, (route) => route.isFirst);
+                        },
+                        child: Text(
+                          '기록하기',
+                          style: TextStyle(fontSize: 15),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                            minimumSize: const Size.fromHeight(50),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)
+                            )
+                        ),
+                      ),
+                    )
+                )
+              ],
+            ),
           ),
         ],
       ),
