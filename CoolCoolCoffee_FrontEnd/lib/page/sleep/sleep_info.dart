@@ -49,114 +49,122 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
     String selecteddate = widget.selectedDay!.toLocal().toIso8601String().split('T')[0];
     String todaydate = today.toLocal().toIso8601String().split('T')[0];
     return Container(
+      margin: const EdgeInsets.only(left: 20, right: 20),
       color: Colors.white,
       child: Center(
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  selecteddate == todaydate
-                      ? '오늘의 수면정보를 불러와요!'
-                      : '$selecteddate의 수면 정보',
-                  style: TextStyle(
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.w500,
+                Container(
+                  margin: const EdgeInsets.only(right:5),
+                  child: Text(
+                    selecteddate == todaydate
+                        ? '오늘의 수면정보'
+                        : '$selecteddate의 수면 정보',
+                    style: const TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-                SizedBox(width: 10),
-                //if (selecteddate == todaydate)
-                  ElevatedButton(
-                    onPressed: () async {
-                      //_fetchSleepTimeAndUpdateState();
-                      tz.initializeTimeZones();
-                      var startTime = widget.selectedDay.subtract(const Duration(days: 1));
-                      var endTime = widget.selectedDay;
-                      try {
-                        final requests = <Future>[];
-                        Map<String, dynamic> typePoints = {};
-                        for (var type in types) {
-                          requests.add(
-                            HealthConnectFactory.getRecord(
-                              type: type,
-                              startTime: startTime,
-                              endTime: endTime,
-                            ).then(
-                                  (value) => typePoints.addAll({type.name: value}),
-                            ),
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () async {
+                        //_fetchSleepTimeAndUpdateState();
+                        tz.initializeTimeZones();
+                        var startTime = widget.selectedDay.subtract(const Duration(days: 1));
+                        var endTime = widget.selectedDay;
+                        try {
+                          final requests = <Future>[];
+                          Map<String, dynamic> typePoints = {};
+                          for (var type in types) {
+                            requests.add(
+                              HealthConnectFactory.getRecord(
+                                type: type,
+                                startTime: startTime,
+                                endTime: endTime,
+                              ).then(
+                                    (value) => typePoints.addAll({type.name: value}),
+                              ),
+                            );
+                          }
+                          await Future.wait(requests);
+                          final resultText = '$typePoints';
+
+                          final startTimeEpochSecond_start =
+                          typePoints['SleepSession']['records'][0]['startTime']['epochSecond'];
+                          final seoul = getLocation('Asia/Seoul');
+                          final resultText_start = TZDateTime.fromMillisecondsSinceEpoch(
+                            seoul,
+                            startTimeEpochSecond_start * 1000,
                           );
+
+                          final startTimeEpochSecond_end =
+                          typePoints['SleepSession']['records'][0]['endTime']['epochSecond'];
+                          final resultText_end = TZDateTime.fromMillisecondsSinceEpoch(
+                            seoul,
+                            startTimeEpochSecond_end * 1000,
+                          );
+
+                          final formatter = DateFormat('h:mm a');
+                          resultText_start_real = formatter.format(resultText_start);
+                          today_sleep_time=resultText_start_real;
+
+                          resultText_end_real = formatter.format(resultText_end);
+                          today_wake_time=resultText_end_real;
+                          ref.watch(shortTermNotiProvider.notifier).resetTodayAlarm();
+                        } catch (e) {
+                          print(e.toString());
                         }
-                        await Future.wait(requests);
-                        final resultText = '$typePoints';
-
-                        final startTimeEpochSecond_start =
-                        typePoints['SleepSession']['records'][0]['startTime']['epochSecond'];
-                        final seoul = getLocation('Asia/Seoul');
-                        final resultText_start = TZDateTime.fromMillisecondsSinceEpoch(
-                          seoul,
-                          startTimeEpochSecond_start * 1000,
-                        );
-
-                        final startTimeEpochSecond_end =
-                        typePoints['SleepSession']['records'][0]['endTime']['epochSecond'];
-                        final resultText_end = TZDateTime.fromMillisecondsSinceEpoch(
-                          seoul,
-                          startTimeEpochSecond_end * 1000,
-                        );
-
-                        final formatter = DateFormat('h:mm a');
-                        resultText_start_real = formatter.format(resultText_start);
-                        today_sleep_time=resultText_start_real;
-
-                        resultText_end_real = formatter.format(resultText_end);
-                        today_wake_time=resultText_end_real;
+                        _updateResultText();
+                        _updateFirestore();
+                        _updateLongTerm(today_sleep_time);
+                        print(resultText_start_real);
+                        print(resultText_end_real);
+                        ref.watch(shortTermNotiProvider.notifier).resetCaffCompare();
                         ref.watch(shortTermNotiProvider.notifier).resetTodayAlarm();
-                      } catch (e) {
-                        print(e.toString());
-                      }
-                      _updateResultText();
-                      _updateFirestore();
-                      _updateLongTerm(today_sleep_time);
-                      print(resultText_start_real);
-                      print(resultText_end_real);
-                      ref.watch(shortTermNotiProvider.notifier).resetCaffCompare();
-                      ref.watch(shortTermNotiProvider.notifier).resetTodayAlarm();
-                      setState(() {});
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: selecteddate == todaydate ? Colors.brown : Colors.white,
-                      shape: selecteddate == todaydate
-                          ? RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      )
-                          : null, // Set shape to null if it's not today's date
-                      elevation: selecteddate == todaydate ? 5 : 0,
-                    ),
-                    child: Text(selecteddate == todaydate ? '가져오기' : ''),
-                  ),
-                SizedBox(width: 10),
-                if (selecteddate == todaydate)
-                  ElevatedButton(
-                    onPressed: () async {
-                      _showManualInputPopup(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.brown,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+                        setState(() {});
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: selecteddate == todaydate ? Colors.brown : Colors.white,
+                        shape: selecteddate == todaydate
+                            ? RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        )
+                            : null, // Set shape to null if it's not today's date
+                        elevation: selecteddate == todaydate ? 3 : 0,
                       ),
+                      child: Text(selecteddate == todaydate ? '가져오기' : '', style: const TextStyle(color: Color(0xffF9F8F7)),),
                     ),
-                    child: Text('입력'),
-                  ),
+                    const SizedBox(width: 10),
+                    if (selecteddate == todaydate)
+                      ElevatedButton(
+                        onPressed: () async {
+                          _showManualInputPopup(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.brown,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          elevation: 3,
+                        ),
+                        child: const Text('입력', style: TextStyle(color: Color(0xffF9F8F7)),),
+                      ),
+                  ],
+                ),
               ],
             ),
+            const SizedBox(height: 5),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
-                  width: 165,
-                  height: 100,
+                  width: 160,
+                  height: 80,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
@@ -168,7 +176,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         '취침시간',
                         style: TextStyle(
                           color: Colors.black,
@@ -178,9 +186,9 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                       SizedBox(height: 10),
                       Text(
                         selecteddate == todaydate ? today_sleep_time : widget.sleepTime ?? '',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
-                          fontSize: 23.0,
+                          fontSize: 22.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -188,8 +196,8 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                   ),
                 ),
                 Container(
-                  width: 165,
-                  height: 100,
+                  width: 160,
+                  height: 80,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
@@ -201,19 +209,19 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         '기상시간',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 16.0,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text(
                         selecteddate == todaydate ? today_wake_time : widget.wakeTime ?? '',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
-                          fontSize: 23.0,
+                          fontSize: 22.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
