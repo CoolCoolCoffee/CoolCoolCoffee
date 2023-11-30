@@ -1,26 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coolcoolcoffee_front/provider/sleep_param_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../menu/menu_add_page.dart';
 
-class RecommendPage extends StatefulWidget {
+class RecommendPage extends ConsumerStatefulWidget {
   const RecommendPage({super.key});
 
   @override
-  State<RecommendPage> createState() => _RecommendPageState();
+  _RecommendPageState createState() => _RecommendPageState();
 }
 
-class _RecommendPageState extends State<RecommendPage> {
+class _RecommendPageState extends ConsumerState<RecommendPage> {
   String uid = FirebaseAuth.instance.currentUser!.uid;
   var db = FirebaseFirestore.instance;
-
+  int userCaffeine = 0;
   // 나중에 마실 수 있는 카페인 값 받아오기
-  var userCaffeine = 100;
 
   @override
   Widget build(BuildContext context) {
+    userCaffeine = ref.watch(sleepParmaProvider).recommendCaff;
     /*var userFavBrand;
     var wait = FirebaseFirestore.instance.collection('Users').doc('ZZDgEPAMHTeb57Ox1aSgtqOXpMB2').collection('user_favorite').doc('favorite_brand').get().then((value){
       userFavBrand = value['brand_list'];
