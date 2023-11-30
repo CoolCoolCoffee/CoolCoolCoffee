@@ -42,7 +42,7 @@ class _DrinkListWidgetState extends State<DrinkListWidget> {
     return Column(
       children: [
         Container(
-          margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+          margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
           child: Row(
             children: [
               Container(
@@ -78,18 +78,21 @@ class _DrinkListWidgetState extends State<DrinkListWidget> {
                   ],
                 ),
               ),
-              ElevatedButton(
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPage()));
-                },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(3),
+              Container(
+                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                child: ElevatedButton(
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPage()));
+                  },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(3),
+                      ),
+                      backgroundColor: widget.isControlMode? Color(0xff93796A) : Color(0xffF9F8F7),
+                      minimumSize: const Size(20, 20),
                     ),
-                    backgroundColor: widget.isControlMode? Color(0xff93796A) : Color(0xffF9F8F7),
-                    minimumSize: const Size(20, 20),
-                  ),
-                  child: Text('+', style: TextStyle(color: widget.isControlMode? Color(0xffF9F8F7) : Color(0xff93796A), fontSize: 22),)),
+                    child: Text('+', style: TextStyle(color: widget.isControlMode? Color(0xffF9F8F7) : Color(0xff93796A), fontSize: 22),)),
+              ),
             ],
           ),
         ),

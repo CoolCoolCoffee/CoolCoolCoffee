@@ -210,34 +210,37 @@ class _UserFormState extends State<SignUpSecondPage> {
                             const SizedBox(height: 10),
                             Row(
                               children: [
-                                Column(
-                                  children: [
-                                    ToggleButtons(
-                                      direction: Axis.vertical,
-                                        isSelected: isSelected1,
-                                        onPressed: toggleSelect1,
-                                        selectedColor: Colors.white,
-                                        fillColor: Colors.brown.withOpacity(0.6),
-                                        borderRadius: const BorderRadius.all(Radius.circular(4)),
-                                        constraints: const BoxConstraints(
-                                          minHeight: 45.0,
-                                          minWidth: 60.0,
-                                        ),
-                                        children: const [
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: 10),
-                                            child: Text('AM', style: TextStyle(fontSize: 16),),),
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: 10),
-                                            child: Text('PM', style: TextStyle(fontSize: 16),),),
-                                        ]
-                                    ),
-                                  ],
+                                Container(
+                                  margin: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                                  child: Column(
+                                    children: [
+                                      ToggleButtons(
+                                        direction: Axis.vertical,
+                                          isSelected: isSelected1,
+                                          onPressed: toggleSelect1,
+                                          selectedColor: Colors.white,
+                                          fillColor: Colors.brown.withOpacity(0.6),
+                                          borderRadius: const BorderRadius.all(Radius.circular(4)),
+                                          constraints: const BoxConstraints(
+                                            minHeight: 45.0,
+                                            minWidth: 60.0,
+                                          ),
+                                          children: const [
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(horizontal: 10),
+                                              child: Text('AM', style: TextStyle(fontSize: 16),),),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(horizontal: 10),
+                                              child: Text('PM', style: TextStyle(fontSize: 16),),),
+                                          ]
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                const SizedBox(width: 20,),
                                 // 취침 시간 '시'
-                                SizedBox(
-                                  width: 100,
+                                Container(
+                                  margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                  width: 70,
                                   child: TextFormField(
                                     keyboardType: TextInputType.number,
                                     controller: _bedHourController,
@@ -261,12 +264,11 @@ class _UserFormState extends State<SignUpSecondPage> {
                                     },
                                   ),
                                 ),
-                                const SizedBox(width: 10,),
                                 const Text(':', style: TextStyle(fontSize: 30),),
-                                const SizedBox(width: 10,),
                                 // 취침 시간 '분'
-                                SizedBox(
-                                  width: 100,
+                                Container(
+                                  margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                  width: 70,
                                   child: TextFormField(
                                     keyboardType: TextInputType.number,
                                     controller: _bedMinController,
@@ -313,8 +315,9 @@ class _UserFormState extends State<SignUpSecondPage> {
                                   children: [
                                     const SizedBox(width: 50,),
                                     // 취침 시간 '시'
-                                    SizedBox(
-                                      width: 100,
+                                    Container(
+                                      margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                      width: 70,
                                       child: TextFormField(
                                         keyboardType: TextInputType.number,
                                         controller: _goodSleepHourController,
@@ -338,12 +341,11 @@ class _UserFormState extends State<SignUpSecondPage> {
                                         },
                                       ),
                                     ),
-                                    const SizedBox(width: 10,),
                                     const Text('시간', style: TextStyle(fontSize: 15),),
-                                    const SizedBox(width: 10,),
                                     // 취침 시간 '분'
-                                    SizedBox(
-                                      width: 100,
+                                    Container(
+                                      margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                      width: 70,
                                       child: TextFormField(
                                         keyboardType: TextInputType.number,
                                         controller: _goodSleepMinController,
@@ -367,9 +369,7 @@ class _UserFormState extends State<SignUpSecondPage> {
                                         },
                                       ),
                                     ),
-                                    const SizedBox(width: 10,),
                                     const Text('분', style: TextStyle(fontSize: 15),),
-                                    const SizedBox(width: 10,),
                                   ],
                                 ),
                               ],
