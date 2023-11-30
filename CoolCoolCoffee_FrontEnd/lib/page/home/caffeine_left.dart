@@ -76,7 +76,9 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
     }
     setState(() {
       _calPredictSleepTime();
-      _calRecommendCaff();
+      if(ref.watch(sleepParmaProvider).goal_sleep_time !=''&& ref.watch(shortTermNotiProvider).predict_sleep_time!=''){
+        _calRecommendCaff();
+      }
     });
   }
   void _calPredictSleepTime(){
@@ -131,7 +133,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
     double goal_time_double = 0;
     String predict_time = ref.watch(shortTermNotiProvider).predict_sleep_time;
     double predict_time_double = 0;
-
+    print('$goal_time !!!!!!!!! $predict_time');
     if(goal_time.contains('AM')){
       var arr = goal_time.split(' ');
       var hour_min = arr[0].split(':');
@@ -222,7 +224,9 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
     final prov = ref.watch(sleepParmaProvider.notifier);
 
     _calPredictSleepTime();
-    _calRecommendCaff();
+    if(ref.watch(sleepParmaProvider).goal_sleep_time !=''&& ref.watch(shortTermNotiProvider).predict_sleep_time!=''){
+      _calRecommendCaff();
+    }
     //listen으로 바꾸는 거 고려해야할듯
     return Container(
       child: Center(

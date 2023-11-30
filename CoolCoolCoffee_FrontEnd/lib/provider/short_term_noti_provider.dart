@@ -40,7 +40,12 @@ class ShortTermNotiNotifier extends StateNotifier<ShortTermParam>{
       var arr = state.goal_sleep_time.split(' ');
       arr = arr[0].split(':');
       goal_sleep_time_hour = double.parse(arr[0]);
-      if(isAm) goal_sleep_time_hour += 24;
+      if(isAm) {
+        if(goal_sleep_time_hour==12) goal_sleep_time_hour-=12;
+        goal_sleep_time_hour += 24;
+      }else{
+        goal_sleep_time_hour+=12;
+      }
       goal_sleep_time_min = double.parse(arr[1])/60.0;
 
       if(state.predict_sleep_time.contains('AM')){
@@ -49,14 +54,21 @@ class ShortTermNotiNotifier extends StateNotifier<ShortTermParam>{
         isAm = false;
       }
       arr = state.predict_sleep_time.split(' ');
+      print('${state.predict_sleep_time}');
       arr = arr[0].split(':');
 
       predict_sleep_time_hour = double.parse(arr[0]);
 
-      if(isAm) predict_sleep_time_hour += 24;
+      if(isAm) {
+        if(predict_sleep_time_hour==12) predict_sleep_time_hour-=12;
+        predict_sleep_time_hour += 24;
+      }else{
+        predict_sleep_time_hour+=12;
+      }
       predict_sleep_time_min = double.parse(arr[1])/60.0;
 
       print('today Alramr ${state.todayAlarm}');
+      print('${goal_sleep_time_hour+goal_sleep_time_min} ,, ${predict_sleep_time_hour+predict_sleep_time_min})');
       if((goal_sleep_time_hour+goal_sleep_time_min)>=(predict_sleep_time_hour+predict_sleep_time_min)){
         //short term 2
         print('short term 2');
@@ -80,7 +92,7 @@ class ShortTermNotiNotifier extends StateNotifier<ShortTermParam>{
           print('delay $delayed_hour : $delayed_minutes');
           DateTime dt = DateTime.now();
           hour = dt.hour;
-          minute = dt.minute + 10;
+          minute = dt.minute + 2;
           if(minute >= 60){
             hour +=1;
             if(hour >=24)hour-=24;

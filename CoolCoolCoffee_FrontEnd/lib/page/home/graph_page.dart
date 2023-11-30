@@ -47,17 +47,19 @@ class _GraphPageState extends ConsumerState<GraphPage> {
     int count = 0;
 
     timer = Timer.periodic(const Duration(milliseconds: 5), (timer) {
-      if(t>40) {
+      if(t>36) {
         timer.cancel();
         initFin = true;
       }
-      setState((){
-        h1Points.add(FlSpot(t, 100 *(h1 + a * sin(2 * pi * sleepCalFunc.timeMap(t)))));
-        h2Points.add(FlSpot(t, 100 * (h2 + a * sin(2 * pi * sleepCalFunc.timeMap(t)))));
-        if(calSleepGraph(t) != null) {
-          sleepPoints.add(calSleepGraph(t)!);
-        }
-      });
+      if(t>3){
+        setState((){
+          h1Points.add(FlSpot(t, 100 *(h1 + a * sin(2 * pi * sleepCalFunc.timeMap(t)))));
+          h2Points.add(FlSpot(t, 100 * (h2 + a * sin(2 * pi * sleepCalFunc.timeMap(t)))));
+          if(calSleepGraph(t) != null) {
+            sleepPoints.add(calSleepGraph(t)!);
+          }
+        });
+      }
       t+=step;
       count++;
       if(count%6 == 0) t = t.ceilToDouble();
@@ -239,25 +241,25 @@ class _GraphPageState extends ConsumerState<GraphPage> {
     Widget text;
     switch (value){
       case 5.0:
-        text = const Text('5', style: style,);
+        text = const Text('5AM', style: style,);
         break;
       case 10.0:
-        text = const Text('10',style: style,);
+        text = const Text('10AM',style: style,);
         break;
       case 15.0:
-        text = const Text('15',style: style,);
+        text = const Text('3PM',style: style,);
         break;
       case 20.0:
-        text = const Text('20',style: style,);
+        text = const Text('8PM',style: style,);
         break;
       case 25.0:
-        text = const Text('25',style: style,);
+        text = const Text('1AM',style: style,);
         break;
       case 30.0:
-        text = const Text('30',style: style,);
+        text = const Text('6AM',style: style,);
         break;
       case 35.0:
-        text = const Text('35',style: style,);
+        text = const Text('11AM',style: style,);
         break;
       default:
         text = const Text('');

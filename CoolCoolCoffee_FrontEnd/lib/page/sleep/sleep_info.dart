@@ -265,8 +265,8 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
           bool isTooLate = false;
           DateTime dt = DateTime.now();
           //int hour = dt.hour+1;
-          int hour = dt.hour;
-          int minute = dt.minute+2;
+          int hour = dt.hour+1;
+          int minute = dt.minute;
           if(hour>=24){
             hour=-24;
           }
@@ -322,8 +322,8 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
           bool isTooLate = false;
           DateTime dt = DateTime.now();
           //int hour = dt.hour+1;
-          int hour = dt.hour;
-          int minute = dt.minute+2;
+          int hour = dt.hour+1;
+          int minute = dt.minute;
           if(hour>=24){
             hour=-24;
           }

@@ -77,8 +77,8 @@ class _DrinkListWidgetState extends State<DrinkListWidget> {
                   ],
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+              Expanded(
+                //margin: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: ElevatedButton(
                   onPressed: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context) => MenuPage()));
@@ -91,42 +91,6 @@ class _DrinkListWidgetState extends State<DrinkListWidget> {
                       minimumSize: const Size(20, 20),
                     ),
                     child: Text('+', style: TextStyle(color: Color(0xffF9F8F7), fontSize: 22),)),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              RichText(
-                  text : TextSpan(
-                    children: [
-                      TextSpan(
-                        text: "앞으로 ",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const TextSpan(
-                        text: "300 mg ",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xffD4936F),
-                        ),
-                      ),
-                      TextSpan(
-                        text: "마실 수 있어요!",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ]
-                  )
               ),
             ],
           ),
