@@ -646,7 +646,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                               ],
                             ),
                             Container(
-                              margin: const EdgeInsets.only(left: 30, right: 10),
+                              margin: const EdgeInsets.only(left: 10, right: 10),
                               width: 60,
                               height: 60,
                               child: TextField(
@@ -712,7 +712,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                           ],
                         ),
                         Container(
-                          margin: const EdgeInsets.only(left: 30, right: 10),
+                          margin: const EdgeInsets.only(left: 10, right: 10),
                           width: 60,
                           height: 60,
                           child: TextField(
