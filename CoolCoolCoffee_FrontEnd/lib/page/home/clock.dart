@@ -265,7 +265,8 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
   @override
   Widget build(BuildContext context){
     final prov = ref.watch(sleepParmaProvider);
-    print('build ${prov.goal_sleep_time}');
+    // print('build ${prov.goal_sleep_time}');
+    // print('sleepEnteredTime!!! $sleepEnteredTime');
     return Column(
       //crossAxisAlignment: CrossAxisAlignment.start,
       children: [
