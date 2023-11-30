@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../menu/conveni_add_page.dart';
 import '../menu/menu_add_page.dart';
 
 class RecommendPage extends ConsumerStatefulWidget {
@@ -53,8 +54,8 @@ class _RecommendPageState extends ConsumerState<RecommendPage> {
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.3),
-                    spreadRadius: 5,
-                    blurRadius: 7,
+                    spreadRadius: 2,
+                    blurRadius: 3,
                     offset: const Offset(0, 3),
                   ),
                 ],
@@ -75,51 +76,60 @@ class _RecommendPageState extends ConsumerState<RecommendPage> {
                     var userFavoriteBrandList = snapshot.data!;
                     var brand_list = userFavoriteBrandList['brand_list'];
                     //print(brand_list);
-                    return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          for(var brand in brand_list)
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height *(2/9),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(7),
-                                    child: Text(
-                                        "  $brand 추천 메뉴",
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 17,
+                    return Container(
+                      margin: const EdgeInsets.only(left: 10, right: 10),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            for(var brand in brand_list)
+                              SizedBox(
+                                height: MediaQuery.of(context).size.height *(2/9),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(7),
+                                      child: Text(
+                                          "  $brand 추천 메뉴",
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 17,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  StreamBuilder(
-                                    stream: db.collection('Cafe_brand').doc(brand)
-                                        .collection('menus')
-                                        .where('caffeine', isLessThanOrEqualTo: userCaffeine)
-                                        .where('caffeine',isGreaterThan: userCaffeine-50)
-                                        .limit(3).snapshots(),
-                                    builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot){
-                                      if(streamSnapshot.hasData){
-                                        return GridView.builder(
-                                          shrinkWrap: true,
-                                          itemCount: streamSnapshot.data!.docs.length,
-                                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 3,
-                                            childAspectRatio: 1,
-                                            mainAxisSpacing: 10,
-                                            crossAxisSpacing: 5,
-                                          ),
-                                          itemBuilder: (context, index){
-                                            final DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[index];
-                                            return GestureDetector(
-                                              onTap: (){
-                                                Navigator.push(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: documentSnapshot, brandName: brand, size: documentSnapshot['basic_size'], shot: '',)));
-                                              },
-                                              child:
-                                                Container(
-                                                  child: Stack(
+                                    StreamBuilder(
+                                      stream: db.collection('Cafe_brand').doc(brand)
+                                          .collection('menus')
+                                          .where('caffeine', isLessThanOrEqualTo: userCaffeine)
+                                          .where('caffeine',isGreaterThan: userCaffeine-50)
+                                          .limit(3).snapshots(),
+                                      builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot){
+                                        if(streamSnapshot.hasData){
+                                          return GridView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: streamSnapshot.data!.docs.length,
+                                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 3,
+                                              childAspectRatio: 1,
+                                              mainAxisSpacing: 10,
+                                              crossAxisSpacing: 5,
+                                            ),
+                                            itemBuilder: (context, index){
+                                              final DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[index];
+                                              return GestureDetector(
+                                                onTap: (){
+                                                  if(brand =='편의점'){
+                                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ConveniAddPage(menuSnapshot: documentSnapshot, brandName: brand)));
+                                                  }else {
+                                                    Navigator.push(context, MaterialPageRoute(builder: (context) => MenuAddPage(
+                                                                  menuSnapshot: documentSnapshot,
+                                                                  brandName: brand,
+                                                                  size: documentSnapshot['basic_size'],
+                                                                  shot: '',)));
+                                                  }
+                                                  },
+                                                child:
+                                                  Stack(
                                                     children: [
                                                       Container(
                                                         margin: const EdgeInsets.all(5),
@@ -142,7 +152,7 @@ class _RecommendPageState extends ConsumerState<RecommendPage> {
                                                       alignment: Alignment.bottomCenter,
                                                       child: Container(
                                                       alignment: Alignment.bottomLeft,
-                                                      height: 40,
+                                                      height: 50,
                                                       margin: const EdgeInsets.all(5),
                                                       decoration: BoxDecoration(
                                                         borderRadius: const BorderRadius.only(bottomRight: Radius.circular(20)),
@@ -154,42 +164,50 @@ class _RecommendPageState extends ConsumerState<RecommendPage> {
                                                         offset: const Offset(0,5)
                                                         )]
                                                       ),
-                                                      child: Column(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                                                        children: [
-                                                          Text(
-                                                            brand,
-                                                            style: const TextStyle(
-                                                              fontSize: 12,
-                                                              color: Colors.grey
+                                                      child: Container(
+                                                        margin: const EdgeInsets.all(3),
+                                                        child: Column(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                          children: [
+                                                            Center(
+                                                              child: Text(
+                                                                brand,
+                                                                style: const TextStyle(
+                                                                  fontSize: 10,
+                                                                  color: Colors.grey,
+                                                                  overflow: TextOverflow.ellipsis,
+                                                                ),
+                                                              ),
                                                             ),
+                                                           Center(
+                                                             child: Text(
+                                                                 documentSnapshot.id,style: const TextStyle(fontSize: 12, overflow: TextOverflow.ellipsis,),
+                                                               maxLines: 1,
+                                                             ),
+                                                           ),
+                                                          ],
                                                           ),
-                                                         Text(
-                                                             documentSnapshot.id,
-                                                           maxLines: 1,
-                                                         ),
-                                                        ],
-                                                        ),
+                                                      ),
                                                      ),
                                                     )
                                                   ],
-                                                ),
-                                              ),
-                                            );
-                                           },
+                                                                                                  ),
+                                              );
+                                             },
 
-                                        );
-                                       }
-                                      else{
-                                        return const CircularProgressIndicator(color: Colors.blue,);
-                                      }
-                                   },
-                                  ),
-                                ],
+                                          );
+                                         }
+                                        else{
+                                          return const CircularProgressIndicator(color: Colors.blue,);
+                                        }
+                                     },
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                        ],
+                          ],
+                      ),
                     );
                   }
                   else{

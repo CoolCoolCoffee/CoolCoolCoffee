@@ -94,91 +94,97 @@ class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
                           UserCaffeineDetailPage(userCaffeine: userCaffeine, date: date,))
                       );
                     },
-                    child: Container(
-                      child: Stack(
-                        children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width / 3 - 5,
-                              margin: EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.grey.withOpacity(0.7),
-                                        spreadRadius: 0,
-                                        blurRadius: 5.0,
-                                        offset: Offset(0, 5))
-                                  ],
-                                  //color: Colors.green,
-                                  image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image:
-                                          NetworkImage(userCaffeine.menuImg))),
-                            ),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: Container(
-                                alignment: Alignment.topLeft,
-                                margin: EdgeInsets.only(top: 5,left: 5),
-                                height: 10,
-                                width: 10,
-                                child:
-                                IconButton(
-                                  icon: Icon(Icons.delete,color: Colors.white,), onPressed: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (
-                                      context) =>
-                                      UserCaffeineDetailPage(userCaffeine: userCaffeine, date: date,))
-                                  );
-                                },
-                                ),
+                    child: Stack(
+                      children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width / 3 - 5,
+                            margin: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey.withOpacity(0.7),
+                                      spreadRadius: 0,
+                                      blurRadius: 5.0,
+                                      offset: const Offset(0, 5))
+                                ],
+                                //color: Colors.green,
+                                image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image:
+                                        NetworkImage(userCaffeine.menuImg))),
+                          ),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Container(
+                              alignment: Alignment.topLeft,
+                              margin: const EdgeInsets.only(top: 5,left: 5),
+                              height: 10,
+                              width: 10,
+                              child:
+                              IconButton(
+                                icon: const Icon(Icons.delete,color: Colors.white,), onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (
+                                    context) =>
+                                    UserCaffeineDetailPage(userCaffeine: userCaffeine, date: date,))
+                                );
+                              },
                               ),
                             ),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: FractionallySizedBox(
-                                heightFactor: 0.3,
+                          ),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: FractionallySizedBox(
+                              heightFactor: 0.4,
+                              child: Container(
+                                width: MediaQuery.of(context).size.width / 3 - 5,
+                                alignment: Alignment.bottomLeft,
+                                margin: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.only(
+                                        bottomRight: Radius.circular(20)),
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.grey.withOpacity(0.7),
+                                          spreadRadius: 0,
+                                          blurRadius: 5.0,
+                                          offset: const Offset(0, 5))
+                                    ]),
                                 child: Container(
-                                  width:
-                                      MediaQuery.of(context).size.width / 3 - 5,
-                                  alignment: Alignment.bottomLeft,
-                                  margin: EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          bottomRight: Radius.circular(20)),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Colors.grey.withOpacity(0.7),
-                                            spreadRadius: 0,
-                                            blurRadius: 5.0,
-                                            offset: Offset(0, 5))
-                                      ]),
+                                  margin: const EdgeInsets.all(3),
                                   child: Column(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.start,
                                     crossAxisAlignment:
                                         CrossAxisAlignment.stretch,
                                     children: [
-                                      Text(
-                                        userCaffeine.brand,
-                                        style: TextStyle(
-                                            fontSize: 10, color: Colors.grey),
-                                      ),
-                                      Text(
-                                        userCaffeine.menuId,
-                                        style: TextStyle(
-                                          fontSize: 12,
+                                      Center(
+                                        child: Text(
+                                          userCaffeine.brand,
+                                          style: const TextStyle(
+                                              fontSize: 10,
+                                              color: Colors.grey,
+                                              overflow: TextOverflow.ellipsis),
                                         ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Center(
+                                        child: Text(
+                                          userCaffeine.menuId,
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       )
                                     ],
                                   ),
                                 ),
                               ),
-                            )
-                        ],
-                      ),
+                            ),
+                          )
+                      ],
                     ),
                   );
                 });
