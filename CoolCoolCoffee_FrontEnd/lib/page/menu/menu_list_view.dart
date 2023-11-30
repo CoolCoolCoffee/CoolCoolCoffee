@@ -166,9 +166,10 @@ class MenuListViewState extends ConsumerState<MenuListView>{
                             children: [
                               Text(
                                 brandName,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 12,
-                                    color: Colors.grey
+                                    color: Colors.grey,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               Text(
