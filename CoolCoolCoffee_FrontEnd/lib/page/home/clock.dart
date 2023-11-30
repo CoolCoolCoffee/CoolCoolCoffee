@@ -96,7 +96,6 @@ class _EditPopupState extends State<EditPopup> {
                     ),
                   ],
                 ),
-                const SizedBox(width: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
