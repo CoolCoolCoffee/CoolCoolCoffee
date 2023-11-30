@@ -125,7 +125,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               SizedBox(height: 10),
               ClockWidget(),
               SizedBox(height: 10),
-              Row(
+              /*Row(
                 children: [
                   ElevatedButton(
                     onPressed: () {
@@ -156,7 +156,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     child: Text('알림 허용'),
                   ),
                 ],
-              ),
+              ),*/
               StreamBuilder(
                   stream: FirebaseFirestore.instance.collection('Users').doc(userCaffeineService.uid).collection('user_caffeine').doc(date).snapshots(),
                   builder: (context,snapshot){
