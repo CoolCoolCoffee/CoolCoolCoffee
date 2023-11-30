@@ -10,18 +10,18 @@ import 'package:intl/intl.dart';
 import '../../model/brand.dart';
 import '../../model/user_caffeine.dart';
 
-class MenuAddPage extends StatefulWidget {
-  final String brandName;
+class MenuAddPageShot extends StatefulWidget {
+  final DocumentSnapshot brandSnapshot;
   final DocumentSnapshot menuSnapshot;
   final String size;
   final String shot;
-  const MenuAddPage({super.key, required this.menuSnapshot, required this.brandName, required this.size, required this.shot,});
+  const MenuAddPageShot({super.key, required this.menuSnapshot, required this.brandSnapshot, required this.size, required this.shot,});
 
   @override
-  State<MenuAddPage> createState() => _MenuAddPageState();
+  State<MenuAddPageShot> createState() => _MenuAddPageShotState();
 }
 
-class _MenuAddPageState extends State<MenuAddPage> {
+class _MenuAddPageShotState extends State<MenuAddPageShot> {
   //final timeController = TextEditingController();
   num _caffeine = 0;
   String _size = "";
@@ -37,10 +37,22 @@ class _MenuAddPageState extends State<MenuAddPage> {
   });
   String _shot = "";
   _changeShotCallback(String shot, num caffeine) => setState((){
-    _shot = shot;
-    _caffeine += caffeine;
+    if(shot =='샷 추가'){
+      if(_shot =='연하게'){
+        _caffeine*=2;
+      }
+      _shot = shot;
+      _caffeine += caffeine;
+    }
+    if(shot=='연하게'){
+      if(_shot=='샷 추가'){
+        _caffeine+=caffeine;
+      }
+      _shot = shot;
+      _caffeine~/=2;
+    }
   });
-  late String _brand;
+  late DocumentSnapshot _brand;
   late DocumentSnapshot _menu;
   late List<MapEntry<String,dynamic>> sizeMap;
   late Map<String,dynamic> sortedSize;
@@ -56,13 +68,13 @@ class _MenuAddPageState extends State<MenuAddPage> {
     userCaffeineService = UserCaffeineService();
     _size = widget.size;
     _shot = widget.shot;
-    _brand = widget.brandName;
+    _brand = widget.brandSnapshot;
     _menu = widget.menuSnapshot;
     sizeMap = _menu['caffeine_per_size'].entries.toList();
     sizeMap.sort((m1,m2) => m1.value.compareTo(m2.value));
     sortedSize = Map.fromEntries(sizeMap);
     sizeSelected = List<bool>.filled(sortedSize.length, false);
-    shotControl = {'연하게':-10,'샷 추가':20};
+    shotControl = {'연하게':-(_brand['shot']),'샷 추가':_brand['shot']};
     shotSelected = List<bool>.filled(shotControl.length, false);
     if(_size != ""){
       int i = 0;
@@ -119,7 +131,7 @@ class _MenuAddPageState extends State<MenuAddPage> {
         children: [
           Expanded(
             flex: 3,
-            child: MenuImgNameTile(brandName: _brand,menuSnapshot: _menu, ),
+            child: MenuImgNameTile(brandName: _brand.id,menuSnapshot: _menu, ),
           ),
           Container(
             margin: const EdgeInsets.only(top: 10),
@@ -312,7 +324,7 @@ class _MenuAddPageState extends State<MenuAddPage> {
                       padding: const EdgeInsets.only(left: 10,top: 5,bottom: 5,),
                       child: ElevatedButton(
                         onPressed: (){
-                          userCaffeineService.addNewUserCaffeine(today, UserCaffeine(drinkTime: time, menuId: _menu.id, brand: _brand, menuSize: _size, shotAdded: 0, caffeineContent: _caffeine, menuImg: _menu['menu_img']));
+                          userCaffeineService.addNewUserCaffeine(today, UserCaffeine(drinkTime: time, menuId: _menu.id, brand: _brand.id, menuSize: _size, shotAdded: 0, caffeineContent: _caffeine, menuImg: _menu['menu_img']));
                           Navigator.popUntil(context, (route) => route.isFirst);
                         },
                         style: ElevatedButton.styleFrom(

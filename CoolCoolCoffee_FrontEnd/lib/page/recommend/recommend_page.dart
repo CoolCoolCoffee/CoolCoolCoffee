@@ -9,6 +9,7 @@ import '../../function/mode_color.dart';
 import '../../provider/color_mode_provider.dart';
 import '../menu/conveni_add_page.dart';
 import '../menu/menu_add_page.dart';
+import '../menu/menu_add_page_shot.dart';
 
 class RecommendPage extends ConsumerStatefulWidget {
   const RecommendPage({super.key});
@@ -23,6 +24,18 @@ class _RecommendPageState extends ConsumerState<RecommendPage> {
   int userCaffeine = 0;
   // 나중에 마실 수 있는 카페인 값 받아오기
 
+  Future<void> _fetchBrand(DocumentSnapshot documentSnapshot, String brand) async{
+    DocumentSnapshot<Map<String,dynamic>> brandDoc =
+    await FirebaseFirestore.instance.collection('Cafe_brand').doc(brand).get();
+    var brandDocument = brandDoc;
+    Navigator.push(context, MaterialPageRoute(builder: (
+        context) =>
+        MenuAddPageShot(menuSnapshot: documentSnapshot,
+          brandSnapshot: brandDocument,
+          size: documentSnapshot['basic_size'],
+          shot: '',)));
+    //setState(() {});
+  }
   @override
   Widget build(BuildContext context) {
     userCaffeine = ref.watch(sleepParmaProvider).recommendCaff;
@@ -125,11 +138,7 @@ class _RecommendPageState extends ConsumerState<RecommendPage> {
                                                   if(brand =='편의점'){
                                                     Navigator.push(context, MaterialPageRoute(builder: (context)=>ConveniAddPage(menuSnapshot: documentSnapshot, brandName: brand)));
                                                   }else {
-                                                    Navigator.push(context, MaterialPageRoute(builder: (context) => MenuAddPage(
-                                                                  menuSnapshot: documentSnapshot,
-                                                                  brandName: brand,
-                                                                  size: documentSnapshot['basic_size'],
-                                                                  shot: '',)));
+                                                    _fetchBrand(documentSnapshot,brand);
                                                   }
                                                   },
                                                 child:

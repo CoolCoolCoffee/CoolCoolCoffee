@@ -8,6 +8,7 @@ class CameraFunc{
   Future<Map<String, dynamic>> fetchMenuFromAppCature(RecognizedText recText) async {
     Map<String,dynamic> map= {};
     String brand = "";
+    //var brandDocument;
     for (TextBlock block in recText.blocks) {
       if(map["success"]!=null){
         break;
@@ -54,7 +55,9 @@ class CameraFunc{
       map.addAll({"success":false});
     }
     if(map["success"]){
-      map.addAll({"brand":brand});
+      DocumentSnapshot<Map<String,dynamic>> brandDoc =
+      await FirebaseFirestore.instance.collection('Cafe_brand').doc(brand).get();
+      map.addAll({"brand":brandDoc});
     }
     return map;
   }
@@ -383,7 +386,9 @@ class CameraFunc{
   Future<Map<String,dynamic>> fetchMenuFromStarbucksLabel(RecognizedText recText) async{
     Map<String,dynamic> ret = {};
     String brand = "스타벅스";
-    ret.addAll({"brand":brand});
+    DocumentSnapshot<Map<String,dynamic>> brandDoc =
+    await FirebaseFirestore.instance.collection('Cafe_brand').doc(brand).get();
+    ret.addAll({"brand":brandDoc});
     bool ice = false;
     bool success = false;
     String menu = "";

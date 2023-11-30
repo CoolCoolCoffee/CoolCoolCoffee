@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/page/menu/conveni_add_page.dart';
-import 'package:coolcoolcoffee_front/page/menu/star_list_view.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,11 +10,23 @@ import '../../model/user_favorite_drink.dart';
 import '../../provider/star_provider.dart';
 import '../../service/user_favorite_drink_service.dart';
 import 'menu_add_page.dart';
+import 'menu_add_page_shot.dart';
 
 class StarPage extends ConsumerWidget {
   final Function starCallback;
   const StarPage({super.key, required this.starCallback});
-
+  Future<void> _fetchBrand(DocumentSnapshot documentSnapshot, BuildContext context, String brand) async{
+    DocumentSnapshot<Map<String,dynamic>> brandDoc =
+    await FirebaseFirestore.instance.collection('Cafe_brand').doc(brand).get();
+    var brandDocument = brandDoc;
+    Navigator.push(context, MaterialPageRoute(builder: (
+        context) =>
+        MenuAddPageShot(menuSnapshot: documentSnapshot,
+          brandSnapshot: brandDocument,
+          size: '',
+          shot: '',)));
+    //setState(() {});
+  }
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final UserFavoriteDrinkService userFavoriteDrinkService = UserFavoriteDrinkService();
@@ -69,12 +81,13 @@ class StarPage extends ConsumerWidget {
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>ConveniAddPage(menuSnapshot: documentSnapshot, brandName: temp['brand'])));
                     }
                     else{
-                      Navigator.push(context, MaterialPageRoute(builder: (
+                      _fetchBrand(documentSnapshot,context,temp['brand']);
+                      /*Navigator.push(context, MaterialPageRoute(builder: (
                           context) =>
                           MenuAddPage(menuSnapshot: documentSnapshot,
                             brandName: temp['brand'],
                             size: '',
-                            shot: '',)));
+                            shot: '',)));*/
                     }
                   },
                   child: //SingleChildScrollView(

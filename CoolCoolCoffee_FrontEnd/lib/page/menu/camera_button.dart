@@ -3,6 +3,7 @@ import 'package:coolcoolcoffee_front/function/camera_functions.dart';
 import 'package:coolcoolcoffee_front/page/menu/brand_check.dart';
 import 'package:coolcoolcoffee_front/page/menu/loading_menu.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_add_page.dart';
+import 'package:coolcoolcoffee_front/page/menu/menu_add_page_shot.dart';
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
@@ -65,7 +66,7 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
     if(cameraMode=="Starbucks label"){
       var ret = await CameraFunc().fetchMenuFromStarbucksLabel(korRecognizedText);
       if(ret["success"]){
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: ret["document"], brandName: ret["brand"], size: ret["size"],shot: ret["shot"],)));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MenuAddPageShot(menuSnapshot: ret["document"], brandSnapshot: ret["brand"], size: ret["size"],shot: ret["shot"],)));
       }else{
         Navigator.pop(context);
         _failedDialogBuilder(context);
@@ -74,7 +75,7 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
     else if(cameraMode=="App Capture"){
       var ret = await CameraFunc().fetchMenuFromAppCature(korRecognizedText);
       if(ret["success"]){
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: ret["document"], brandName: ret["brand"], size: ret["size"],shot: "",)));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MenuAddPageShot(menuSnapshot: ret["document"], brandSnapshot: ret["brand"], size: ret["size"],shot: ret['shot'],)));
       }else{
         Navigator.pop(context);
         _failedDialogBuilder(context);
