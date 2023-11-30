@@ -10,6 +10,8 @@ import '../../service/user_caffeine_service.dart';
 import 'caffeine_left.dart';
 import 'drink_list.dart';
 import 'clock.dart';
+import 'package:coolcoolcoffee_front/page/home/longterm_popup_A.dart';
+import 'package:coolcoolcoffee_front/page/home/longterm_popup_B.dart';
 
 import '../menu/menu_page.dart';
 
@@ -47,6 +49,9 @@ class _HomePageState extends ConsumerState<HomePage> {
       ref.watch(sleepParmaProvider.notifier).changeWakeTime(userSleepDoc['wake_time']);
       //print('wake time ${userSleepDoc['wake_time']}');
       ref.watch(sleepParmaProvider.notifier).changeSleepQuality(userSleepDoc['sleep_quality_score']);
+      setState(() {
+        now = today;
+      });
     }
     //오늘 꺼가 없으면 어제꺼로
     else if(yesUserSleepDoc.exists&&yesUserSleepDoc.data()!.containsKey('wake_time')&&yesUserSleepDoc.data()!.containsKey('sleep_quality_score')){
@@ -93,12 +98,38 @@ class _HomePageState extends ConsumerState<HomePage> {
             SizedBox(height: 10),
             ClockWidget(),
             SizedBox(height: 10),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return LongPopup_A();
+                      },
+                    );
+                  },
+                  child: Text('LongTerm_A Feedback'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return LongPopup_B();
+                      },
+                    );
+                  },
+                  child: Text('LongTerm_B Feedback'),
+                ),
+              ],
+            ),
             StreamBuilder(
-                stream: FirebaseFirestore.instance.collection('Users').doc(userCaffeineService.uid).collection('user_caffeine').doc(date).snapshots(),
-                builder: (context,snapshot){
-                  print('좀 바뀌어라 ㅅㅂ');
-                  return CaffeineLeftWidget(snapshots: snapshot,);
-                }),
+              stream: FirebaseFirestore.instance.collection('Users').doc(userCaffeineService.uid).collection('user_caffeine').doc(date).snapshots(),
+              builder: (context,snapshot){
+                print('좀 바뀌어라 ㅅㅂ');
+                return CaffeineLeftWidget(snapshots: snapshot,);
+             }),
             SizedBox(height: 20),
             DrinkListWidget(),
           ],

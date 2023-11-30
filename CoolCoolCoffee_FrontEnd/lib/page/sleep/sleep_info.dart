@@ -285,12 +285,9 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
     }
     //print("sssssssssssssss $currentDate");
   }
-
-
   void _updateResultText() {
     setState(() {});
   }
-
   String convertTo12HourFormat(String time) {
     List<String> parts = time.split(':');
     int hours = int.parse(parts[0]);
@@ -307,8 +304,6 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
 
     return '$hours:$formattedMinutes $amPm';
   }
-
-
   Future<void> _fetchSleepTimeAndUpdateState() async {
     try {
       tz.initializeTimeZones();
@@ -362,7 +357,6 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
       print('Error!: $e');
     }
   }
-
   Future<void> _showManualInputPopup(BuildContext context) async {
     TextEditingController sleepHoursController = TextEditingController();
     TextEditingController sleepMinutesController = TextEditingController();
@@ -564,8 +558,6 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
       },
     );
   }
-
-
   Future<void> _updateFirestoreWithManualInput(String selectedSleepTime, String selectedWakeTime) async {
     String currentDate = DateTime.now().toLocal().toString().split(' ')[0];
 
