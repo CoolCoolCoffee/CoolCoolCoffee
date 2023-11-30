@@ -25,39 +25,44 @@ class _SleepConditionWidgetState extends State<SleepConditionWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.only(left: 20, right: 20),
       color: Colors.white,
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                '피곤도를 기록해주세요',
-                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w500),
-              ),
-              SizedBox(width: 10),
-              ElevatedButton(
-                // onPressed: () async {
-                //   await saveSelectedCondition(); // Use 'await' here
-                // },
-                onPressed: () {
-                  onPressedHandler();
-                  _showConfirmationDialog();// Call asynchronously
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.brown,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  elevation: 5,
+              Container(
+                margin: const EdgeInsets.only(right:10),
+                child: const Text(
+                  '피곤도를 기록해주세요',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                 ),
-                child: Text('저장'),
+              ),
+              Container(
+                width: 80,
+                height: 40,
+                child: ElevatedButton(
+                  onPressed: () {
+                    onPressedHandler(); // Call asynchronously
+                    _showConfirmationDialog();// Cal
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.brown,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    elevation: 3,
+                  ),
+                  child: const Text('저장', style: TextStyle(color: Color(0xffF9F8F7),),),
+                ),
               ),
             ],
           ),
           Container(
             width: 350,
-            padding: EdgeInsets.symmetric(horizontal: 14.0),
+            margin: const EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 14.0),
             decoration: BoxDecoration(
               border: Border.all(
                 color: Colors.brown, // Border color

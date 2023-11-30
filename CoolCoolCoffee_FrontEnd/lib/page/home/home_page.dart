@@ -32,11 +32,13 @@ class _HomePageState extends ConsumerState<HomePage> {
   DateTime now = DateTime.now();
   DateFormat dayFormatter = DateFormat('yyyy-MM-dd');
   String date = '';
+
   @override
   void initState(){
     super.initState();
     _initializeSleepParam();
   }
+
   Future<void> _initializeSleepParam() async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     DateTime today = DateTime.now();
@@ -73,6 +75,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       ref.watch(sleepParmaProvider.notifier).changeSleepQuality(-1);
     }
   }
+
   @override
   Widget build(BuildContext context) {
 
@@ -80,17 +83,17 @@ class _HomePageState extends ConsumerState<HomePage> {
     date = dayFormatter.format(now);
     UserCaffeineService userCaffeineService = UserCaffeineService();
     userCaffeineService.checkExits(date);
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.brown.withOpacity(0.1),
+        backgroundColor: ref.watch(colorModeProvider).isControlMode ? modeColor.controlModeColor['background_color']:modeColor.noSleepModeColor['background_color'],
         appBar: AppBar(
-          title: const Center(
-            child: Text(
-              '쿨쿨커피',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
-              ),
+          centerTitle: true,
+          title: const Text(
+            '쿨쿨커피',
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
             ),
           ),
           actions: [         // 조절, 밤샘 모드 선택 토글
@@ -115,14 +118,12 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ),
           ],
-          backgroundColor: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['page_background']:modeColor.noSleepModeColor['page_background'],
           toolbarHeight: 50,
-          iconTheme: IconThemeData(color: Colors.white),
+          iconTheme: const IconThemeData(color: Colors.white),
         ),
         body: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 10),
               ClockWidget(),
               SizedBox(height: 10),
               /*Row(
@@ -148,12 +149,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                       );
                     },
                     child: Text('LongTerm_B'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      openAppSettings(); // 허용 설정 페이지
-                    },
-                    child: Text('알림 허용'),
                   ),
                 ],
               ),*/

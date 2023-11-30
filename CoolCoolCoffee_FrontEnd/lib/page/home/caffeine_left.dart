@@ -275,7 +275,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
                         ),
                         elevation: 5,
                       ),
-                      child: Column(
+                      child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
@@ -283,12 +283,12 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
                             color: Colors.white,
                             size: 24,
                           ),
-                          SizedBox(width: 8),
+                          SizedBox(width: 5),
                           Text(
                             '그래프',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 16,
+                              fontSize: 14,
                             ),
                           ),
                         ],
@@ -338,11 +338,11 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
   }
   Widget setText(bool sleepNotYet, String bedTime){
     if(sleepNotYet){
-      return Column(
+      return const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            '수면 정보 입력을',
+            '수면 정보를',
             style: TextStyle(
               color: Colors.black,
               fontSize: 20.0,
@@ -350,7 +350,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
           ),
           SizedBox(height: 15),
           Text(
-            '완료해주jj세요!',
+            '입력해주세요!',
             style: TextStyle(
               color: Colors.black,
               fontSize: 20.0,
@@ -360,10 +360,10 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
       );
     }
     if(bedTime == ''){
-      return Column(
+      return const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [Text(
-          '예상 jj수면 시간',
+          '예상 수면 시간',
           style: TextStyle(
             color: Colors.black,
             fontSize: 20.0,
@@ -382,7 +382,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [Text(
-          '예상 jj수면 시간',
+          '예상 수면 시간',
           style: TextStyle(
             color: Colors.black,
             fontSize: 20.0,

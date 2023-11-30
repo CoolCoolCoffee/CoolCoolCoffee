@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_health_connect/flutter_health_connect.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:coolcoolcoffee_front/page/my_page/profile_change_page.dart';
 
@@ -140,6 +141,26 @@ class _MyPageState extends State<MyPage> {
                           SizedBox(width: 8.0), // 아이콘과 텍스트 사이 간격 조절
                           Text(
                             '권한 설정',
+                            style: TextStyle(
+                              color: Colors.black, // 텍스트 색상 설정
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // 알림 설정
+                    TextButton(
+                      onPressed: () {
+                        openAppSettings();
+                      },
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.notifications_active, color: Colors.grey), // 아이콘 추가
+                          SizedBox(width: 8.0), // 아이콘과 텍스트 사이 간격 조절
+                          Text(
+                            '알림 설정',
                             style: TextStyle(
                               color: Colors.black, // 텍스트 색상 설정
                             ),

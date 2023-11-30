@@ -80,136 +80,142 @@ class _EditSleepDialogState extends ConsumerState<EditSleepDialog> {
             //Dialog Main Title
             title: const Center(child: Text('수면 정보 수정', style: TextStyle(fontSize: 18),)),
             content: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 5,),
-                  const Text('평균 취침 시간', ),
-                  const SizedBox(height: 5,),
-                  Row(
-                    children: [
-                      Column(
-                        children: [
-                          ToggleButtons(
-                              direction: Axis.vertical,
-                              isSelected: _isSelected,
-                              onPressed: toggleSelect,
-                              selectedColor: Colors.white,
-                              fillColor: Colors.brown.withOpacity(0.6),
-                              borderRadius: const BorderRadius.all(Radius.circular(4)),
-                              constraints: const BoxConstraints(
-                                minHeight: 45.0,
-                                minWidth: 60.0,
-                              ),
-                              children: const [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 8),
-                                  child: Text('AM', style: TextStyle(fontSize: 16),),),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 8),
-                                  child: Text('PM', style: TextStyle(fontSize: 16),),),
-                              ]
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 20,),
-                      // 취침 시간 '시'
-                      SizedBox(
-                        width: 70,
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            labelText: '시',
-                            border: OutlineInputBorder(),
-                          ),
-                          onChanged: (value){
-                            setState(() {
-                              print('취침 시간 $value 시');
-                              bedHour = int.parse(value);
-                            });
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 10,),
-                      const Text(':', style: TextStyle(fontSize: 30),),
-                      const SizedBox(width: 10,),
-                      // 취침 시간 '분'
-                      SizedBox(
-                        width: 70,
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          decoration: const InputDecoration(
-                            labelText: '분',
-                            border: OutlineInputBorder(),
-                          ),
-                          onChanged: (value){
-                            setState(() {
-                              print('취침 시간 $value 분');
-                              bedMin = int.parse(value);
-                            });
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 10,),
-                    ],
-                  ),
-                  const SizedBox(height: 30),
-
-                  // 적정 수면 시간을 입력받는 위젯
-                  const Text('적정 수면 시간'),
-                  Column(
-                    children: [
-                      const SizedBox(height: 5,),
-                      Row(
-                        children: [
-                          const SizedBox(width: 30,),
-                          // 취침 시간 '시'
-                          SizedBox(
-                            width: 70,
-                            child: TextField(
-                              keyboardType: TextInputType.number,
-                              decoration: const InputDecoration(
-                                labelText: '시',
-                                border: OutlineInputBorder(),
-                              ),
-                              onChanged: (value){
-                                setState(() {
-                                  print('적정수면시간 $value 시');
-                                  goodSleepHour = int.parse(value);
-                                });
-                              },
+              child: Container(
+                width: 250,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 5,),
+                    const Text('평균 취침 시간', ),
+                    const SizedBox(height: 5,),
+                    Row(
+                      children: [
+                        Column(
+                          children: [
+                            ToggleButtons(
+                                direction: Axis.vertical,
+                                isSelected: _isSelected,
+                                onPressed: toggleSelect,
+                                selectedColor: Colors.white,
+                                fillColor: Colors.brown.withOpacity(0.6),
+                                borderRadius: const BorderRadius.all(Radius.circular(4)),
+                                constraints: const BoxConstraints(
+                                  minHeight: 45.0,
+                                  minWidth: 60.0,
+                                ),
+                                children: const [
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 8),
+                                    child: Text('AM', style: TextStyle(fontSize: 16),),),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 8),
+                                    child: Text('PM', style: TextStyle(fontSize: 16),),),
+                                ]
                             ),
-                          ),
-                          const SizedBox(width: 10,),
-                          const Text('시간', style: TextStyle(fontSize: 15),),
-                          const SizedBox(width: 10,),
-                          // 취침 시간 '분'
-                          SizedBox(
-                            width: 70,
-                            child: TextField(
-                              keyboardType: TextInputType.number,
-                              decoration: const InputDecoration(
-                                labelText: '분',
-                                border: OutlineInputBorder(),
-                              ),
-                              onChanged: (value){
-                                setState(() {
-                                  print('적정수면시간 $value 분');
-                                  goodSleepMin = int.parse(value);
-                                });
-                              },
+                          ],
+                        ),
+                        const SizedBox(width: 20,),
+                        // 취침 시간 '시'
+                        SizedBox(
+                          width: 60,
+                          child: TextField(
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              labelText: '시',
+                              border: OutlineInputBorder(),
                             ),
+                            onChanged: (value){
+                              setState(() {
+                                print('취침 시간 $value 시');
+                                bedHour = int.parse(value);
+                              });
+                            },
                           ),
-                          const SizedBox(width: 10,),
-                          const Text('분', style: TextStyle(fontSize: 15),),
-                          const SizedBox(width: 10,),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 10, right: 10),
+                            child: const Text(':', style: TextStyle(fontSize: 30),)
+                        ),
 
-                ],
+                        // 취침 시간 '분'
+                        SizedBox(
+                          width: 60,
+                          child: TextField(
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              labelText: '분',
+                              border: OutlineInputBorder(),
+                            ),
+                            onChanged: (value){
+                              setState(() {
+                                print('취침 시간 $value 분');
+                                bedMin = int.parse(value);
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 30),
+
+                    // 적정 수면 시간을 입력받는 위젯
+                    const Text('적정 수면 시간'),
+                    Column(
+                      children: [
+                        const SizedBox(height: 5,),
+                        Row(
+                          children: [
+                            const SizedBox(width: 20,),
+                            // 취침 시간 '시'
+                            SizedBox(
+                              width: 60,
+                              child: TextField(
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  labelText: '시',
+                                  border: OutlineInputBorder(),
+                                ),
+                                onChanged: (value){
+                                  setState(() {
+                                    print('적정수면시간 $value 시');
+                                    goodSleepHour = int.parse(value);
+                                  });
+                                },
+                              ),
+                            ),
+                            Container(
+                                margin: const EdgeInsets.only(left: 10, right: 10),
+                                child: const Text('시간', style: TextStyle(fontSize: 15),)
+                            ),
+                            // 취침 시간 '분'
+                            SizedBox(
+                              width: 60,
+                              child: TextField(
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  labelText: '분',
+                                  border: OutlineInputBorder(),
+                                ),
+                                onChanged: (value){
+                                  setState(() {
+                                    print('적정수면시간 $value 분');
+                                    goodSleepMin = int.parse(value);
+                                  });
+                                },
+                              ),
+                            ),
+                            Container(
+                                margin: const EdgeInsets.only(left: 10, right: 10),
+                                child: const Text('분', style: TextStyle(fontSize: 15),)
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+
+                  ],
+                ),
               ),
             ),
             actions: [

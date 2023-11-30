@@ -2,18 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/page/home/user_caffeine_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_health_connect/flutter_health_connect.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../function/mode_color.dart';
+import '../../provider/color_mode_provider.dart';
 import '../menu/menu_page.dart';
 
-class DrinkListWidget extends StatefulWidget {
+class DrinkListWidget extends ConsumerStatefulWidget {
   const DrinkListWidget({Key? key,}) : super(key: key);
 
   @override
   _DrinkListWidgetState createState() => _DrinkListWidgetState();
 }
 
-class _DrinkListWidgetState extends State<DrinkListWidget> {
+class _DrinkListWidgetState extends ConsumerState<DrinkListWidget> {
   String? userName;
 
   Future<void> fetchUserName() async {
@@ -41,11 +43,11 @@ class _DrinkListWidgetState extends State<DrinkListWidget> {
     return Column(
       children: [
         Container(
-          margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+          margin: const EdgeInsets.only(left: 20, right: 20),
           child: Row(
             children: [
               Container(
-                margin: const EdgeInsets.fromLTRB(0,0,10,0),
+                margin: const EdgeInsets.only(right: 20),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   textBaseline: TextBaseline.ideographic,
@@ -55,15 +57,15 @@ class _DrinkListWidgetState extends State<DrinkListWidget> {
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
-                        color: Colors.black,
+                        color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['black_color']:modeColor.noSleepModeColor['white_color'],
                       ),
                     ),
                     Text(
                       '$userName',
-                      style: const TextStyle(
-                        fontSize: 25,
+                      style: TextStyle(
+                        fontSize: 26,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xffD4936F),
+                        color: ref.watch(colorModeProvider).isControlMode ? modeColor.controlModeColor['sub_color']:modeColor.noSleepModeColor['sub_color'],
                       ),
                     ),
                     Text(
@@ -71,7 +73,7 @@ class _DrinkListWidgetState extends State<DrinkListWidget> {
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
-                        color: Colors.black
+                        color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['black_color']:modeColor.noSleepModeColor['white_color'],
                       ),
                     ),
                   ],
@@ -87,10 +89,10 @@ class _DrinkListWidgetState extends State<DrinkListWidget> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(3),
                       ),
-                      backgroundColor: Color(0xff93796A),
+                      backgroundColor: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['main_color']:modeColor.noSleepModeColor['main_color'],
                       minimumSize: const Size(20, 20),
                     ),
-                    child: Text('+', style: TextStyle(color: Color(0xffF9F8F7), fontSize: 22),)),
+                    child: Text('+', style: TextStyle(color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['background_color']:modeColor.noSleepModeColor['background_color'], fontSize: 22),)),
               ),
             ],
           ),
@@ -98,7 +100,7 @@ class _DrinkListWidgetState extends State<DrinkListWidget> {
         const SizedBox(height: 7),
         Center(
           child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 5),
+            margin: const EdgeInsets.only(left: 10, right: 10),
             width: MediaQuery.of(context).size.width ,
             height: 130,
             decoration: BoxDecoration(

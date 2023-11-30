@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 final modeColor = ModeColor();
 class ModeColor{
   Map<String,dynamic> controlModeColor={
-    "color_background":Colors.brown.withOpacity(0.6),
-    "page_background":Colors.white,
+    "background_color": const Color(0xffF9F8F7),
+    "main_color": const Color(0xff93796A),
+    "sub_color": const Color(0xffD4936F),
+    "black_color": Colors.black,
+    "white_color": Colors.white,
   };
   Map<String,dynamic> noSleepModeColor={
-    "color_background":Colors.white,
-    "page_background":Colors.brown,
+    "background_color": const Color(0xff93796A),
+    "main_color": const Color(0xffF9F8F7),
+    "sub_color": const Color(0xffD4936F),
+    "white_color": Colors.white,
+    "black_color": Colors.black,
   };
 }
