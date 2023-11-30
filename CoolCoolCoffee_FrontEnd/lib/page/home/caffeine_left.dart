@@ -399,9 +399,11 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
             {'predict_sleep_time': predict_sleep_time}, SetOptions(merge: true)
         );
     }else{
-      await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(yesterday).set(
-          {'predict_sleep_time': predict_sleep_time}, SetOptions(merge: true)
-      );
+      if(yesUserSleepDoc.exists){
+        await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(yesterday).set(
+            {'predict_sleep_time': predict_sleep_time}, SetOptions(merge: true)
+        );
+      }
     }
     //print("sssssssssssssss $currentDate");
   }

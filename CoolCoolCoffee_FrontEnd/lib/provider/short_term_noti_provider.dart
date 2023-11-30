@@ -12,16 +12,6 @@ class ShortTermNotiNotifier extends StateNotifier<ShortTermParam>{
   void resetTodayAlarm(){
     state.todayAlarm = false;
   }
-  //short term1
-  /*void setIsCaffTooMuch(){
-    state.isCaffTooMuch = true;
-    state.isCaffOk = false;
-  }*/
-  //short term2
-  /*void setIsCaffOk(){
-    state.isCaffTooMuch = false;
-    state.isCaffOk = true;
-  }*/
   void resetCaffCompare(){
     state.isCaffTooMuch = false;
     state.isCaffOk = false;

@@ -45,7 +45,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(yesterdaydate).get();
     //오늘의 수면 정보 받아오기
     if(userSleepDoc.exists && userSleepDoc.data()!.containsKey('wake_time')&&userSleepDoc.data()!.containsKey('sleep_quality_score')){
-      print('!!!!!!!오늘???');
+
       ref.watch(sleepParmaProvider.notifier).changeWakeTime(userSleepDoc['wake_time']);
       //print('wake time ${userSleepDoc['wake_time']}');
       ref.watch(sleepParmaProvider.notifier).changeSleepQuality(userSleepDoc['sleep_quality_score']);
@@ -64,7 +64,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     }
     else{
       ref.watch(sleepParmaProvider.notifier).changeWakeTime("");
-      print('no wake time~~~');
+
       ref.watch(sleepParmaProvider.notifier).changeSleepQuality(-1);
     }
   }

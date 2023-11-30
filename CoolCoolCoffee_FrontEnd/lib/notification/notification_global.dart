@@ -24,6 +24,7 @@ class NotificationGlobal {
     );
     //일찍 잔 경우가 많을 때 : term A
     if(isTooEarly){
+      print('longterm feed back term AAAAA 일찍 잤다잉 $hour $minute에 알람갈거임');
       await _localNotification.zonedSchedule(
         4,
         '쿨쿨 커피',
@@ -38,6 +39,7 @@ class NotificationGlobal {
     }
     //늦게 잔 경우가 많을 때 : term B
     if(isTooLate){
+      print('longterm feed back term BBBB 늦게 잤다잉 $hour $minute에 알람갈거임');
       await _localNotification.zonedSchedule(
         5,
         '쿨쿨 커피',
@@ -154,6 +156,7 @@ class NotificationGlobal {
   }
 
   static cancelNotification(int id) async {
+    print('$id 캔슬함요');
     await _localNotification.cancel(id);
   }
 

@@ -1,3 +1,4 @@
+import 'package:coolcoolcoffee_front/notification/notification_global.dart';
 import 'package:coolcoolcoffee_front/provider/long_term_noti_provider.dart';
 import 'package:coolcoolcoffee_front/provider/short_term_noti_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -47,13 +48,6 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
   Widget build(BuildContext context) {
     String selecteddate = widget.selectedDay!.toLocal().toIso8601String().split('T')[0];
     String todaydate = today.toLocal().toIso8601String().split('T')[0];
-    // print('Selected Day: ${widget.selectedDay}');
-    // print('SleepTime in initState: ${widget.sleepTime}');
-    // print('Wake in initState: ${widget.wakeTime}');
-    // print('selecteddate $selecteddate');
-    // print('todaydate $todaydate');
-    // resultText_start_real = widget.sleepTime ?? '';
-    // resultText_end_real = widget.wakeTime ?? '';
     return Container(
       color: Colors.white,
       child: Center(
@@ -252,40 +246,134 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
     await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(yesterday).get();
     DocumentSnapshot<Map<String,dynamic>>  userDoc =
     await FirebaseFirestore.instance.collection('Users').doc(uid).get();
-    print('오늘꺼냐?? ${ref.watch(longTermNotiProvider).todayDate} 오늘: $currentDate');
     //어제 수면 정보 존재함
     if(yesterdayDoc.exists&&yesterdayDoc.data()!.containsKey('predict_sleep_time')){
       //print('오늘꺼냐?? ${ref.watch(longTermNotiProvider).todayDate} 오늘: $currentDate');
       //아직 오늘꺼 계산 안함.
       if(ref.watch(longTermNotiProvider).todayDate != currentDate){
-        print('언제 잤는 데?? $convertedSleepTime 어제 예상은 언젠데? ${yesterdayDoc['predict_sleep_time']}');
         String compare = _calLongTermFeedback(convertedSleepTime, yesterdayDoc['predict_sleep_time']);
         ref.watch(longTermNotiProvider.notifier).setTodayDate(currentDate);
         Map<String,dynamic> longterm_feed = userDoc['longterm_feedback'];
         longterm_feed[compare]++;
-        print('compare : $compare');
-        print('$longterm_feed');
         await FirebaseFirestore.instance.collection('Users').doc(uid).set(
             {'longterm_feedback':longterm_feed},SetOptions(merge: true)
         );
+
+        if(longterm_feed['same']+longterm_feed['less']+longterm_feed['over']==4){
+          String max = _checkMax(longterm_feed);
+          bool isTooEarly = false;
+          bool isTooLate = false;
+          DateTime dt = DateTime.now();
+          //int hour = dt.hour+1;
+          int hour = dt.hour;
+          int minute = dt.minute+2;
+          if(hour>=24){
+            hour=-24;
+          }
+          if(minute > 60){
+            minute-=60;
+            hour+=1;
+            if(hour>24){
+              hour-=24;
+            }
+          }
+          if(max =='less'){
+            print('less');
+            isTooEarly = true;
+          }
+          if(max == 'over'){
+            print('over');
+            isTooLate = true;
+          }
+          NotificationGlobal.cancelNotification(4);
+          NotificationGlobal.cancelNotification(5);
+          NotificationGlobal.longTermFeedBackNoti(isTooEarly, isTooLate, hour, minute);
+        }
+        if(longterm_feed['same']+longterm_feed['less']+longterm_feed['over']>4){
+          for(var key in longterm_feed.keys){
+            if(key==compare){
+              longterm_feed[key]=1;
+            }
+            else{
+              longterm_feed[key] = 0;
+            }
+          }
+          await FirebaseFirestore.instance.collection('Users').doc(uid).set(
+              {'longterm_feedback':longterm_feed},SetOptions(merge: true)
+          );
+        }
       }
       //오늘꺼 수정하는거임
       else{
-        print('언제 잤는 데?? $convertedSleepTime 어제 예상은 언젠데? ${yesterdayDoc['predict_sleep_time']}');
         String temp = ref.watch(longTermNotiProvider).todayCal;
         String compare = _calLongTermFeedback(convertedSleepTime, yesterdayDoc['predict_sleep_time']);
-        print('$temp , $compare');
+
         Map<String,dynamic> longterm_feed = userDoc['longterm_feedback'];
         longterm_feed[temp]--;
         longterm_feed[compare]++;
-        print('$longterm_feed');
+
         await FirebaseFirestore.instance.collection('Users').doc(uid).set(
             {'longterm_feedback':longterm_feed},SetOptions(merge: true)
         );
+
+        if(longterm_feed['same']+longterm_feed['less']+longterm_feed['over']==4){
+          String max = _checkMax(longterm_feed);
+          bool isTooEarly = false;
+          bool isTooLate = false;
+          DateTime dt = DateTime.now();
+          //int hour = dt.hour+1;
+          int hour = dt.hour;
+          int minute = dt.minute+2;
+          if(hour>=24){
+            hour=-24;
+          }
+          if(minute > 60){
+            minute-=60;
+            hour+=1;
+            if(hour>24){
+              hour-=24;
+            }
+          }
+          if(max =='less'){
+            print('less');
+            isTooEarly = true;
+          }
+          if(max == 'over'){
+            print('over');
+            isTooLate = true;
+          }
+          NotificationGlobal.cancelNotification(4);
+          NotificationGlobal.cancelNotification(5);
+          NotificationGlobal.longTermFeedBackNoti(isTooEarly, isTooLate, hour, minute);
+        }
+        if(longterm_feed['same']+longterm_feed['less']+longterm_feed['over']>4){
+          for(var key in longterm_feed.keys){
+            if(key==compare){
+              longterm_feed[key]=1;
+            }
+            else{
+              longterm_feed[key] = 0;
+            }
+          }
+          await FirebaseFirestore.instance.collection('Users').doc(uid).set(
+              {'longterm_feedback':longterm_feed},SetOptions(merge: true)
+          );
+        }
       }
     }else{
       ref.watch(longTermNotiProvider.notifier).setTodayDate(currentDate);
     }
+  }
+  String _checkMax(Map<String,dynamic> map){
+    String max = '';
+    int temp = -1;
+    for(var key in map.keys){
+      if(map[key]>temp){
+        temp = map[key];
+        max = key;
+      }
+    }
+    return max;
   }
   String _calLongTermFeedback(String realSleepTime, String predictSleepTime){
     int realSleepHour = 0;
