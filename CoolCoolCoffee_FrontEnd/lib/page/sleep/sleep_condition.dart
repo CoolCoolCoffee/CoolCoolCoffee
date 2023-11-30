@@ -45,9 +45,10 @@ class _SleepConditionWidgetState extends State<SleepConditionWidget> {
                 child: ElevatedButton(
                   onPressed: () {
                     onPressedHandler(); // Call asynchronously
+                    _showConfirmationDialog();// Cal
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.brown,
+                    backgroundColor: Colors.brown,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -101,6 +102,26 @@ class _SleepConditionWidgetState extends State<SleepConditionWidget> {
       ),
     );
   }
+
+  void _showConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text('피곤도가 새로 입력되었습니다!'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // 팝업 닫기
+              },
+              child: Text('닫기'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   Future<void> _fetchSleepQualityScore() async {
     try {

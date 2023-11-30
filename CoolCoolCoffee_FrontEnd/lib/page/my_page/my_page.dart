@@ -284,6 +284,8 @@ class _MyPageState extends State<MyPage> {
               TextButton(
                 child: const Text("설정", style: TextStyle(color: Colors.brown, fontWeight: FontWeight.bold)),
                 onPressed: () async {
+                  await HealthConnectFactory.isApiSupported();
+                  await HealthConnectFactory.isAvailable();
                   try {
                     await HealthConnectFactory.openHealthConnectSettings();
                     resultText = 'Settings activity started';

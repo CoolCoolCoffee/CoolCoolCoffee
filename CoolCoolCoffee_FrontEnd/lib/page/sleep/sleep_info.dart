@@ -1,4 +1,5 @@
 import 'package:coolcoolcoffee_front/notification/notification_global.dart';
+import 'package:coolcoolcoffee_front/page/home/longterm_popup_A.dart';
 import 'package:coolcoolcoffee_front/provider/long_term_noti_provider.dart';
 import 'package:coolcoolcoffee_front/provider/short_term_noti_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,6 +13,7 @@ import 'package:coolcoolcoffee_front/service/user_sleep_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../provider/sleep_param_provider.dart';
+import '../home/longterm_popup_B.dart';
 
 class SleepInfoWidget extends ConsumerStatefulWidget {
   final DateTime selectedDay;
@@ -49,7 +51,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
     String selecteddate = widget.selectedDay!.toLocal().toIso8601String().split('T')[0];
     String todaydate = today.toLocal().toIso8601String().split('T')[0];
     return Container(
-      margin: const EdgeInsets.only(left: 20, right: 20),
+      margin: EdgeInsets.only(left: 20,right: 20),
       color: Colors.white,
       child: Center(
         child: Column(
@@ -116,8 +118,10 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                           resultText_end_real = formatter.format(resultText_end);
                           today_wake_time=resultText_end_real;
                           ref.watch(shortTermNotiProvider.notifier).resetTodayAlarm();
+                          _showConfirmationDialog_get_auto();
                         } catch (e) {
                           print(e.toString());
+                          _showConfirmationDialog_get_auto_fail();
                         }
                         _updateResultText();
                         _updateFirestore();
@@ -139,7 +143,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                       ),
                       child: Text(selecteddate == todaydate ? '가져오기' : '', style: const TextStyle(color: Color(0xffF9F8F7)),),
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10,),
                     if (selecteddate == todaydate)
                       ElevatedButton(
                         onPressed: () async {
@@ -152,13 +156,13 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                           ),
                           elevation: 3,
                         ),
-                        child: const Text('입력', style: TextStyle(color: Color(0xffF9F8F7)),),
+                        child: Text('입력', style: TextStyle(color: Color(0xffF9F8F7)),),
                       ),
                   ],
-                ),
+                )
               ],
             ),
-            const SizedBox(height: 5),
+            SizedBox(height: 5,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -176,7 +180,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
+                      Text(
                         '취침시간',
                         style: TextStyle(
                           color: Colors.black,
@@ -186,7 +190,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                       SizedBox(height: 10),
                       Text(
                         selecteddate == todaydate ? today_sleep_time : widget.sleepTime ?? '',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.black,
                           fontSize: 22.0,
                           fontWeight: FontWeight.bold,
@@ -209,17 +213,17 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
+                      Text(
                         '기상시간',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 16.0,
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: 10),
                       Text(
                         selecteddate == todaydate ? today_wake_time : widget.wakeTime ?? '',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.black,
                           fontSize: 22.0,
                           fontWeight: FontWeight.bold,
@@ -271,31 +275,30 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
           String max = _checkMax(longterm_feed);
           bool isTooEarly = false;
           bool isTooLate = false;
-          DateTime dt = DateTime.now();
-          //int hour = dt.hour+1;
-          int hour = dt.hour+1;
-          int minute = dt.minute;
-          if(hour>=24){
-            hour=-24;
-          }
-          if(minute > 60){
-            minute-=60;
-            hour+=1;
-            if(hour>24){
-              hour-=24;
-            }
-          }
           if(max =='less'){
-            print('less');
             isTooEarly = true;
           }
           if(max == 'over'){
-            print('over');
             isTooLate = true;
           }
-          NotificationGlobal.cancelNotification(4);
-          NotificationGlobal.cancelNotification(5);
-          NotificationGlobal.longTermFeedBackNoti(isTooEarly, isTooLate, hour, minute);
+          if(isTooEarly){
+            showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                return LongPopup_A();
+              },
+            );
+          }
+          if(isTooLate){
+            showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                return LongPopup_B();
+              },
+            );
+          }
         }
         if(longterm_feed['same']+longterm_feed['less']+longterm_feed['over']>4){
           for(var key in longterm_feed.keys){
@@ -328,31 +331,31 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
           String max = _checkMax(longterm_feed);
           bool isTooEarly = false;
           bool isTooLate = false;
-          DateTime dt = DateTime.now();
-          //int hour = dt.hour+1;
-          int hour = dt.hour+1;
-          int minute = dt.minute;
-          if(hour>=24){
-            hour=-24;
-          }
-          if(minute > 60){
-            minute-=60;
-            hour+=1;
-            if(hour>24){
-              hour-=24;
-            }
-          }
+
           if(max =='less'){
-            print('less');
             isTooEarly = true;
           }
           if(max == 'over'){
-            print('over');
             isTooLate = true;
           }
-          NotificationGlobal.cancelNotification(4);
-          NotificationGlobal.cancelNotification(5);
-          NotificationGlobal.longTermFeedBackNoti(isTooEarly, isTooLate, hour, minute);
+          if(isTooEarly){
+            showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                return LongPopup_A();
+              },
+            );
+          }
+          if(isTooLate){
+            showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                return LongPopup_B();
+              },
+            );
+          }
         }
         if(longterm_feed['same']+longterm_feed['less']+longterm_feed['over']>4){
           for(var key in longterm_feed.keys){
@@ -381,6 +384,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
         max = key;
       }
     }
+    if(map['over']==map['less']) return 'same';
     return max;
   }
   String _calLongTermFeedback(String realSleepTime, String predictSleepTime){
@@ -716,6 +720,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                 ElevatedButton(
                   onPressed: () async {
                     Navigator.of(context).pop();
+                    _showConfirmationDialog_manual();
 
                     String selectedSleepTime = '${sleepHoursController.text}:${sleepMinutesController.text} ${sleepIsAM ? 'AM' : 'PM'}';
                     String selectedWakeTime = '${wakeHoursController.text}:${wakeMinutesController.text} ${wakeIsAM ? 'AM' : 'PM'}';
@@ -740,6 +745,72 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
               ],
             );
           },
+        );
+      },
+    );
+  }
+  void _showConfirmationDialog_manual() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text('취침시간, 기상시간이 새로 입력되었습니다!'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // 팝업 닫기
+              },
+              child: Text('닫기'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+  void _showConfirmationDialog_get_auto() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text('취침시간, 기상시간이 새로 입력되었습니다!'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // 팝업 닫기
+              },
+              child: Text('닫기'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+  void _showConfirmationDialog_get_auto_fail() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text('삼성헬스를 정보를 불러오지 못했습니다!\n 입력 및 연결 상태를 확인해주세요'),
+          actions: [
+            TextButton(
+              child: const Text("설정 가기", style: TextStyle(color: Colors.brown, fontWeight: FontWeight.bold)),
+              onPressed: () async {
+                await HealthConnectFactory.isApiSupported();
+                await HealthConnectFactory.isAvailable();
+                try {
+                  await HealthConnectFactory.openHealthConnectSettings();
+                } catch (e) {
+                  print("error : $e");
+                }
+              },
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // 팝업 닫기
+              },
+              child: Text('닫기'),
+            ),
+          ],
         );
       },
     );

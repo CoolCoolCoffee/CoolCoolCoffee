@@ -126,7 +126,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             children: [
               ClockWidget(),
               SizedBox(height: 10),
-              Row(
+              /*Row(
                 children: [
                   ElevatedButton(
                     onPressed: () {
@@ -151,7 +151,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     child: Text('LongTerm_B'),
                   ),
                 ],
-              ),
+              ),*/
               StreamBuilder(
                   stream: FirebaseFirestore.instance.collection('Users').doc(userCaffeineService.uid).collection('user_caffeine').doc(date).snapshots(),
                   builder: (context,snapshot){

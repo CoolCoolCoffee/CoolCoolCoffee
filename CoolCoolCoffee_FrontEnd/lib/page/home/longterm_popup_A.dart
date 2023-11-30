@@ -33,6 +33,7 @@ class LongPopup_A extends StatelessWidget {
 
   void _showA1Dialog(BuildContext context) {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -62,6 +63,7 @@ class LongPopup_A extends StatelessWidget {
 
   void _showA2Dialog(BuildContext context) {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return _A2Dialog();
@@ -87,7 +89,7 @@ class _A2DialogState extends ConsumerState<_A2Dialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('A2'),
+      title: Text('평균 취침 시간과 적정 수면 시간을 재입력해주세요!',style: TextStyle(fontSize: 15),),
       content: Expanded(
         child: Column(
           mainAxisSize: MainAxisSize.min,
