@@ -38,13 +38,13 @@ class _MyInfoState extends State<MyInfo> {
                 const Text(
                   ' 유저 정보',
                   style: TextStyle(
-                      fontSize: 15, fontWeight: FontWeight.w500),
+                      fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.7),
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Padding(
@@ -58,14 +58,14 @@ class _MyInfoState extends State<MyInfo> {
                             const Text(
                               '닉네임',
                               style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 17,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                             Text(
                               (snapshot.data as Map)['user_name'],
                               style: const TextStyle(
-                                fontSize: 18,
+                                fontSize: 17,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -87,14 +87,14 @@ class _MyInfoState extends State<MyInfo> {
                             const Text(
                               '이메일',
                               style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 17,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                             Text(
                               (snapshot.data as Map)['user_email'],
                               style: const TextStyle(
-                                fontSize: 18,
+                                fontSize: 17,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -116,7 +116,7 @@ class _MyInfoState extends State<MyInfo> {
                             const Text(
                               '나이',
                               style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 17,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -124,7 +124,7 @@ class _MyInfoState extends State<MyInfo> {
                               (snapshot.data as Map)['user_age']
                                   .toString(),
                               style: const TextStyle(
-                                fontSize: 18,
+                                fontSize: 17,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -136,7 +136,7 @@ class _MyInfoState extends State<MyInfo> {
                 ),
               ],
             )
-            : Center(child: CircularProgressIndicator());
+            : const Center(child: CircularProgressIndicator());
       },
     );
   }

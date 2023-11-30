@@ -15,9 +15,11 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
   );
+
   await NotificationGlobal.initializeNotifications();
+
   runApp(
-      ProviderScope(
+      const ProviderScope(
           child: CoolCoolCoffee()
       )
   );
@@ -37,22 +39,21 @@ class CoolCoolCoffee extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        primaryColor: Colors.brown.withOpacity(0.6),
-      ),
-      debugShowCheckedModeBanner: false,
-      // theme: ThemeData(scaffoldBackgroundColor: Colors.brown.withOpacity(0.1)),
-      home: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (ctx, userSnapshot) {
-          if(userSnapshot.hasData && userSnapshot.data != null ){
-            NotificationGlobal.showDailyNotification();
-            return PageStates();
-          } else{
-            return LoginPage();
-          }
-        },
-      ),
+            theme: ThemeData(
+                primarySwatch: Colors.brown,
+            ),
+            debugShowCheckedModeBanner: false,
+            home: StreamBuilder<User?>(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (ctx, userSnapshot) {
+                if (userSnapshot.hasData && userSnapshot.data != null) {
+                  NotificationGlobal.showDailyNotification();
+                  return PageStates();
+                } else {
+                  return LoginPage();
+                }
+              },
+            ),
     );
   }
 }

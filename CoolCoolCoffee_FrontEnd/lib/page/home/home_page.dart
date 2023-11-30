@@ -81,93 +81,93 @@ class _HomePageState extends ConsumerState<HomePage> {
     UserCaffeineService userCaffeineService = UserCaffeineService();
     userCaffeineService.checkExits(date);
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.brown.withOpacity(0.1),
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.brown.withOpacity(0.1),
         appBar: AppBar(
           title: const Center(
             child: Text(
               '쿨쿨커피',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w600,
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
-        ),
-        actions: [         // 조절, 밤샘 모드 선택 토글
-          Container(
-            padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
-            child: ToggleSwitch(
-              minWidth: 50.0,
-              initialLabelIndex: ref.watch(colorModeProvider).selectedIndex,
-              cornerRadius: 10.0,
-              activeFgColor: Colors.white,
-              activeBgColors: [[Colors.brown.withOpacity(0.4)], const [Colors.brown]],
-              inactiveFgColor: Colors.white,
-              inactiveBgColor: Colors.grey,
-              totalSwitches: 2,
-              labels: const ['조절', '밤샘'],
-              onToggle: (index) {
-                setState(() {
-                  ref.watch(colorModeProvider.notifier).switchMode(index!);
-                  ref.watch(colorModeProvider.notifier).switchIndex(index);
-                });
-              },
+          actions: [         // 조절, 밤샘 모드 선택 토글
+            Container(
+              padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+              child: ToggleSwitch(
+                minWidth: 50.0,
+                initialLabelIndex: ref.watch(colorModeProvider).selectedIndex,
+                cornerRadius: 10.0,
+                activeFgColor: Colors.white,
+                activeBgColors: [[Colors.brown.withOpacity(0.4)], const [Colors.brown]],
+                inactiveFgColor: Colors.white,
+                inactiveBgColor: Colors.grey,
+                totalSwitches: 2,
+                labels: const ['조절', '밤샘'],
+                onToggle: (index) {
+                  setState(() {
+                    ref.watch(colorModeProvider.notifier).switchMode(index!);
+                    ref.watch(colorModeProvider.notifier).switchIndex(index);
+                  });
+                },
+              ),
             ),
-          ),
-        ],
-        backgroundColor: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['page_background']:modeColor.noSleepModeColor['page_background'],
-        toolbarHeight: 50,
-        iconTheme: IconThemeData(color: Colors.white),
-    ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 10),
-            ClockWidget(),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return LongPopup_A();
-                      },
-                    );
-                  },
-                  child: Text('LongTerm_A'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return LongPopup_B();
-                      },
-                    );
-                  },
-                  child: Text('LongTerm_B'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    openAppSettings(); // 허용 설정 페이지
-                  },
-                  child: Text('알림 허용'),
-                ),
-              ],
-            ),
-            StreamBuilder(
-              stream: FirebaseFirestore.instance.collection('Users').doc(userCaffeineService.uid).collection('user_caffeine').doc(date).snapshots(),
-              builder: (context,snapshot){
-                print('좀 바뀌어라 ㅅㅂ');
-                return CaffeineLeftWidget(snapshots: snapshot,);
-             }),
-            SizedBox(height: 20),
-            DrinkListWidget(),
           ],
+          backgroundColor: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['page_background']:modeColor.noSleepModeColor['page_background'],
+          toolbarHeight: 50,
+          iconTheme: IconThemeData(color: Colors.white),
         ),
-      )
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 10),
+              ClockWidget(),
+              SizedBox(height: 10),
+              Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return LongPopup_A();
+                        },
+                      );
+                    },
+                    child: Text('LongTerm_A'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return LongPopup_B();
+                        },
+                      );
+                    },
+                    child: Text('LongTerm_B'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      openAppSettings(); // 허용 설정 페이지
+                    },
+                    child: Text('알림 허용'),
+                  ),
+                ],
+              ),
+              StreamBuilder(
+                  stream: FirebaseFirestore.instance.collection('Users').doc(userCaffeineService.uid).collection('user_caffeine').doc(date).snapshots(),
+                  builder: (context,snapshot){
+                    print('좀 바뀌어라 ㅅㅂ');
+                    return CaffeineLeftWidget(snapshots: snapshot,);
+                  }),
+              SizedBox(height: 20),
+              DrinkListWidget(),
+            ],
+          ),
+        )
     );
   }
 }

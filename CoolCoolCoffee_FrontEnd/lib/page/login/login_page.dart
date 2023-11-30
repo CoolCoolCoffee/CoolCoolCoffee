@@ -21,6 +21,20 @@ class _LoginPageState extends State<LoginPage> {
   String _email = '';
   String _password = '';
 
+  late bool _passwordVisible;
+
+  @override
+  void initState() {
+    _passwordVisible = false;
+    super.initState();
+  }
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   Widget _userIdWidget(){
     return TextFormField(
       controller: _emailController,
@@ -48,13 +62,24 @@ class _LoginPageState extends State<LoginPage> {
   Widget _userPwWidget(){
     return TextFormField(
       controller: _passwordController,
-      obscureText: true,
-      keyboardType: TextInputType.emailAddress,
-      decoration: const InputDecoration(
-        border: OutlineInputBorder(),
+      obscureText: !_passwordVisible,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(),
         labelText: '비밀번호',
         hintText: '비밀번호를 입력하세요.',
-        hintStyle: TextStyle(color: Colors.grey),
+        hintStyle: const TextStyle(color: Colors.grey),
+        suffixIcon: IconButton(
+            onPressed: () {
+              setState(() {
+                _passwordVisible = !_passwordVisible;
+              });
+              },
+            icon: Icon(
+                _passwordVisible
+                    ? Icons.visibility
+                    : Icons.visibility_off,),
+        )
       ),
       validator: (String? value){
         if(value!.isEmpty){
@@ -78,16 +103,6 @@ class _LoginPageState extends State<LoginPage> {
       );
       print('사용자 로그인 완료: ${userCredential.user!.email}');
 
-      // if(!mounted) return;
-      // Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
-      // Navigator.push(context, MaterialPageRoute(builder: (context) => const PageStates()),);
-
-      // if(!mounted) return;
-      // Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) => const PageStates(),
-      //     ));
     } on FirebaseAuthException catch (e) {
       //로그인 예외처리
       switch (e.code) {
@@ -96,29 +111,66 @@ class _LoginPageState extends State<LoginPage> {
             errorMessage = '유효하지 않는 이메일 주소입니다.';
             print(errorMessage);
           });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(errorMessage, style: const TextStyle(color: Colors.red),),
+              backgroundColor: Colors.brown.withOpacity(0.4),
+            ),
+          );
           break;
+
         case 'wrong-password':
           setState(() {
             errorMessage = '비밀번호가 틀렸습니다.';
             print(errorMessage);
           });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(errorMessage, style: const TextStyle(color: Colors.red),),
+              backgroundColor: Colors.brown.withOpacity(0.4),
+            ),
+          );
           break;
-        case 'user-disabled':
-          setState(() {
-            errorMessage = '비활성화된 계정입니다.';
-            print(errorMessage);
-          });
-          break;
+
         case 'user-not-found':
           setState(() {
             errorMessage = '존재하지 않는 이메일 주소입니다.';
             print(errorMessage);
           });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(errorMessage, style: const TextStyle(color: Colors.red),),
+              backgroundColor: Colors.brown.withOpacity(0.4),
+            ),
+          );
           break;
+
+        case 'user-disabled':
+          setState(() {
+            errorMessage = '비활성화된 계정입니다.';
+            print(errorMessage);
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(errorMessage, style: const TextStyle(color: Colors.red),),
+              backgroundColor: Colors.brown.withOpacity(0.4),
+            ),
+          );
+          break;
+
         default:
           errorMessage = e.code;
           print('오류가 발생했습니다. : $errorMessage');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('오류가 발생했습니다(error code : $errorMessage', style: const TextStyle(color: Colors.red),),
+              backgroundColor: Colors.brown.withOpacity(0.6),
+            ),
+          );
+          break;
       }
+
+
     }
   }
 
@@ -175,13 +227,14 @@ class _LoginPageState extends State<LoginPage> {
                 child: ElevatedButton(
                     style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.brown.withOpacity(0.6)),
+
                     ),
                     onPressed: () {
                       if(_formKey.currentState!.validate()) {
                         _handleLogin();
                       }
                     },
-                    child: const Text("로그인"),
+                    child: const Text("로그인", style: TextStyle(color: Colors.white, fontSize: 17),),
                 ),
               ),
             ],
@@ -189,19 +242,6 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    //해당 클래스가 호출되었을떄
-    super.initState();
-  }
-  @override
-  void dispose() {
-    // 해당 클래스가 사라질떄
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
   }
 
 }

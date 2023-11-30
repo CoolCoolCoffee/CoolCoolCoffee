@@ -283,10 +283,10 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
           children: [
             if(short_term.isCaffOk)
               RichText(
-                textAlign: TextAlign.start,
+                  textAlign: TextAlign.start,
                   text: TextSpan(
-                      text: "목표한 취침 시간에 수면이 가능합니다!",
-                      style: TextStyle(
+                    text: "목표한 취침 시간에 수면이 가능합니다!",
+                    style: TextStyle(
                       color: Colors.black,
                       fontSize: 15,
                     ),
@@ -294,25 +294,25 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
               ),
             if(short_term.isCaffTooMuch)
               RichText(
-                textAlign: TextAlign.start,
+                  textAlign: TextAlign.start,
                   text: TextSpan(
-                      text: "취침 시간이 !시간 !분 밀릴 예정입니다!",
-                      style: TextStyle(
+                    text: "취침 시간이 !시간 !분 밀릴 예정입니다!",
+                    style: TextStyle(
                       color: Colors.black,
                       fontSize: 15,
-                      ),
+                    ),
                   )
               ),
-              if (prov.goal_sleep_time.isEmpty)
-                RichText(
-                    textAlign: TextAlign.start,
-                    text: TextSpan(
-                      text: "목표 수면 시간을 설정해주세요.",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                      ),
-                    ),
+            if (prov.goal_sleep_time.isEmpty)
+              RichText(
+                textAlign: TextAlign.start,
+                text: TextSpan(
+                  text: "목표 수면 시간을 설정해주세요.",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 15,
+                  ),
+                ),
               ),
             //SizedBox(width: 55),
             ElevatedButton(

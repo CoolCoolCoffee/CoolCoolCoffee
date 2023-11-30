@@ -93,26 +93,26 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
         timer.cancel();
       }
       if(calSleepGraph(t) != -1) {
-          minus = 100 *(h1 + a * sin(2 * pi * sleepCalFunc.timeMap(t))) - calSleepGraph(t);
-          if(predict == 0 && minus < 0) {
-            predict++;
+        minus = 100 *(h1 + a * sin(2 * pi * sleepCalFunc.timeMap(t))) - calSleepGraph(t);
+        if(predict == 0 && minus < 0) {
+          predict++;
+        }
+        if(predict == 1){
+          predict = 2;
+          if(bedTime != sleepCalFunc.setPredictedBedTime(t)){
+            bedTime = sleepCalFunc.setPredictedBedTime(t);
+            ref.watch(shortTermNotiProvider.notifier).setPredictSleepTime(bedTime);
+            print('set!!! ${ref.watch(shortTermNotiProvider).predict_sleep_time}');
+            print('${ref.watch(shortTermNotiProvider).goal_sleep_time}');
+            ref.watch(shortTermNotiProvider.notifier).setCaffCompare(ref.watch(sleepParmaProvider).caff_list.length);
+            _updateFirestore();
+            _setWidget();
+            //여기서 이제 todayAlarm이 false 면 short term alarm 보내기
+            //hour 랑 Minute 잘 생각하고 설정해야함!!!!!!!!!11
+            print('잘 시간이다 임마 $bedTime');
+            print('잘자라 ${ref.watch(shortTermNotiProvider).predict_sleep_time}');
           }
-          if(predict == 1){
-            predict = 2;
-            if(bedTime != sleepCalFunc.setPredictedBedTime(t)){
-                bedTime = sleepCalFunc.setPredictedBedTime(t);
-                ref.watch(shortTermNotiProvider.notifier).setPredictSleepTime(bedTime);
-                print('set!!! ${ref.watch(shortTermNotiProvider).predict_sleep_time}');
-                print('${ref.watch(shortTermNotiProvider).goal_sleep_time}');
-                ref.watch(shortTermNotiProvider.notifier).setCaffCompare(ref.watch(sleepParmaProvider).caff_list.length);
-                _updateFirestore();
-                _setWidget();
-                //여기서 이제 todayAlarm이 false 면 short term alarm 보내기
-                //hour 랑 Minute 잘 생각하고 설정해야함!!!!!!!!!11
-                print('잘 시간이다 임마 $bedTime');
-                print('잘자라 ${ref.watch(shortTermNotiProvider).predict_sleep_time}');
-              }
-          }
+        }
       }
       t+=step;
       count++;
@@ -170,7 +170,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Container(
-              width: MediaQuery.of(context).size.width - 100,
+              width: MediaQuery.of(context).size.width*0.9,
               height: 100,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -178,51 +178,61 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey.withOpacity(0.3),
-                    spreadRadius: 5,
-                    blurRadius: 7,
+                    spreadRadius: 2,
+                    blurRadius: 3,
                     offset: Offset(0, 3),
                   ),
                 ],
               ),
-              child: setText(sleepNotYet, bedTime),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if(prov.state.goal_sleep_time == ""){
-                  _showGoalSleepTimeUpdatePopup(context);
-                }else if(prov.state.wake_time == ""|| prov.state.sleep_quality == -1) {
-                  _showSleepDataUpdatePopup(context);
-                }else{
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>GraphPage(bedTime: bedTime,)));
-                }
-                 // 버튼을 누르면 팝업 창 표시
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Colors.brown,
-                minimumSize: Size(5, 90),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                elevation: 5,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Row(
                 children: [
-                  Icon(
-                    Icons.trending_up,
-                    color: Colors.white,
-                    size: 24,
+                  Expanded(
+                      child: setText(sleepNotYet, bedTime),
                   ),
-                  SizedBox(width: 8),
-                  Text(
-                    '그래프',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
+                  Container(
+                    margin: const EdgeInsets.all(10),
+                    width: 90,
+                    height: 80,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if(prov.state.goal_sleep_time == ""){
+                          _showGoalSleepTimeUpdatePopup(context);
+                        }else if(prov.state.wake_time == ""|| prov.state.sleep_quality == -1) {
+                          _showSleepDataUpdatePopup(context);
+                        }else{
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>GraphPage(bedTime: bedTime,)));
+                        }
+                        // 버튼을 누르면 팝업 창 표시
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.brown,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 5,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.trending_up,
+                            color: Colors.white,
+                            size: 24,
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            '그래프',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
+                  )
                 ],
-              ),
+              )
             ),
           ],
         ),
@@ -268,62 +278,62 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-          '수면 정보 입력을',
+            '수면 정보 입력을',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20.0,
+            ),
+          ),
+          SizedBox(height: 15),
+          Text(
+            '완료해주jj세요!',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20.0,
+            ),
+          )
+        ],
+      );
+    }
+    if(bedTime == ''){
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [Text(
+          '예상 jj수면 시간',
           style: TextStyle(
             color: Colors.black,
             fontSize: 20.0,
           ),
         ),
-        SizedBox(height: 15),
-        Text(
-          '완료해주jj세요!',
+          SizedBox(height: 15),
+          Text(
+            '계산중....',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20.0,
+            ),
+          )],
+      );
+    }else{
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [Text(
+          '예상 jj수면 시간',
           style: TextStyle(
             color: Colors.black,
             fontSize: 20.0,
           ),
-        )
-      ],
+        ),
+          SizedBox(height: 15),
+          Text(
+            bedTime,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20.0,
+            ),
+          )],
       );
     }
-      if(bedTime == ''){
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [Text(
-            '예상 jj수면 시간',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20.0,
-            ),
-          ),
-            SizedBox(height: 15),
-            Text(
-              '계산중....',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20.0,
-              ),
-            )],
-        );
-      }else{
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [Text(
-            '예상 jj수면 시간',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20.0,
-            ),
-          ),
-            SizedBox(height: 15),
-            Text(
-              bedTime,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20.0,
-              ),
-            )],
-        );
-      }
   }
   void _showGoalSleepTimeUpdatePopup(BuildContext context) {
     showDialog(
@@ -349,19 +359,19 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular((10.0))),
-            content: const Text("오늘의 수면 정보를 업데이트 해주세요!"),
-            insetPadding: const EdgeInsets.fromLTRB(10, 100, 10, 10),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('닫기'),
-              ),
-            ],
-          );
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular((10.0))),
+          content: const Text("오늘의 수면 정보를 업데이트 해주세요!"),
+          insetPadding: const EdgeInsets.fromLTRB(10, 100, 10, 10),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('닫기'),
+            ),
+          ],
+        );
       },
     );
   }
@@ -395,9 +405,9 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
     await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(yesterday).get();
     bool isToday = userSleepDoc.exists && userSleepDoc.data()!.containsKey('wake_time')&&userSleepDoc.data()!.containsKey('sleep_quality_score');
     if(isToday){
-        await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(today).set(
-            {'predict_sleep_time': predict_sleep_time}, SetOptions(merge: true)
-        );
+      await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(today).set(
+          {'predict_sleep_time': predict_sleep_time}, SetOptions(merge: true)
+      );
     }else{
       if(yesUserSleepDoc.exists){
         await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(yesterday).set(

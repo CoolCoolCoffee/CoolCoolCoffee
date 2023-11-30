@@ -205,7 +205,7 @@ class _EditBrandDialogState extends State<EditBrandDialog> {
       ),
       actions: [
         TextButton(
-          child: const Text("취소", style: TextStyle(color: Colors.black)),
+          child: const Text("취소", style: TextStyle(color: Colors.grey)),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -215,7 +215,7 @@ class _EditBrandDialogState extends State<EditBrandDialog> {
             updateBrandInfo(new_brand_list);
             Navigator.pop(context);
           },
-          child: const Text('수정', style: TextStyle(color: Colors.redAccent),),
+          child: const Text('수정', style: TextStyle(color: Colors.brown, fontWeight: FontWeight.bold),),
         ),
       ],
     );
@@ -282,7 +282,7 @@ class _BrandInfoState extends State<BrandInfo> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(' 선호 브랜드', style: TextStyle(
-                fontSize: 15, fontWeight: FontWeight.w500),),
+                fontSize: 14, fontWeight: FontWeight.bold),),
             IconButton(
               onPressed: (){
                 // 수정 화면 보여주는 함수
@@ -295,7 +295,7 @@ class _BrandInfoState extends State<BrandInfo> {
         Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.7),
+            color: Colors.white,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
@@ -306,8 +306,8 @@ class _BrandInfoState extends State<BrandInfo> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                        const Text('1', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
-                        Text(brand_list[0], style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
+                        const Text('1', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),),
+                        Text(brand_list[0], style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),),
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -316,8 +316,8 @@ class _BrandInfoState extends State<BrandInfo> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('2', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
-                      Text(brand_list[1], style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
+                      const Text('2', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),),
+                      Text(brand_list[1], style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),),
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -326,8 +326,8 @@ class _BrandInfoState extends State<BrandInfo> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('3', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
-                      Text(brand_list[2], style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
+                      const Text('3', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),),
+                      Text(brand_list[2], style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),),
                     ],
                   ),
                 ]

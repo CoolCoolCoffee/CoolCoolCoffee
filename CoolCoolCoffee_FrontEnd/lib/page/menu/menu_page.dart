@@ -37,6 +37,7 @@ class _MenuPageState extends ConsumerState<MenuPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xffF9F8F7),
       appBar: AppBar(
         backgroundColor: Colors.white,
         leading: IconButton(
@@ -51,7 +52,7 @@ class _MenuPageState extends ConsumerState<MenuPage> {
         centerTitle: true,
         title: Text(
             _brand,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black
           ),
         ),
@@ -71,15 +72,21 @@ class _MenuPageState extends ConsumerState<MenuPage> {
           )
         ],
       ),
-      body:Column(
-        children: [
-          Container(height: 20,),
-          Expanded(child: BrandListView(brandCallback: _changeBrandCallback,)),
-          Expanded(
-            flex: 9,
-            child: MenuListView(brandName: _brand,)
-          )
-        ],
+      body:Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            Container(
+                height: 80,
+                margin: const EdgeInsets.all(5),
+                child: Expanded(child: BrandListView(brandCallback: _changeBrandCallback,))),
+            Expanded(
+              flex: 9,
+              child: MenuListView(brandName: _brand,)
+            )
+          ],
+        ),
       ),
       floatingActionButton: Stack(
         children: [
@@ -87,17 +94,17 @@ class _MenuPageState extends ConsumerState<MenuPage> {
             alignment: Alignment(
               Alignment.bottomRight.x,Alignment.bottomRight.y - 0.25,
             ),
-            child:CameraButton(),
+            child: const CameraButton(),
           ),
           Align(
             alignment: Alignment.bottomRight,
             child: FloatingActionButton(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50))),
-              backgroundColor: Colors.blue,
-              focusColor: Colors.white,
-              child: Icon(Icons.add,color: Colors.white,),
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50))),
+              backgroundColor: const Color(0xff93796A),
+              focusColor: const Color(0xffF9F8F7),
+              child: const Icon(Icons.add,color: Colors.white,),
               onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>GeneralMenuAddPage()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> const GeneralMenuAddPage()));
               },
             ),
           )

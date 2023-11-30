@@ -40,7 +40,7 @@ class _ProfileChangePageState extends State<ProfileChangePage> {
       body: Center(
         child: Container(
           padding: const EdgeInsets.all(20),
-          color: Colors.brown.withOpacity(0.1),
+          color: Color(0xffF9F8F7),
           width: double.infinity,
           height: double.infinity,
 

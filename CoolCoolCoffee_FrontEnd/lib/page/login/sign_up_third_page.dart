@@ -393,18 +393,20 @@ class _UserFormState extends State<SignUpThirdPage> {
                 ],
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 5),
             Center(
               child: Container(
                 height: 70,
                 width: MediaQuery.of(context).size.width,
                 padding: const EdgeInsets.only(top: 8.0),
                 child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.brown.withOpacity(0.6)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.brown.withOpacity(0.6),
+                      minimumSize: const Size.fromHeight(70),
+                      shape: const BeveledRectangleBorder(),
                     ),
                     onPressed: _onNextButtonPressed,
-                    child: const Text('제출', style: TextStyle(fontSize: 22),)),
+                    child: const Text('제출', style: TextStyle(fontSize: 22, color: Colors.white),)),
               ),
             ),
           ],
