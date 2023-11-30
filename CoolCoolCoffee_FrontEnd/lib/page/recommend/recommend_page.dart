@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../menu/conveni_add_page.dart';
 import '../menu/menu_add_page.dart';
 
 class RecommendPage extends StatefulWidget {
@@ -113,8 +114,17 @@ class _RecommendPageState extends State<RecommendPage> {
                                             final DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[index];
                                             return GestureDetector(
                                               onTap: (){
-                                                Navigator.push(context, MaterialPageRoute(builder: (context) => MenuAddPage(menuSnapshot: documentSnapshot, brandName: brand, size: documentSnapshot['basic_size'], shot: '',)));
-                                              },
+                                                if(brand =='편의점'){
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>ConveniAddPage(menuSnapshot: documentSnapshot, brandName: brand)));
+
+                                                }else {
+                                                  Navigator.push(context, MaterialPageRoute(builder: (context) => MenuAddPage(
+                                                                menuSnapshot: documentSnapshot,
+                                                                brandName: brand,
+                                                                size: documentSnapshot['basic_size'],
+                                                                shot: '',)));
+                                                }
+                                                },
                                               child:
                                                 Container(
                                                   child: Stack(
