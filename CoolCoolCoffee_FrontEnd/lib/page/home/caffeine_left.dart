@@ -370,7 +370,13 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
     String predict_sleep_time = '';
     if(temp.contains('AM')){
       temp = temp.split(' ')[0];
-      predict_sleep_time = temp;
+      int hour = int.parse(temp.split(':')[0]);
+      int minute = int.parse(temp.split(':')[1]);
+      //자정인거임
+      if(hour ==12){
+        hour-=12;
+      }
+      predict_sleep_time = '$hour:$minute';
     }else{
       temp = temp.split(' ')[0];
       int hour = int.parse(temp.split(':')[0]);

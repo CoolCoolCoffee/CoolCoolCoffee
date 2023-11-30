@@ -1,3 +1,4 @@
+import 'package:coolcoolcoffee_front/provider/long_term_noti_provider.dart';
 import 'package:coolcoolcoffee_front/provider/short_term_noti_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,6 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
       _fetchSleepTimeAndUpdateState();
     }
   }
-
 
   List<HealthConnectDataType> types = [HealthConnectDataType.SleepSession];
 
@@ -114,6 +114,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                         final formatter = DateFormat('h:mm a');
                         resultText_start_real = formatter.format(resultText_start);
                         today_sleep_time=resultText_start_real;
+
                         resultText_end_real = formatter.format(resultText_end);
                         today_wake_time=resultText_end_real;
                         ref.watch(shortTermNotiProvider.notifier).resetTodayAlarm();
@@ -122,6 +123,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                       }
                       _updateResultText();
                       _updateFirestore();
+                      _updateLongTerm(today_sleep_time);
                       print(resultText_start_real);
                       print(resultText_end_real);
                       ref.watch(shortTermNotiProvider.notifier).resetCaffCompare();
@@ -231,7 +233,88 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
       ),
     );
   }
+  Future<void> _updateLongTerm(String sleep_time) async {
+    List<String> sleepTimeComponents = sleep_time.split(':');
+    int sleepHours = int.parse(sleepTimeComponents[0]);
+    if (sleepHours < 12 && sleep_time.toLowerCase().contains('pm')) {
+      sleepHours += 12;
+    }
+    if(sleepHours==12&&sleep_time.toLowerCase().contains('am')){
+      sleepHours-=12;
+    }
+    String convertedSleepTime = '$sleepHours:${sleepTimeComponents[1]}';
+    convertedSleepTime = convertedSleepTime.replaceAll(RegExp(r'\s?[APMapm]{2}\s?$'), '');
 
+    String currentDate = DateTime.now().toLocal().toString().split(' ')[0];
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    String yesterday = DateTime.now().subtract(Duration(days: 1)).toLocal().toString().split(' ')[0];
+    DocumentSnapshot<Map<String, dynamic>> yesterdayDoc =
+    await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(yesterday).get();
+    DocumentSnapshot<Map<String,dynamic>>  userDoc =
+    await FirebaseFirestore.instance.collection('Users').doc(uid).get();
+    print('오늘꺼냐?? ${ref.watch(longTermNotiProvider).todayDate} 오늘: $currentDate');
+    //어제 수면 정보 존재함
+    if(yesterdayDoc.exists&&yesterdayDoc.data()!.containsKey('predict_sleep_time')){
+      //print('오늘꺼냐?? ${ref.watch(longTermNotiProvider).todayDate} 오늘: $currentDate');
+      //아직 오늘꺼 계산 안함.
+      if(ref.watch(longTermNotiProvider).todayDate != currentDate){
+        print('언제 잤는 데?? $convertedSleepTime 어제 예상은 언젠데? ${yesterdayDoc['predict_sleep_time']}');
+        String compare = _calLongTermFeedback(convertedSleepTime, yesterdayDoc['predict_sleep_time']);
+        ref.watch(longTermNotiProvider.notifier).setTodayDate(currentDate);
+        Map<String,dynamic> longterm_feed = userDoc['longterm_feedback'];
+        longterm_feed[compare]++;
+        print('compare : $compare');
+        print('$longterm_feed');
+        await FirebaseFirestore.instance.collection('Users').doc(uid).set(
+            {'longterm_feedback':longterm_feed},SetOptions(merge: true)
+        );
+      }
+      //오늘꺼 수정하는거임
+      else{
+        print('언제 잤는 데?? $convertedSleepTime 어제 예상은 언젠데? ${yesterdayDoc['predict_sleep_time']}');
+        String temp = ref.watch(longTermNotiProvider).todayCal;
+        String compare = _calLongTermFeedback(convertedSleepTime, yesterdayDoc['predict_sleep_time']);
+        print('$temp , $compare');
+        Map<String,dynamic> longterm_feed = userDoc['longterm_feedback'];
+        longterm_feed[temp]--;
+        longterm_feed[compare]++;
+        print('$longterm_feed');
+        await FirebaseFirestore.instance.collection('Users').doc(uid).set(
+            {'longterm_feedback':longterm_feed},SetOptions(merge: true)
+        );
+      }
+    }else{
+      ref.watch(longTermNotiProvider.notifier).setTodayDate(currentDate);
+    }
+  }
+  String _calLongTermFeedback(String realSleepTime, String predictSleepTime){
+    int realSleepHour = 0;
+    int realSleepMin = 0;
+    int predictSleepHour = 0;
+    int predictSleepMin=0;
+    var splitRealTime = realSleepTime.split(':');
+    realSleepHour = int.parse(splitRealTime[0]);
+    realSleepMin = int.parse(splitRealTime[1]);
+    var splitPredictTime = predictSleepTime.split(':');
+    predictSleepHour = int.parse(splitPredictTime[0]);
+    predictSleepMin = int.parse(splitPredictTime[1]);
+    if(realSleepHour <12) realSleepHour+=24;
+    if(predictSleepHour<12) predictSleepHour+=24;
+    double realTime = realSleepHour.toDouble() + realSleepMin.toDouble()/60.0;
+    double predictTime = predictSleepHour.toDouble() + predictSleepMin.toDouble()/60.0;
+
+    if((realTime - predictTime)>0.5) {
+      ref.watch(longTermNotiProvider.notifier).setTodayCal('over');
+      return 'over';
+    }
+    if((realTime-predictTime)<-0.5) {
+      ref.watch(longTermNotiProvider.notifier).setTodayCal('less');
+      return 'less';
+    } else {
+      ref.watch(longTermNotiProvider.notifier).setTodayCal('same');
+      return 'same';
+    }
+  }
   Future<void> _updateFirestore() async {
     String currentDate = DateTime.now().toLocal().toString().split(' ')[0];
 
@@ -253,6 +336,9 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
     if (sleepHours < 12 && today_sleep_time.toLowerCase().contains('pm')) {
       sleepHours += 12;
     }
+    if(sleepHours==12&&today_sleep_time.toLowerCase().contains('am')){
+      sleepHours-=12;
+    }
     String convertedSleepTime = '$sleepHours:${sleepTimeComponents[1]}';
     convertedSleepTime = convertedSleepTime.replaceAll(RegExp(r'\s?[APMapm]{2}\s?$'), '');
 
@@ -262,6 +348,9 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
     if (wakeHours < 12 && today_wake_time.toLowerCase().contains('pm')) {
       wakeHours += 12;
     }
+    if(wakeHours==12&&today_wake_time.toLowerCase().contains('am')){
+      wakeHours-=12;
+    }
     String convertedWakeTime = '$wakeHours:${wakeTimeComponents[1]}';
     convertedWakeTime = convertedWakeTime.replaceAll(RegExp(r'\s?[APMapm]{2}\s?$'), '');
 
@@ -270,6 +359,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
     ref.watch(sleepParmaProvider.notifier).changeWakeTime(today_wake_time);
     final prov = ref.watch(sleepParmaProvider.notifier);
     print(prov.state.wake_time);
+
     if (todayDocument.exists) {
       // 문서 있으면 sleep_time 및 wake_time 필드 업데이트
       await userSleepCollection.doc(currentDate).update({
@@ -283,7 +373,6 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
         'wake_time': convertedWakeTime,
       });
     }
-    //print("sssssssssssssss $currentDate");
   }
   void _updateResultText() {
     setState(() {});
@@ -539,6 +628,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                     ref.watch(shortTermNotiProvider.notifier).resetCaffCompare();
                     ref.watch(shortTermNotiProvider.notifier).resetTodayAlarm();
                     await _fetchSleepTimeAndUpdateState();
+                    await _updateLongTerm(selectedSleepTime);
                     print('Selected Sleep Time: $selectedSleepTime');
                     print('Selected Wake Time: $selectedWakeTime');
                   },
@@ -580,6 +670,9 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
     if (sleepHours < 12 && selectedSleepTime.toLowerCase().contains('pm')) {
       sleepHours += 12;
     }
+    if(sleepHours==12&&selectedSleepTime.toLowerCase().contains('am')){
+      sleepHours-=12;
+    }
     String convertedSleepTime = '$sleepHours:${sleepTimeComponents[1]}';
     convertedSleepTime = convertedSleepTime.replaceAll(RegExp(r'\s?[APMapm]{2}\s?$'), '');
 
@@ -588,6 +681,9 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
     int wakeHours = int.parse(wakeTimeComponents[0]);
     if (wakeHours < 12 && selectedWakeTime.toLowerCase().contains('pm')) {
       wakeHours += 12;
+    }
+    if(wakeHours==12&&selectedWakeTime.toLowerCase().contains('am')){
+      wakeHours-=12;
     }
     String convertedWakeTime = '$wakeHours:${wakeTimeComponents[1]}';
     convertedWakeTime = convertedWakeTime.replaceAll(RegExp(r'\s?[APMapm]{2}\s?$'), '');
