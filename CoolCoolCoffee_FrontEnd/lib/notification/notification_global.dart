@@ -17,8 +17,9 @@ class NotificationGlobal {
     );
     await _localNotification.initialize(initSettings);
   }
+
   //long term feed id : A -> 4, B -> 5
-  static longTermFeedBackNoti(bool isTooEarly, bool isTooLate, int hour, int minute) async {
+  /*static longTermFeedBackNoti(bool isTooEarly, bool isTooLate, int hour, int minute) async {
     const NotificationDetails _details = NotificationDetails(
       android: AndroidNotificationDetails('long_term_notifiaction', 'long Term Notification',channelShowBadge: true,),
     );
@@ -52,7 +53,7 @@ class NotificationGlobal {
         matchDateTimeComponents: DateTimeComponents.time,
       );
     }
-  }
+  }*/
   //short ter id : term 2 -> 2, term 1 -> 3
   static shortTermFeedBackNoti(bool isCaffOk, bool isCaffTooMuch, int caff_length, int hour, int minute, int delayed_hour, int delayed_minutes) async {
     const NotificationDetails _details = NotificationDetails(

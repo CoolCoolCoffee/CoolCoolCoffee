@@ -16,8 +16,8 @@ class LongPopup_B extends StatelessWidget {
         TextButton(
           onPressed: () async {
             Navigator.of(context).pop();
-            await _updateCaffeineHalfTime();
             _showB2Dialog(context);
+            await _updateCaffeineHalfTime();
             // 카페인 반감기 늘려주기
           },
           child: Text('예'),
@@ -36,6 +36,7 @@ class LongPopup_B extends StatelessWidget {
 
   void _showB1Dialog(BuildContext context) {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -65,6 +66,7 @@ class LongPopup_B extends StatelessWidget {
 
   void _showB1_YesDialog(BuildContext context) {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return _ChangeDialog();
@@ -74,6 +76,7 @@ class LongPopup_B extends StatelessWidget {
 
   void _showB2Dialog(BuildContext context) {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -129,7 +132,7 @@ class _ChangeDialogState extends ConsumerState<_ChangeDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('B1_Yes'),
+      title: Text('평균 취침 시간과 적정 수면 시간을 재입력해주세요!',style: TextStyle(fontSize: 15),),
       content: Expanded(
         child: Column(
           mainAxisSize: MainAxisSize.min,

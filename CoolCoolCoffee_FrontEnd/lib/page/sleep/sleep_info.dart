@@ -1,4 +1,5 @@
 import 'package:coolcoolcoffee_front/notification/notification_global.dart';
+import 'package:coolcoolcoffee_front/page/home/longterm_popup_A.dart';
 import 'package:coolcoolcoffee_front/provider/long_term_noti_provider.dart';
 import 'package:coolcoolcoffee_front/provider/short_term_noti_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,6 +13,7 @@ import 'package:coolcoolcoffee_front/service/user_sleep_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../provider/sleep_param_provider.dart';
+import '../home/longterm_popup_B.dart';
 
 class SleepInfoWidget extends ConsumerStatefulWidget {
   final DateTime selectedDay;
@@ -263,31 +265,30 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
           String max = _checkMax(longterm_feed);
           bool isTooEarly = false;
           bool isTooLate = false;
-          DateTime dt = DateTime.now();
-          //int hour = dt.hour+1;
-          int hour = dt.hour+1;
-          int minute = dt.minute;
-          if(hour>=24){
-            hour=-24;
-          }
-          if(minute > 60){
-            minute-=60;
-            hour+=1;
-            if(hour>24){
-              hour-=24;
-            }
-          }
           if(max =='less'){
-            print('less');
             isTooEarly = true;
           }
           if(max == 'over'){
-            print('over');
             isTooLate = true;
           }
-          NotificationGlobal.cancelNotification(4);
-          NotificationGlobal.cancelNotification(5);
-          NotificationGlobal.longTermFeedBackNoti(isTooEarly, isTooLate, hour, minute);
+          if(isTooEarly){
+            showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                return LongPopup_A();
+              },
+            );
+          }
+          if(isTooLate){
+            showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                return LongPopup_B();
+              },
+            );
+          }
         }
         if(longterm_feed['same']+longterm_feed['less']+longterm_feed['over']>4){
           for(var key in longterm_feed.keys){
@@ -320,31 +321,31 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
           String max = _checkMax(longterm_feed);
           bool isTooEarly = false;
           bool isTooLate = false;
-          DateTime dt = DateTime.now();
-          //int hour = dt.hour+1;
-          int hour = dt.hour+1;
-          int minute = dt.minute;
-          if(hour>=24){
-            hour=-24;
-          }
-          if(minute > 60){
-            minute-=60;
-            hour+=1;
-            if(hour>24){
-              hour-=24;
-            }
-          }
+
           if(max =='less'){
-            print('less');
             isTooEarly = true;
           }
           if(max == 'over'){
-            print('over');
             isTooLate = true;
           }
-          NotificationGlobal.cancelNotification(4);
-          NotificationGlobal.cancelNotification(5);
-          NotificationGlobal.longTermFeedBackNoti(isTooEarly, isTooLate, hour, minute);
+          if(isTooEarly){
+            showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                return LongPopup_A();
+              },
+            );
+          }
+          if(isTooLate){
+            showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                return LongPopup_B();
+              },
+            );
+          }
         }
         if(longterm_feed['same']+longterm_feed['less']+longterm_feed['over']>4){
           for(var key in longterm_feed.keys){
@@ -373,6 +374,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
         max = key;
       }
     }
+    if(map['over']==map['less']) return 'same';
     return max;
   }
   String _calLongTermFeedback(String realSleepTime, String predictSleepTime){
