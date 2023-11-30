@@ -88,7 +88,7 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
           Bubble(
             title: "Starbucks label",
             iconColor: Colors.white,
-            bubbleColor: Colors.blue,
+            bubbleColor: const Color(0xff93796A),
             icon: Icons.label_outline_rounded,
             titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
             onPress: () {
@@ -98,7 +98,7 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
           Bubble(
             title: "App Capture",
             iconColor: Colors.white,
-            bubbleColor: Colors.blue,
+            bubbleColor: const Color(0xff93796A),
             icon: Icons.screenshot_outlined,
             titleStyle: const TextStyle(fontSize: 16, color: Colors.white),
             onPress: () {
@@ -110,7 +110,7 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
         onPress: () => _animationController!.isCompleted
             ? _animationController!.reverse()
             : _animationController!.forward(),
-        backGroundColor: Colors.blue,
+        backGroundColor: const Color(0xff93796A),
         iconColor: Colors.white,
         iconData: Icons.camera_alt_outlined,
     );
