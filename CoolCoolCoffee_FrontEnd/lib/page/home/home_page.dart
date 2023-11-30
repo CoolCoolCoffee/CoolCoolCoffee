@@ -150,12 +150,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                     },
                     child: Text('LongTerm_B'),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      openAppSettings(); // 허용 설정 페이지
-                    },
-                    child: Text('알림 허용'),
-                  ),
                 ],
               ),
               StreamBuilder(

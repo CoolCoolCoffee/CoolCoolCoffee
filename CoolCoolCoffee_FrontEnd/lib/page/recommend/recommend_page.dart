@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../function/mode_color.dart';
+import '../../provider/color_mode_provider.dart';
 import '../menu/conveni_add_page.dart';
 import '../menu/menu_add_page.dart';
 
@@ -31,7 +33,7 @@ class _RecommendPageState extends ConsumerState<RecommendPage> {
     });
     print("$userFavBrand  dfdfdfdfd");*/
     return Scaffold(
-        backgroundColor: Colors.brown.withOpacity(0.1),
+        backgroundColor: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['background_color']:modeColor.noSleepModeColor['background_color'],
         appBar: AppBar(
           title: const Text('추천', style: TextStyle(
               color: Colors.black,
@@ -64,7 +66,8 @@ class _RecommendPageState extends ConsumerState<RecommendPage> {
                   child: Text(
                       '앞으로 $userCaffeine mg 마실 수 있어요!',
                     style: const TextStyle(
-                      fontSize: 20
+                      fontSize: 20,
+                      color: Colors.black,
                     ),
                   ),
               ),
@@ -91,9 +94,10 @@ class _RecommendPageState extends ConsumerState<RecommendPage> {
                                       padding: const EdgeInsets.all(7),
                                       child: Text(
                                           "  $brand 추천 메뉴",
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 17,
+                                          color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['black_color']:modeColor.noSleepModeColor['white_color'],
                                         ),
                                       ),
                                     ),
