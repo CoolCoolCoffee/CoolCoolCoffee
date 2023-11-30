@@ -114,8 +114,10 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                         resultText_end_real = formatter.format(resultText_end);
                         today_wake_time=resultText_end_real;
                         ref.watch(shortTermNotiProvider.notifier).resetTodayAlarm();
+                        _showConfirmationDialog_get_auto();
                       } catch (e) {
                         print(e.toString());
+                        _showConfirmationDialog_get_auto_fail();
                       }
                       _updateResultText();
                       _updateFirestore();
@@ -710,6 +712,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                 ElevatedButton(
                   onPressed: () async {
                     Navigator.of(context).pop();
+                    _showConfirmationDialog_manual();
 
                     String selectedSleepTime = '${sleepHoursController.text}:${sleepMinutesController.text} ${sleepIsAM ? 'AM' : 'PM'}';
                     String selectedWakeTime = '${wakeHoursController.text}:${wakeMinutesController.text} ${wakeIsAM ? 'AM' : 'PM'}';
@@ -734,6 +737,72 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
               ],
             );
           },
+        );
+      },
+    );
+  }
+  void _showConfirmationDialog_manual() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text('취침시간, 기상시간이 새로 입력되었습니다!'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // 팝업 닫기
+              },
+              child: Text('닫기'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+  void _showConfirmationDialog_get_auto() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text('취침시간, 기상시간이 새로 입력되었습니다!'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // 팝업 닫기
+              },
+              child: Text('닫기'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+  void _showConfirmationDialog_get_auto_fail() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text('삼성헬스를 정보를 불러오지 못했습니다!\n 입력 및 연결 상태를 확인해주세요'),
+          actions: [
+            TextButton(
+              child: const Text("설정 가기", style: TextStyle(color: Colors.brown, fontWeight: FontWeight.bold)),
+              onPressed: () async {
+                await HealthConnectFactory.isApiSupported();
+                await HealthConnectFactory.isAvailable();
+                try {
+                  await HealthConnectFactory.openHealthConnectSettings();
+                } catch (e) {
+                  print("error : $e");
+                }
+              },
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // 팝업 닫기
+              },
+              child: Text('닫기'),
+            ),
+          ],
         );
       },
     );
