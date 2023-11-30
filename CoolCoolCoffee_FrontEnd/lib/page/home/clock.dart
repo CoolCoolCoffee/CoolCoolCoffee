@@ -285,32 +285,10 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
         Container(
           margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.ideographic,
             children: [
-              if(short_term.isCaffOk)
-                RichText(
-                    textAlign: TextAlign.start,
-                    text: TextSpan(
-                      text: "목표한 취침 시간에 수면이 가능합니다!",
-                      style: TextStyle(
-                        color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['black_color']:modeColor.noSleepModeColor['white_color'],
-                        fontSize: 16,
-                      ),
-                    )
-                ),
-              if(short_term.isCaffTooMuch)
-                RichText(
-                    textAlign: TextAlign.start,
-                    text: TextSpan(
-                      text: "취침 시간이 !시간 !분 밀릴 예정입니다!",
-                      style: TextStyle(
-                        color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['black_color']:modeColor.noSleepModeColor['white_color'],
-                        fontSize: 16,
-                      ),
-                    )
-                ),
               if (prov.goal_sleep_time.isEmpty)
                 RichText(
                   textAlign: TextAlign.start,
@@ -322,7 +300,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
                     ),
                   ),
                 ),
-              //SizedBox(width: 55),
+              //Sized침Box(width: 55),
               ElevatedButton(
                 onPressed: () {
                   _showEditPopup(context);

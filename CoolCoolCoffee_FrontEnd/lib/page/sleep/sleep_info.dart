@@ -791,7 +791,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: Text('취침시간, 기상시간이 새로 입력되었습니다!'),
+          content: Text('취침시간, 기상시간이 새로 입력되었습니다!\n피곤도도 설정하러 가볼까요?'),
           actions: [
             TextButton(
               onPressed: () {
