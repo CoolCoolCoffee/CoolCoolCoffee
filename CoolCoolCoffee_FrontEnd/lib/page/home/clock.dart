@@ -3,12 +3,9 @@ import 'package:coolcoolcoffee_front/provider/color_mode_provider.dart';
 import 'package:coolcoolcoffee_front/provider/short_term_noti_provider.dart';
 import 'package:coolcoolcoffee_front/provider/sleep_param_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:analog_clock/analog_clock.dart';
-import 'package:flutter_health_connect/flutter_health_connect.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart';
 
 class EditPopup extends StatefulWidget {
   final Function(String) onSave;
@@ -50,77 +47,91 @@ class _EditPopupState extends State<EditPopup> {
 
   @override
   Widget build(BuildContext context) {
+
+    List<bool> _isSelected = [sleepIsAM, !sleepIsAM];
+    void toggleSelect(value) {
+      print(value);
+
+      if(value == 0){
+        sleepIsAM = true;
+      } else{
+        sleepIsAM = false;
+      }
+
+      setState(() {
+        _isSelected = [sleepIsAM, !sleepIsAM];
+        print(_isSelected);
+      });
+    }
+
     return AlertDialog(
-      title: Text('목표 수면 시간'),
+      backgroundColor: Colors.white,
+      title: const Center(child: Text('목표 취침 시간을 입력해주세요', style: TextStyle(fontSize: 16),)),
       content: SingleChildScrollView(
-        child: Container(
-          //constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height - 100),
-          child: Column(
-            children: [
-              Text(
-                '취침시간',
-                textAlign: TextAlign.start,
-              ),
-              SizedBox(height: 5),
-              Row(
-                children: [
-                  Container(
-                    width: 60,
-                    height: 40,
-                    child: TextField(
-                      controller: sleepHoursController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: '시',
-                        border: OutlineInputBorder(),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Column(
+                  children: [
+                    ToggleButtons(
+                        direction: Axis.vertical,
+                        isSelected: _isSelected,
+                        onPressed: toggleSelect,
+                        selectedColor: Colors.white,
+                        fillColor: Colors.brown.withOpacity(0.6),
+                        borderRadius: const BorderRadius.all(Radius.circular(4)),
+                        constraints: const BoxConstraints(
+                          minHeight: 45.0,
+                          minWidth: 60.0,
+                        ),
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            child: Text('AM', style: TextStyle(fontSize: 16),),),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            child: Text('PM', style: TextStyle(fontSize: 16),),),
+                        ]
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(left: 10, right: 10),
+                      width: 60,
+                      height: 60,
+                      child: TextField(
+                        controller: sleepHoursController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          labelText: '시',
+                          border: OutlineInputBorder(),
+                        ),
                       ),
                     ),
-                  ),
-                  Text(
-                    ' : ',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Container(
-                    width: 60,
-                    height: 40,
-                    child: TextField(
-                      controller: sleepMinutesController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: '분',
-                        border: OutlineInputBorder(),
+                    const Text(' : ', style: TextStyle(fontSize: 20),),
+                    Container(
+                      margin: const EdgeInsets.only(left: 10, right: 10),
+                      width: 60,
+                      height: 60,
+                      child: TextField(
+                        controller: sleepMinutesController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          labelText: '분',
+                          border: OutlineInputBorder(),
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        sleepIsAM = true;
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: sleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
-                      minimumSize: Size(40, 40),
-                    ),
-                    child: Text('AM'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        sleepIsAM = false;
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: !sleepIsAM ? Colors.brown.withOpacity(0.6) : Colors.brown.withOpacity(0.2),
-                      minimumSize: Size(40, 40),
-                    ),
-                    child: Text('PM'),
-                  ),
-                ],
-              ),
-            ],
-          ),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
       ),
       actions: [
@@ -129,18 +140,17 @@ class _EditPopupState extends State<EditPopup> {
             isCancelled = true;
             Navigator.of(context).pop();
           },
-          child: Text(
-            '취소',
-            style: TextStyle(
-              color: Colors.black,
-            ),
-          ),
           style: TextButton.styleFrom(
-            backgroundColor: Colors.grey[300],
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            minimumSize: Size(60, 40),
+            minimumSize: const Size(60, 40),
+          ),
+          child: const Text(
+            '취소',
+            style: TextStyle(
+              color: Colors.grey,
+            ),
           ),
         ),
         TextButton(
@@ -184,18 +194,14 @@ class _EditPopupState extends State<EditPopup> {
             }
             updateFirestore();
           },
-          child: Text(
-            '확인',
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
           style: TextButton.styleFrom(
-            backgroundColor: Colors.brown,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
-            minimumSize: Size(60, 40),
+            minimumSize: const Size(60, 40),
+          ),
+          child: const Text(
+            '입력', style: TextStyle(color: Colors.brown, fontWeight: FontWeight.bold),
           ),
         ),
       ],
@@ -276,107 +282,109 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
     return Column(
       //crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.baseline,
-          textBaseline: TextBaseline.ideographic,
-          children: [
-            if(short_term.isCaffOk)
-              RichText(
+        Container(
+          margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.ideographic,
+            children: [
+              if(short_term.isCaffOk)
+                RichText(
+                    textAlign: TextAlign.start,
+                    text: TextSpan(
+                      text: "목표한 취침 시간에 수면이 가능합니다!",
+                      style: TextStyle(
+                        color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['black_color']:modeColor.noSleepModeColor['white_color'],
+                        fontSize: 16,
+                      ),
+                    )
+                ),
+              if(short_term.isCaffTooMuch)
+                RichText(
+                    textAlign: TextAlign.start,
+                    text: TextSpan(
+                      text: "취침 시간이 !시간 !분 밀릴 예정입니다!",
+                      style: TextStyle(
+                        color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['black_color']:modeColor.noSleepModeColor['white_color'],
+                        fontSize: 16,
+                      ),
+                    )
+                ),
+              if (prov.goal_sleep_time.isEmpty)
+                RichText(
                   textAlign: TextAlign.start,
                   text: TextSpan(
-                    text: "목표한 취침 시간에 수면이 가능합니다!",
+                    text: "목표 수면 시간을 설정해주세요.",
                     style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
+                      color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['black_color']:modeColor.noSleepModeColor['white_color'],
+                      fontSize: 16,
                     ),
-                  )
-              ),
-            if(short_term.isCaffTooMuch)
-              RichText(
-                  textAlign: TextAlign.start,
-                  text: TextSpan(
-                    text: "취침 시간이 !시간 !분 밀릴 예정입니다!",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                    ),
-                  )
-              ),
-            if (prov.goal_sleep_time.isEmpty)
-              RichText(
-                textAlign: TextAlign.start,
-                text: TextSpan(
-                  text: "목표 수면 시간을 설정해주세요.",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 15,
                   ),
                 ),
-              ),
-            //SizedBox(width: 55),
-            ElevatedButton(
-              onPressed: () {
-                _showEditPopup(context);
-                print("dddd $sleepEnteredTime");
-              },
-              style: ElevatedButton.styleFrom(
-                primary: null,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+              //SizedBox(width: 55),
+              ElevatedButton(
+                onPressed: () {
+                  _showEditPopup(context);
+                  print("dddd $sleepEnteredTime");
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: null,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  elevation: 0,
+                  backgroundColor: Colors.transparent,
                 ),
-                elevation: 0,
-                backgroundColor: Colors.transparent,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.edit, // 연필 아이콘
-                    color: Colors.brown,
-                    size: 18,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.edit, // 연필 아이콘
+                      color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['main_color']:modeColor.noSleepModeColor['main_color'],
+                      size: 18,
 
-                  ),
-                  SizedBox(width: 3),
-                  Text(
-                    prov.goal_sleep_time.isNotEmpty
-                        ? '수정'
-                        : '설정',
-                    style: TextStyle(
-                      color: Colors.brown,
-                      fontSize: 17,
-                      decoration: TextDecoration.underline,
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 3),
+                    Text(
+                      prov.goal_sleep_time.isNotEmpty
+                          ? '수정'
+                          : '설정',
+                      style: TextStyle(
+                        color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['main_color']:modeColor.noSleepModeColor['main_color'],
+                        fontSize: 15,
+                        // decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-        SizedBox(height: 10),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(150),
-          child: Container(
-            width: 250,
-            height: 250,
-            color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['color_background']:modeColor.noSleepModeColor['color_background'],
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    //'취침 시간\n $sleepEnteredTime',
-                    prov.goal_sleep_time.isNotEmpty
-                        ? '취침 시간\n ${prov.goal_sleep_time}'
-                        : '아직 목표 취침시간이 설정되지 않았네요!\n 목표 취침시간을 설정해볼까요?',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
+        Container(
+          margin: const EdgeInsets.all(10),
+          width: 250,
+          height: 250,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['main_color']:modeColor.noSleepModeColor['main_color'],
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  //'취침 시간\n $sleepEnteredTime',
+                  prov.goal_sleep_time.isNotEmpty
+                      ? '목표 취침 시간\n     ${prov.goal_sleep_time}'
+                      : '아직 목표 취침시간이 설정되지 않았네요!\n 목표 취침시간을 설정해볼까요?',
+                  style: TextStyle(
+                    color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['white_color']:modeColor.noSleepModeColor['black_color'],
+                    fontSize: 20,
                   ),
-                  SizedBox(height: 10,),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
