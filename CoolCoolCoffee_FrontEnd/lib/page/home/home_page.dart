@@ -1,11 +1,15 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coolcoolcoffee_front/function/mode_color.dart';
+import 'package:coolcoolcoffee_front/provider/color_mode_provider.dart';
+import 'package:coolcoolcoffee_front/provider/long_term_noti_provider.dart';
 import 'package:coolcoolcoffee_front/provider/sleep_param_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 import '../../service/user_caffeine_service.dart';
 import 'caffeine_left.dart';
 import 'drink_list.dart';
@@ -82,14 +86,36 @@ class _HomePageState extends ConsumerState<HomePage> {
         appBar: AppBar(
           title: const Center(
             child: Text(
-              '홈 화면',
+              '쿨쿨커피',
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w600,
             ),
           ),
         ),
-        backgroundColor: Colors.white,
+        actions: [         // 조절, 밤샘 모드 선택 토글
+          Container(
+            padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+            child: ToggleSwitch(
+              minWidth: 50.0,
+              initialLabelIndex: ref.watch(colorModeProvider).selectedIndex,
+              cornerRadius: 10.0,
+              activeFgColor: Colors.white,
+              activeBgColors: [[Colors.brown.withOpacity(0.4)], const [Colors.brown]],
+              inactiveFgColor: Colors.white,
+              inactiveBgColor: Colors.grey,
+              totalSwitches: 2,
+              labels: const ['조절', '밤샘'],
+              onToggle: (index) {
+                setState(() {
+                  ref.watch(colorModeProvider.notifier).switchMode(index!);
+                  ref.watch(colorModeProvider.notifier).switchIndex(index);
+                });
+              },
+            ),
+          ),
+        ],
+        backgroundColor: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['page_background']:modeColor.noSleepModeColor['page_background'],
         toolbarHeight: 50,
         iconTheme: IconThemeData(color: Colors.white),
     ),

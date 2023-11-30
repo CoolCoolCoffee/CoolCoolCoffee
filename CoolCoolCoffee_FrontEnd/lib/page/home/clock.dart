@@ -1,3 +1,5 @@
+import 'package:coolcoolcoffee_front/function/mode_color.dart';
+import 'package:coolcoolcoffee_front/provider/color_mode_provider.dart';
 import 'package:coolcoolcoffee_front/provider/short_term_noti_provider.dart';
 import 'package:coolcoolcoffee_front/provider/sleep_param_provider.dart';
 import 'package:flutter/material.dart';
@@ -357,7 +359,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
           child: Container(
             width: 250,
             height: 250,
-            color: Colors.brown.withOpacity(0.6),
+            color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['color_background']:modeColor.noSleepModeColor['color_background'],
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
