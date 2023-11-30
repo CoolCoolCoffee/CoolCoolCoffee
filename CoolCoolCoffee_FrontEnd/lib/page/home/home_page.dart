@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/function/mode_color.dart';
 import 'package:coolcoolcoffee_front/provider/color_mode_provider.dart';
 import 'package:coolcoolcoffee_front/provider/long_term_noti_provider.dart';
+import 'package:coolcoolcoffee_front/provider/short_term_noti_provider.dart';
 import 'package:coolcoolcoffee_front/provider/sleep_param_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -113,6 +114,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   setState(() {
                     ref.watch(colorModeProvider.notifier).switchMode(index!);
                     ref.watch(colorModeProvider.notifier).switchIndex(index);
+                    ref.watch(shortTermNotiProvider.notifier).switchMode(index);
                   });
                 },
               ),

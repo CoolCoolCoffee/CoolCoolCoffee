@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coolcoolcoffee_front/provider/short_term_noti_provider.dart';
 import 'package:coolcoolcoffee_front/provider/sleep_param_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,12 +39,6 @@ class _RecommendPageState extends ConsumerState<RecommendPage> {
   @override
   Widget build(BuildContext context) {
     userCaffeine = ref.watch(sleepParmaProvider).recommendCaff;
-    /*var userFavBrand;
-    var wait = FirebaseFirestore.instance.collection('Users').doc('ZZDgEPAMHTeb57Ox1aSgtqOXpMB2').collection('user_favorite').doc('favorite_brand').get().then((value){
-      userFavBrand = value['brand_list'];
-      print(userFavBrand);
-    });
-    print("$userFavBrand  dfdfdfdfd");*/
     return Scaffold(
         backgroundColor: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['background_color']:modeColor.noSleepModeColor['background_color'],
         appBar: AppBar(
@@ -114,11 +109,18 @@ class _RecommendPageState extends ConsumerState<RecommendPage> {
                                       ),
                                     ),
                                     StreamBuilder(
-                                      stream: db.collection('Cafe_brand').doc(brand)
+                                      stream: ref.watch(shortTermNotiProvider).isControlMode?
+                                      db.collection('Cafe_brand').doc(brand)
                                           .collection('menus')
                                           .where('caffeine', isLessThanOrEqualTo: userCaffeine)
-                                          .where('caffeine',isGreaterThan: userCaffeine-50)
-                                          .limit(3).snapshots(),
+                                          .where('caffeine',isGreaterThan: userCaffeine-100)
+                                          .limit(3).snapshots():
+                                      db.collection('Cafe_brand').doc(brand)
+                                          .collection('menus')
+                                          .where('caffeine', isLessThanOrEqualTo: userCaffeine+100)
+                                          .where('caffeine',isGreaterThan: userCaffeine)
+                                          .limit(3).snapshots()
+                                      ,
                                       builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot){
                                         if(streamSnapshot.hasData){
                                           return GridView.builder(
