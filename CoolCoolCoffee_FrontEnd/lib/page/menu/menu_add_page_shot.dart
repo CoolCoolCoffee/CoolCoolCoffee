@@ -138,7 +138,7 @@ class _MenuAddPageShotState extends State<MenuAddPageShot> {
             child: Row(
               children: [
                 Expanded(
-                  flex: 3,
+                  flex: 7,
                   child: Container(
                       width: double.infinity,
                       margin: EdgeInsets.all(10),
@@ -185,7 +185,6 @@ class _MenuAddPageShotState extends State<MenuAddPageShot> {
                                   ),
                                 ),
                               ),
-                              SizedBox(width: 10),
                               ElevatedButton(
                                 onPressed: () {
                                   setState(() {
@@ -226,8 +225,9 @@ class _MenuAddPageShotState extends State<MenuAddPageShot> {
                   ),
                 ),
                 Expanded(
+                  flex: 2,
                     child: Container(
-                      padding: const EdgeInsets.only(right: 10,top: 5,bottom: 5,),
+                      margin: const EdgeInsets.only(right: 10,top: 5,bottom: 5,),
                       child: ElevatedButton(
                         onPressed: (){
                           //여기!!!!!!!

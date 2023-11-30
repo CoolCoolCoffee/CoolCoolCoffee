@@ -203,7 +203,6 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
 
     if(isToday){
       ref.watch(sleepParmaProvider.notifier).changeWakeTime(userSleepDoc['wake_time']);
-      //print('wake time ${userSleepDoc['wake_time']}');
       ref.watch(sleepParmaProvider.notifier).changeSleepQuality(userSleepDoc['sleep_quality_score']);
     }
     //오늘 꺼가 없으면 어제꺼로
