@@ -12,6 +12,7 @@ import 'drink_list.dart';
 import 'clock.dart';
 import 'package:coolcoolcoffee_front/page/home/longterm_popup_A.dart';
 import 'package:coolcoolcoffee_front/page/home/longterm_popup_B.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../menu/menu_page.dart';
 
@@ -109,7 +110,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       },
                     );
                   },
-                  child: Text('LongTerm_A Feedback'),
+                  child: Text('LongTerm_A'),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -120,7 +121,13 @@ class _HomePageState extends ConsumerState<HomePage> {
                       },
                     );
                   },
-                  child: Text('LongTerm_B Feedback'),
+                  child: Text('LongTerm_B'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    openAppSettings(); // 허용 설정 페이지
+                  },
+                  child: Text('알림 허용'),
                 ),
               ],
             ),
