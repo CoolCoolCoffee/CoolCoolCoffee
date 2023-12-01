@@ -83,8 +83,8 @@ class ShortTermNotiNotifier extends StateNotifier<ShortTermParam>{
         print('${goal_sleep_time_hour +
             goal_sleep_time_min} ,, ${predict_sleep_time_hour +
             predict_sleep_time_min})');
-        if ((goal_sleep_time_hour + goal_sleep_time_min) >=
-            (predict_sleep_time_hour + predict_sleep_time_min)) {
+        if ((goal_sleep_time_hour + goal_sleep_time_min) -
+            (predict_sleep_time_hour + predict_sleep_time_min)>=0) {
           //short term 2
           print('short term 2');
           if (!state.todayAlarm && !state.isCaffOk) {
