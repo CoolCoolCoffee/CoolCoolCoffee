@@ -125,7 +125,9 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                         }
                         _updateResultText();
                         _updateFirestore();
-                        _updateLongTerm(today_sleep_time);
+                        if(today_sleep_time != ''){
+                          _updateLongTerm(today_sleep_time);
+                        }
                         print(resultText_start_real);
                         print(resultText_end_real);
                         ref.watch(shortTermNotiProvider.notifier).resetCaffCompare();

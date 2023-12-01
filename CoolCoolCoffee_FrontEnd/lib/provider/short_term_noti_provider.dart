@@ -31,8 +31,11 @@ class ShortTermNotiNotifier extends StateNotifier<ShortTermParam>{
     state.predict_sleep_time = predict_sleep_time;
   }
   void setCaffCompare(int drinkNum){
+    print('predict lseep time : ${state.predict_sleep_time}');
+    print('goal sleep time : ${state.goal_sleep_time}');
     if(state.predict_sleep_time != ""&&state.goal_sleep_time != "") {
-      if (!state.isControlMode) {
+      print('${state.isControlMode?"조절":"밤샘"}');
+      if (state.isControlMode) {
         bool isAm = false;
         double goal_sleep_time_hour = 0;
         double goal_sleep_time_min = 0;

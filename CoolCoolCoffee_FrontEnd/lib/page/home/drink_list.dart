@@ -63,7 +63,7 @@ class _DrinkListWidgetState extends ConsumerState<DrinkListWidget> {
                     Text(
                       '$userName',
                       style: TextStyle(
-                        fontSize: 26,
+                        fontSize: 17,
                         fontWeight: FontWeight.bold,
                         color: ref.watch(colorModeProvider).isControlMode ? modeColor.controlModeColor['sub_color']:modeColor.noSleepModeColor['sub_color'],
                       ),
@@ -71,7 +71,7 @@ class _DrinkListWidgetState extends ConsumerState<DrinkListWidget> {
                     Text(
                       "님이 마신 카페인 음료",
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 15,
                         fontWeight: FontWeight.w500,
                         color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['black_color']:modeColor.noSleepModeColor['white_color'],
                       ),
