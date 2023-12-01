@@ -219,6 +219,13 @@ class _MyAppState extends State<MyApp> {
             Text(resultText),
             Text(resultText_start_real),
             Text(resultText_end_real),
+            ElevatedButton(
+              onPressed: (){
+                if(!mounted) return;
+                Navigator.popUntil(context, (route) => route.isFirst);
+              },
+              child: const Text('쿨쿨커피 시작하기'),
+            )
           ],
         ),
       ),

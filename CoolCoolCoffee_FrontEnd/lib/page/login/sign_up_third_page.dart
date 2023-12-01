@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'package:coolcoolcoffee_front/page/login/brand_btn.dart';
 
+import '../../health.dart';
+
 
 class SignUpThirdPage extends StatefulWidget {
   final String userEmail;
@@ -172,8 +174,12 @@ class _UserFormState extends State<SignUpThirdPage> {
 
         print('User registration and data saving to the database successful!');
 
+        // if(!mounted) return;
+        // Navigator.popUntil(context, (route) => route.isFirst);
+
         if(!mounted) return;
-        Navigator.popUntil(context, (route) => route.isFirst);
+        Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+
       }
     } catch (e) {
       print("Error during user registration or saving data to the database: $e");
