@@ -17,43 +17,6 @@ class NotificationGlobal {
     );
     await _localNotification.initialize(initSettings);
   }
-
-  //long term feed id : A -> 4, B -> 5
-  /*static longTermFeedBackNoti(bool isTooEarly, bool isTooLate, int hour, int minute) async {
-    const NotificationDetails _details = NotificationDetails(
-      android: AndroidNotificationDetails('long_term_notifiaction', 'long Term Notification',channelShowBadge: true,),
-    );
-    //일찍 잔 경우가 많을 때 : term A
-    if(isTooEarly){
-      print('longterm feed back term AAAAA 일찍 잤다잉 $hour $minute에 알람갈거임');
-      await _localNotification.zonedSchedule(
-        4,
-        '쿨쿨 커피',
-        '지난 4일 카페인의 영향을 많이 받으셨나요?',
-        _setTimeZoneSetting(hour, minute),
-        _details,
-        uiLocalNotificationDateInterpretation:
-        UILocalNotificationDateInterpretation.absoluteTime,
-        androidAllowWhileIdle: true,
-        matchDateTimeComponents: DateTimeComponents.time,
-      );
-    }
-    //늦게 잔 경우가 많을 때 : term B
-    if(isTooLate){
-      print('longterm feed back term BBBB 늦게 잤다잉 $hour $minute에 알람갈거임');
-      await _localNotification.zonedSchedule(
-        5,
-        '쿨쿨 커피',
-        '지난 4일 카페인의 영향을 많이 받으셨나요?',
-        _setTimeZoneSetting(hour, minute),
-        _details,
-        uiLocalNotificationDateInterpretation:
-        UILocalNotificationDateInterpretation.absoluteTime,
-        androidAllowWhileIdle: true,
-        matchDateTimeComponents: DateTimeComponents.time,
-      );
-    }
-  }*/
   //short ter id : term 2 -> 2, term 1 -> 3
   static shortTermFeedBackNoti(bool isCaffOk, bool isCaffTooMuch, int caff_length, int hour, int minute, int delayed_hour, int delayed_minutes) async {
     const NotificationDetails _details = NotificationDetails(
@@ -150,8 +113,8 @@ class NotificationGlobal {
       _now.year,
       _now.month,
       _now.day,
-      20,
-      22,
+      12,
+      30,
     );
     return scheduledDate;
   }
