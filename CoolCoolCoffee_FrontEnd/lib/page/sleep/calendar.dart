@@ -135,6 +135,20 @@ class _CalendarWidgetState extends State<CalendarWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TableCalendar(
+          calendarStyle: CalendarStyle(
+            todayTextStyle: TextStyle(color: Colors.black),
+            todayDecoration: BoxDecoration(
+              border: Border.all(color:Colors.grey.withOpacity(0.7),width: 2),
+              //border: Border.all(color: Colors.brown),
+              shape: BoxShape.circle,
+            ),
+            selectedTextStyle: TextStyle(color: Colors.black),
+            selectedDecoration:BoxDecoration(
+              border: Border.all(color: Colors.brown,width: 2),
+                color: Colors.transparent,
+                shape: BoxShape.circle,
+            ),
+          ),
           firstDay: DateTime.utc(2023, 1, 1),
           lastDay: DateTime.utc(2030, 1, 1),
           focusedDay: _focusedDay,
