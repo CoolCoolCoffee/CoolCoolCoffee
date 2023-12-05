@@ -109,7 +109,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                 inactiveFgColor: Colors.white,
                 inactiveBgColor: Colors.grey.withOpacity(0.8),
                 totalSwitches: 2,
-                labels: const ['조절', '밤샘'],
+                customTextStyles: const [
+                  TextStyle(
+                      overflow: TextOverflow.visible, fontSize: 18, inherit: false, fontFamily: 'KNPSKkomi')
+                ],
+                labels: [
+                  "조절",
+                  "밤샘",
+                ],
                 onToggle: (index) {
                   setState(() {
                     ref.watch(colorModeProvider.notifier).switchMode(index!);

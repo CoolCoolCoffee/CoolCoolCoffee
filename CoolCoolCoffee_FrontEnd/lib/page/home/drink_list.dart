@@ -55,23 +55,22 @@ class _DrinkListWidgetState extends ConsumerState<DrinkListWidget> {
                     Text(
                       "오늘 ",
                       style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 22,
                         color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['black_color']:modeColor.noSleepModeColor['white_color'],
                       ),
                     ),
                     Text(
                       '$userName',
                       style: TextStyle(
-                        fontSize: 17,
+                        fontSize: 25,
                         fontWeight: FontWeight.bold,
                         color: ref.watch(colorModeProvider).isControlMode ? modeColor.controlModeColor['sub_color']:modeColor.noSleepModeColor['sub_color'],
                       ),
                     ),
                     Text(
-                      "님이 마신 카페인 음료",
+                      " 님이 마신 카페인 음료   ",
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 22,
                         fontWeight: FontWeight.w500,
                         color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['black_color']:modeColor.noSleepModeColor['white_color'],
                       ),

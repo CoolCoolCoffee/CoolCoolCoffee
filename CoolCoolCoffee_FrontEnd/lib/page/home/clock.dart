@@ -296,7 +296,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
                     text: "목표 수면 시간을 설정해주세요.",
                     style: TextStyle(
                       color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['black_color']:modeColor.noSleepModeColor['white_color'],
-                      fontSize: 16,
+                      fontSize: 20,
                     ),
                   ),
                 ),
@@ -330,7 +330,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
                           : '설정',
                       style: TextStyle(
                         color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['main_color']:modeColor.noSleepModeColor['main_color'],
-                        fontSize: 15,
+                        fontSize: 17,
                         // decoration: TextDecoration.underline,
                       ),
                     ),
@@ -359,11 +359,12 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
                     Text(
                       //'취침 시간\n $sleepEnteredTime',
                       prov.goal_sleep_time.isNotEmpty
-                          ? '목표 취침 시간\n     ${prov.goal_sleep_time}'
+                          ? '  목표 취침 시간\n   ${prov.goal_sleep_time}'
                           : '',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 20,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     // 수정 아이콘 여기로 옮기기

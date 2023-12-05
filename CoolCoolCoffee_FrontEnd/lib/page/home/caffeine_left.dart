@@ -282,14 +282,14 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
                           Icon(
                             Icons.trending_up,
                             color: Colors.white,
-                            size: 24,
+                            size: 28,
                           ),
                           SizedBox(width: 5),
                           Text(
                             '그래프',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 14,
+                              fontSize: 20,
                             ),
                           ),
                         ],
@@ -367,15 +367,15 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
           '예상 수면 시간',
           style: TextStyle(
             color: Colors.black,
-            fontSize: 20.0,
+            fontSize: 28.0,
           ),
         ),
-          SizedBox(height: 15),
+          SizedBox(height: 5),
           Text(
             '계산중....',
             style: TextStyle(
               color: Colors.black,
-              fontSize: 20.0,
+              fontSize: 28.0,
             ),
           )],
       );
@@ -386,15 +386,16 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
           '예상 수면 시간',
           style: TextStyle(
             color: Colors.black,
-            fontSize: 20.0,
+            fontSize: 22.0,
           ),
         ),
-          SizedBox(height: 15),
+          SizedBox(height: 5),
           Text(
             bedTime,
             style: TextStyle(
               color: Colors.black,
-              fontSize: 20.0,
+              fontSize: 26.0,
+              fontWeight: FontWeight.bold,
             ),
           )],
       );

@@ -41,6 +41,7 @@ class CoolCoolCoffee extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+        fontFamily: 'KNPSKkomi',
           primarySwatch: Colors.brown,
       ),
       debugShowCheckedModeBanner: false,
