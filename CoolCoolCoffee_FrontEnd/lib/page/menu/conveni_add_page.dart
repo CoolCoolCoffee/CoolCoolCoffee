@@ -85,7 +85,7 @@ class _ConveniAddPageState extends State<ConveniAddPage> {
             child: Row(
               children: [
                 Expanded(
-                  flex: 3,
+                  flex: 7,
                   child: Container(
                       width: double.infinity,
                       margin: EdgeInsets.all(10),
@@ -94,20 +94,50 @@ class _ConveniAddPageState extends State<ConveniAddPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            padding: EdgeInsets.only(left: 5, bottom: 10),
+                            padding: EdgeInsets.only(left: 10, bottom: 10),
                             child: Text('섭취 시간',
                                 style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold)),
+                                    fontSize: 18, fontWeight: FontWeight.bold)),
                           ),
                           isConfirm
                               ? Row(
                             children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    // 확인 모드에서 분 입력 상태로 전환
+                                    isAM = true;
+                                  });
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  primary: isAM
+                                      ? Colors.brown.withOpacity(0.6)
+                                      : Colors.brown.withOpacity(0.2),
+                                  minimumSize: Size(30, 40),
+                                ),
+                                child: Text('AM'),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    // 확인 모드에서 분 입력 상태로 전환
+                                    isAM = false;
+                                  });
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  primary: !isAM
+                                      ? Colors.brown.withOpacity(0.6)
+                                      : Colors.brown.withOpacity(0.2),
+                                  minimumSize: Size(35, 40),
+                                ),
+                                child: Text('PM'),
+                              ),
                               Container(
                                 width: 60,
                                 height: 40,
                                 child: TextField(
                                   controller: hoursController,
-                                  focusNode: hoursFocusNode,
+                                  //focusNode: hoursFocusNode,
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
                                     labelText: '시',
@@ -124,7 +154,7 @@ class _ConveniAddPageState extends State<ConveniAddPage> {
                                 height: 40,
                                 child: TextField(
                                   controller: minutesController,
-                                  focusNode: minutesFocusNode,
+                                  //focusNode: minutesFocusNode,
                                   keyboardType: TextInputType.number,
                                   decoration: InputDecoration(
                                     labelText: '분',
@@ -132,49 +162,19 @@ class _ConveniAddPageState extends State<ConveniAddPage> {
                                   ),
                                 ),
                               ),
-                              SizedBox(width: 10),
-                              ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    // 확인 모드에서 분 입력 상태로 전환
-                                    isAM = true;
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  primary: isAM
-                                      ? Colors.brown.withOpacity(0.6)
-                                      : Colors.brown.withOpacity(0.2),
-                                  minimumSize: Size(40, 40),
-                                ),
-                                child: Text('AM'),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    // 확인 모드에서 분 입력 상태로 전환
-                                    isAM = false;
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  primary: !isAM
-                                      ? Colors.brown.withOpacity(0.6)
-                                      : Colors.brown.withOpacity(0.2),
-                                  minimumSize: Size(40, 40),
-                                ),
-                                child: Text('PM'),
-                              ),
                             ],
                           )
                               : Container(
-                              padding: EdgeInsets.only(left: 5, bottom: 10),
-                              child: Text('$time')),
+                              padding: EdgeInsets.only(left: 30, bottom: 10),
+                              child: Text('$time', style: TextStyle(fontSize: 20),)),
                         ],
                       )
                   ),
                 ),
                 Expanded(
+                    flex: 2,
                     child: Container(
-                      padding: const EdgeInsets.only(right: 10,top: 5,bottom: 5,),
+                      padding: const EdgeInsets.only(right: 10,top: 30, bottom: 5,),
                       child: ElevatedButton(
                         onPressed: (){
                           //여기!!!!!!!
@@ -191,9 +191,10 @@ class _ConveniAddPageState extends State<ConveniAddPage> {
                         },
                         child: Text(
                           isConfirm? '확인':'수정',
-                          style: TextStyle(fontSize: 15),
+                          style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                         style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xff93796A),
                             minimumSize: const Size.fromHeight(50),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)
@@ -246,15 +247,16 @@ class _ConveniAddPageState extends State<ConveniAddPage> {
                           userCaffeineService.addNewUserCaffeine(today, UserCaffeine(drinkTime: time, menuId: _menu.id, brand: _brand, menuSize: "", shotAdded: -3, caffeineContent: _menu['caffeine_content'], menuImg: _menu['menu_img']));
                           Navigator.popUntil(context, (route) => route.isFirst);
                         },
-                        child: Text(
-                          '기록하기',
-                          style: TextStyle(fontSize: 15),
-                        ),
                         style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xff93796A),
                             minimumSize: const Size.fromHeight(50),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)
                             )
+                        ),
+                        child: const Text(
+                          '기록하기',
+                          style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
                       ),
                     )
