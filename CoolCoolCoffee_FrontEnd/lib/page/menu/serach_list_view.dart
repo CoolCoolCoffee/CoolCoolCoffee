@@ -84,26 +84,30 @@ class _SearchListViewState extends State<SearchListView> {
                           blurRadius: 5.0,
                           offset: Offset(0, 5))
                     ]),
-                child: Column(
-                  mainAxisAlignment:
-                  MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment:
-                  CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      brandName,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
-                        overflow: TextOverflow.ellipsis,
+                child: Container(
+                  margin: const EdgeInsets.only(left: 10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        brandName,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                    ),
-                    Text(
-                      documentSnapshot.id,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    )
-                  ],
+                      Text(
+                        documentSnapshot.id,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        maxLines: 1,
+                      )
+                    ],
+                  ),
                 ),
               ),
             )

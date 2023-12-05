@@ -159,23 +159,30 @@ class StarPage extends ConsumerWidget {
                                 )
                                 ]
                             ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Text(
-                                  userFavDrink.brand,
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.grey
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 10),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    userFavDrink.brand,
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.grey,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  userFavDrink.menuId,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                )
-                              ],
+                                  Text(
+                                    userFavDrink.menuId,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    maxLines: 1,
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                         )

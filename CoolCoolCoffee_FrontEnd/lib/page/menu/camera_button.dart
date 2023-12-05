@@ -142,7 +142,7 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
         builder: (BuildContext context) {
           return AlertDialog(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular((10.0))),
-            content: const Text("어떤 것으로 접근하시겠습니까?"),
+            content: (cameraMode=="App Capture")?const Text("어떤 것으로 접근하시겠습니까?\n커피빈, 컴포즈커피, 할리스는 앱오더 캡처화면을 통한 메뉴 분석 불가합니다."):const Text("어떤 것으로 접근하시겠습니까?"),
             insetPadding: const EdgeInsets.fromLTRB(10, 100, 10, 10),
             actions: [
               TextButton(

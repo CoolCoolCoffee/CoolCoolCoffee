@@ -30,6 +30,14 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text(
+          '메뉴 검색',
+          style: const TextStyle(
+              color: Colors.black,
+              fontSize: 24
+          ),
+        ),
+        centerTitle: true,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -47,6 +55,7 @@ class _SearchPageState extends State<SearchPage> {
               child: Row(
                 children: [
                   Container(
+                    margin: EdgeInsets.only(left: 10,right: 5),
                         child: DropdownButton(
                           //underline: Container(width: 20,),
                           value: _selectedBrand,

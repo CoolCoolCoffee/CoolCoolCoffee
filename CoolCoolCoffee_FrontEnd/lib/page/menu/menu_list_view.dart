@@ -185,9 +185,9 @@ class MenuListViewState extends ConsumerState<MenuListView>{
                                     documentSnapshot.id,
                                     style: const TextStyle(
                                       fontSize: 18,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                     maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
                                   )
                                 ],
                               ),
