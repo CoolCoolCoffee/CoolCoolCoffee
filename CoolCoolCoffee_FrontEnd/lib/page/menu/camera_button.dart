@@ -84,7 +84,7 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
     return FloatingActionBubble(
         items: <Bubble>[
           Bubble(
-            title: "Starbucks label",
+            title: "스타벅스 라벨지 사진",
             iconColor: Colors.white,
             bubbleColor: const Color(0xff93796A),
             icon: Icons.label_outline_rounded,
@@ -94,7 +94,7 @@ class _CameraButtonState extends State<CameraButton> with SingleTickerProviderSt
             },
           ),
           Bubble(
-            title: "App Capture",
+            title: "앱오더 주문내역 캡처화면",
             iconColor: Colors.white,
             bubbleColor: const Color(0xff93796A),
             icon: Icons.screenshot_outlined,

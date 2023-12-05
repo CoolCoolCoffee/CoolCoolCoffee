@@ -81,7 +81,6 @@ class _MenuPageState extends ConsumerState<MenuPage> {
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
-            const SizedBox(height: 20),
             Container(
                 height: 80,
                 margin: const EdgeInsets.all(5),
