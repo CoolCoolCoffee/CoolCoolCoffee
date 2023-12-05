@@ -11,7 +11,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
-  final _brandList = ['전체','더벤티','매머드커피','메가커피','빽다방','스타벅스','이디야','커피빈','컴포즈커피','투썹플레이스','편의점','할리스'];
+  final _brandList = ['전체','더벤티','매머드커피','메가커피','빽다방','스타벅스','이디야','커피빈','컴포즈커피','투썸플레이스','편의점','할리스'];
   String _selectedBrand = '전체';
   String _menu = '';
   @override
