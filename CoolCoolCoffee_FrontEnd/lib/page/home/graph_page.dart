@@ -83,8 +83,36 @@ class _GraphPageState extends ConsumerState<GraphPage> {
       body: initFin ?
       Column(
         children: [
-          Container(height: MediaQuery.of(context).size.height/7,),
-        AspectRatio(aspectRatio: 1,
+          Container(
+            margin: EdgeInsets.all(10),
+            child: Column(
+              children: [
+                Container(margin: EdgeInsets.only(top: 20),),
+                Row(
+                  children: [
+                    Container(margin:EdgeInsets.only(left:20,right: 10),width: 30,height: 2,color: Colors.greenAccent,),
+                    Text('수면 욕구 그래프',style: TextStyle(fontSize: 20),),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Container(margin:EdgeInsets.only(left:20,right: 10),width: 30,height: 2,color: Colors.blue,),
+                    Text('생체리듬 그래프',style: TextStyle(fontSize: 20)),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Container(margin:EdgeInsets.only(left:20,right: 10),width: 30,height: 2,color: Colors.purple,),
+                    Text('과',style: TextStyle(fontSize: 20)),
+                    Container(margin:EdgeInsets.only(left:20,right: 10),width: 30,height: 2,color: Colors.greenAccent,),
+                    Text('가 만나는 지점 : 예상 수면 시간',style: TextStyle(fontSize: 20)),
+                  ],
+                ),
+                Container(margin: EdgeInsets.only(top: 20),),
+              ],
+            ),
+          ),
+          AspectRatio(aspectRatio: 1,
             child: Padding(
               padding: const EdgeInsets.only(top:20, bottom: 20),
               child: LineChart(
@@ -147,43 +175,6 @@ class _GraphPageState extends ConsumerState<GraphPage> {
               ),
             ),
           ),
-          Container(
-            margin: EdgeInsets.all(10),
-            child: Column(
-              children: [
-                Center(
-                  child: Row(
-                    children: [
-                      Container(margin:EdgeInsets.only(left:10,right: 10),width: 30,height: 2,color: Colors.greenAccent,),
-                      Text('수면 욕구 그래프',style: TextStyle(fontSize: 20),),
-                    ],
-                  ),
-                ),
-                Center(
-                  child: Row(
-                    children: [
-                      Container(margin:EdgeInsets.only(left:10,right: 10),width: 30,height: 2,color: Colors.blue,),
-                      Text('생체리듬 그래프',style: TextStyle(fontSize: 20)),
-                    ],
-                  ),
-                ),
-                Center(
-                  child: Row(
-                    children: [
-                      Container(margin:EdgeInsets.only(left:10,right: 10),width: 30,height: 2,color: Colors.purple,),
-                      Text('과',style: TextStyle(fontSize: 20)),
-                      Container(margin:EdgeInsets.only(left:10,right: 10),width: 30,height: 2,color: Colors.greenAccent,),
-                      Text('가 만나는 지점 : 예상 수면 시간',style: TextStyle(fontSize: 20)),
-                    ],
-                  ),
-                ),
-                /*Text(
-                  '예상 수면 시간 = $bedTime'
-                ),
-                Text('목표 취침 시간 = ${prov.goal_sleep_time}'),*/
-              ],
-            ),
-          )
         ],
       )
       :Center(
