@@ -36,13 +36,13 @@ class _SleepPageState extends State<SleepPage> {
     else future = false;
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text(
-            '수면 기록',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w600,
-            ),
+        centerTitle: true,
+        title: const Text(
+          '수면 기록',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w600,
+            fontSize: 24,
           ),
         ),
         backgroundColor: Colors.white,

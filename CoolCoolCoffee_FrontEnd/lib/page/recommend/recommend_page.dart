@@ -45,6 +45,7 @@ class _RecommendPageState extends ConsumerState<RecommendPage> {
           title: const Text('추천', style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w600,
+            fontSize: 24,
             ),
           ),
           centerTitle: true,
@@ -70,13 +71,11 @@ class _RecommendPageState extends ConsumerState<RecommendPage> {
                 ],
               ),
               child: Center(
-                  child: Text(
-                      '앞으로 $userCaffeine mg 마실 수 있어요!',
-                    style: const TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                    ),
-                  ),
+                  child: ref.watch(colorModeProvider).isControlMode?
+                        Text('$userCaffeine mg 까지 마실 수 있어요!',
+                            style: const TextStyle(fontSize: 20, color: Colors.black,)) :
+                        Text('밤샘을 위해 $userCaffeine mg 마셔봐요!',
+                            style: const TextStyle(fontSize: 20, color: Colors.black,)),
               ),
             ),
             StreamBuilder(

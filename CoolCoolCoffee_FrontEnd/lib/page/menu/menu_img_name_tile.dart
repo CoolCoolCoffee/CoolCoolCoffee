@@ -49,7 +49,7 @@ class MenuImgNameTile extends StatelessWidget {
                     child: Text(
                       brandName,
                       style: const TextStyle(
-                          fontSize: 15,
+                          fontSize: 18,
                           color: Colors.grey,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -60,7 +60,7 @@ class MenuImgNameTile extends StatelessWidget {
                     child: Text(
                       menuSnapshot.id,
                       style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 24,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),

@@ -66,7 +66,7 @@ class _EditPopupState extends State<EditPopup> {
 
     return AlertDialog(
       backgroundColor: Colors.white,
-      title: const Center(child: Text('목표 취침 시간을 입력해주세요', style: TextStyle(fontSize: 16),)),
+      title: const Center(child: Text('목표 취침 시간을 입력해주세요', style: TextStyle(fontSize: 18),)),
       content: SingleChildScrollView(
         child: Column(
           children: [
@@ -88,10 +88,10 @@ class _EditPopupState extends State<EditPopup> {
                         children: const [
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Text('AM', style: TextStyle(fontSize: 16),),),
+                            child: Text('AM', style: TextStyle(fontSize: 20),),),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 8),
-                            child: Text('PM', style: TextStyle(fontSize: 16),),),
+                            child: Text('PM', style: TextStyle(fontSize: 20),),),
                         ]
                     ),
                   ],
@@ -145,12 +145,7 @@ class _EditPopupState extends State<EditPopup> {
             ),
             minimumSize: const Size(60, 40),
           ),
-          child: const Text(
-            '취소',
-            style: TextStyle(
-              color: Colors.grey,
-            ),
-          ),
+          child: Text('취소', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.grey),),
         ),
         TextButton(
           onPressed: () async {
@@ -199,9 +194,7 @@ class _EditPopupState extends State<EditPopup> {
             ),
             minimumSize: const Size(60, 40),
           ),
-          child: const Text(
-            '입력', style: TextStyle(color: Colors.brown, fontWeight: FontWeight.bold),
-          ),
+          child: Text('입력', style: TextStyle(fontSize: 24, color: Color(0xff93796A), fontWeight: FontWeight.bold),),
         ),
       ],
     );
@@ -350,7 +343,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
                 child: Image.asset('assets/coffee.png'),
               ),
               Positioned(
-                left: 75,
+                left: 90,
                 top: 180,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -359,15 +352,26 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
                     Text(
                       //'취침 시간\n $sleepEnteredTime',
                       prov.goal_sleep_time.isNotEmpty
-                          ? '  목표 취침 시간\n   ${prov.goal_sleep_time}'
+                          ? '목표 취침 시간'
                           : '',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 22,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Text(
+                      //'취침 시간\n $sleepEnteredTime',
+                      prov.goal_sleep_time.isNotEmpty
+                          ? '${prov.goal_sleep_time}'
+                          : '',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 26,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    // 수정 아이콘 여기로 옮기기
+                    // 수정 아이콘
                     if (prov.goal_sleep_time.isEmpty == false)
                     ElevatedButton(
                       onPressed: () {

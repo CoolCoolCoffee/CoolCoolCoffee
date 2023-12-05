@@ -81,12 +81,6 @@ class StarPage extends ConsumerWidget {
                     }
                     else{
                       _fetchBrand(documentSnapshot,context,temp['brand']);
-                      /*Navigator.push(context, MaterialPageRoute(builder: (
-                          context) =>
-                          MenuAddPage(menuSnapshot: documentSnapshot,
-                            brandName: temp['brand'],
-                            size: '',
-                            shot: '',)));*/
                     }
                   },
                   child: //SingleChildScrollView(

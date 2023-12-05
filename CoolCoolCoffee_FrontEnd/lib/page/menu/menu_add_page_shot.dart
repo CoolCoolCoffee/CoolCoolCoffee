@@ -123,7 +123,8 @@ class _MenuAddPageShotState extends State<MenuAddPageShot> {
         title: const Text(
           "음료 추가하기",
           style: TextStyle(
-              color: Colors.black
+              color: Colors.black,
+            fontSize: 24
           ),
         ),
       ),
@@ -141,7 +142,7 @@ class _MenuAddPageShotState extends State<MenuAddPageShot> {
                   flex: 7,
                   child: Container(
                       width: double.infinity,
-                      margin: EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(10),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,7 +151,7 @@ class _MenuAddPageShotState extends State<MenuAddPageShot> {
                             padding: EdgeInsets.only(left: 10, bottom: 10),
                             child: Text('섭취 시간',
                                 style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold)),
+                                    fontSize: 22, fontWeight: FontWeight.bold)),
                           ),
                           isConfirm
                               ? Row(
@@ -218,8 +219,8 @@ class _MenuAddPageShotState extends State<MenuAddPageShot> {
                             ],
                           )
                               : Container(
-                              padding: EdgeInsets.only(left: 30, bottom: 10),
-                              child: Text('$time', style: TextStyle(fontSize: 20),)),
+                              padding: EdgeInsets.only(left: 5, bottom: 10),
+                              child: Text('$time', style: TextStyle(fontSize: 26),)),
                         ],
                       )
                   ),
@@ -244,7 +245,7 @@ class _MenuAddPageShotState extends State<MenuAddPageShot> {
                         },
                         child: Text(
                           isConfirm? '확인':'수정',
-                          style: TextStyle(fontSize: 15, color: Colors.white),
+                          style: TextStyle(fontSize: 16, color: Colors.white),
                         ),
                         style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xff93796A),
@@ -269,7 +270,7 @@ class _MenuAddPageShotState extends State<MenuAddPageShot> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(padding: const EdgeInsets.only(left: 5,bottom: 10),child: const Text('사이즈',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
+                      Container(padding: const EdgeInsets.only(left: 5,bottom: 10),child: const Text('사이즈',style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),)),
                       MenuToggleBtn(isSelected: sizeSelected ,map: sortedSize, callback: _changeSizeCallback,),
                     ],
                   )
@@ -286,7 +287,7 @@ class _MenuAddPageShotState extends State<MenuAddPageShot> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(padding: const EdgeInsets.only(left: 5,bottom: 10),child: const Text('샷 조절',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)),
+                        Container(padding: const EdgeInsets.only(left: 5,bottom: 10),child: const Text('샷 조절',style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),)),
                         MenuToggleBtn(isSelected: shotSelected ,map: shotControl, callback: _changeShotCallback,),
                       ],
                     )
@@ -307,13 +308,13 @@ class _MenuAddPageShotState extends State<MenuAddPageShot> {
                       child: const Text(
                         '카페인 함량',
                         style: TextStyle(
-                            fontSize: 10
+                            fontSize: 12
                         ),
                       ),
                     ),
                     Text(_caffeine.toString(),
                       style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold
                       ),
                     )
@@ -337,7 +338,7 @@ class _MenuAddPageShotState extends State<MenuAddPageShot> {
                         ),
                         child: const Text(
                           '기록하기',
-                          style: TextStyle(fontSize: 15, color: Colors.white),
+                          style: TextStyle(fontSize: 20, color: Colors.white),
                         ),
                       ),
                     )

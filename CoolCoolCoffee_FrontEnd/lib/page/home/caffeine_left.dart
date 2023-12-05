@@ -387,6 +387,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
           style: TextStyle(
             color: Colors.black,
             fontSize: 22.0,
+            fontWeight: FontWeight.w500,
           ),
         ),
           SizedBox(height: 5),
