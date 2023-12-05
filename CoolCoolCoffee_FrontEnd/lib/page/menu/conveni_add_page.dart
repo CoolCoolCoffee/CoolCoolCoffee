@@ -97,7 +97,7 @@ class _ConveniAddPageState extends State<ConveniAddPage> {
                             padding: EdgeInsets.only(left: 10, bottom: 10),
                             child: Text('섭취 시간',
                                 style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold)),
+                                    fontSize: 22, fontWeight: FontWeight.bold)),
                           ),
                           isConfirm
                               ? Row(
@@ -165,8 +165,8 @@ class _ConveniAddPageState extends State<ConveniAddPage> {
                             ],
                           )
                               : Container(
-                              padding: EdgeInsets.only(left: 30, bottom: 10),
-                              child: Text('$time', style: TextStyle(fontSize: 20),)),
+                              padding: EdgeInsets.only(left: 5, bottom: 10),
+                              child: Text('$time', style: TextStyle(fontSize: 26),)),
                         ],
                       )
                   ),
@@ -191,7 +191,7 @@ class _ConveniAddPageState extends State<ConveniAddPage> {
                         },
                         child: Text(
                           isConfirm? '확인':'수정',
-                          style: TextStyle(fontSize: 15, color: Colors.white),
+                          style: TextStyle(fontSize: 16, color: Colors.white),
                         ),
                         style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xff93796A),
@@ -224,13 +224,12 @@ class _ConveniAddPageState extends State<ConveniAddPage> {
                           Text(
                             '카페인 함량',
                             style: TextStyle(
-                                fontSize: 10
+                                fontSize: 12
                             ),
                           ),
-                          Container(height: 5,),
                           Text(_menu['caffeine_content'].toString(),
                             style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold
                             ),
                           )
@@ -256,7 +255,7 @@ class _ConveniAddPageState extends State<ConveniAddPage> {
                         ),
                         child: const Text(
                           '기록하기',
-                          style: TextStyle(fontSize: 15, color: Colors.white),
+                          style: TextStyle(fontSize: 20, color: Colors.white),
                         ),
                       ),
                     )
