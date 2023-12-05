@@ -96,10 +96,8 @@ class _GraphPageState extends ConsumerState<GraphPage> {
                     handleBuiltInTouches: true,
                     touchTooltipData: LineTouchTooltipData(
                       getTooltipItems: (value){
-                        List<LineTooltipItem> list = [];
                         int count = 0;
                         return value.map((e){
-                          print('숫자다ㅏㅏㅏㅏㅏㅏㅏ$count');
                           if(count == 1){
                             count++;
                             return LineTooltipItem(sleepCalFunc.setPredictedBedTime(e.x), TextStyle(fontSize: 15));
@@ -113,7 +111,6 @@ class _GraphPageState extends ConsumerState<GraphPage> {
                       tooltipBgColor: Colors.blueGrey.withOpacity(0.3),
                     ),
                   ),
-                  clipData: FlClipData.all(),
                   borderData:  FlBorderData(
                       show: true,
                       border: Border(
@@ -154,10 +151,36 @@ class _GraphPageState extends ConsumerState<GraphPage> {
             margin: EdgeInsets.all(10),
             child: Column(
               children: [
-                Text(
+                Center(
+                  child: Row(
+                    children: [
+                      Container(margin:EdgeInsets.only(left:10,right: 10),width: 30,height: 2,color: Colors.greenAccent,),
+                      Text('수면 욕구 그래프',style: TextStyle(fontSize: 20),),
+                    ],
+                  ),
+                ),
+                Center(
+                  child: Row(
+                    children: [
+                      Container(margin:EdgeInsets.only(left:10,right: 10),width: 30,height: 2,color: Colors.blue,),
+                      Text('생체리듬 그래프',style: TextStyle(fontSize: 20)),
+                    ],
+                  ),
+                ),
+                Center(
+                  child: Row(
+                    children: [
+                      Container(margin:EdgeInsets.only(left:10,right: 10),width: 30,height: 2,color: Colors.purple,),
+                      Text('과',style: TextStyle(fontSize: 20)),
+                      Container(margin:EdgeInsets.only(left:10,right: 10),width: 30,height: 2,color: Colors.greenAccent,),
+                      Text('가 만나는 지점 : 예상 수면 시간',style: TextStyle(fontSize: 20)),
+                    ],
+                  ),
+                ),
+                /*Text(
                   '예상 수면 시간 = $bedTime'
                 ),
-                Text('목표 취침 시간 = ${prov.goal_sleep_time}'),
+                Text('목표 취침 시간 = ${prov.goal_sleep_time}'),*/
               ],
             ),
           )
