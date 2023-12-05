@@ -14,7 +14,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../function/mode_color.dart';
 import '../../model/user_caffeine.dart';
+import '../../provider/color_mode_provider.dart';
 import '../../service/user_caffeine_service.dart';
 
 class CaffeineLeftWidget extends ConsumerStatefulWidget {
@@ -236,7 +238,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
               width: MediaQuery.of(context).size.width*0.9,
               height: 100,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['white_color']:modeColor.noSleepModeColor['light_brown_color'],
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(

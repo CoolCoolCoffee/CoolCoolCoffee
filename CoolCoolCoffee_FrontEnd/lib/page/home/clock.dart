@@ -281,6 +281,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
     return Column(
       //crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        if (prov.goal_sleep_time.isEmpty)
         Container(
           margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
           child: Row(
@@ -339,32 +340,102 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
             ],
           ),
         ),
-        Container(
-          margin: const EdgeInsets.all(10),
-          width: 250,
-          height: 250,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['main_color']:modeColor.noSleepModeColor['main_color'],
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  //'취침 시간\n $sleepEnteredTime',
-                  prov.goal_sleep_time.isNotEmpty
-                      ? '목표 취침 시간\n     ${prov.goal_sleep_time}'
-                      : '아직 목표 취침시간이 설정되지 않았네요!\n 목표 취침시간을 설정해볼까요?',
-                  style: TextStyle(
-                    color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['white_color']:modeColor.noSleepModeColor['black_color'],
-                    fontSize: 20,
-                  ),
+        Center(
+          child: Stack(
+            children: [
+              Container(
+                height: 300,
+                width: 300,
+                margin: const EdgeInsets.only(top:20, bottom: 20),
+                child: Image.asset('assets/coffee.png'),
+              ),
+              Positioned(
+                left: 75,
+                top: 180,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      //'취침 시간\n $sleepEnteredTime',
+                      prov.goal_sleep_time.isNotEmpty
+                          ? '목표 취침 시간\n     ${prov.goal_sleep_time}'
+                          : '',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
+                    ),
+                    // 수정 아이콘 여기로 옮기기
+                    if (prov.goal_sleep_time.isEmpty == false)
+                    ElevatedButton(
+                      onPressed: () {
+                        _showEditPopup(context);
+                        print("dddd $sleepEnteredTime");
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: null,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 0,
+                        backgroundColor: Colors.transparent,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.edit, // 연필 아이콘
+                            color: Colors.black,
+                            size: 18,
+
+                          ),
+                          const SizedBox(width: 3),
+                          Text(
+                            prov.goal_sleep_time.isNotEmpty
+                                ? '수정'
+                                : '설정',
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                              // decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ]
           ),
-        ),
+        )
+        // Container(
+        //   margin: const EdgeInsets.all(10),
+        //   width: 250,
+        //   height: 250,
+        //   decoration: BoxDecoration(
+        //     shape: BoxShape.circle,
+        //     color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['main_color']:modeColor.noSleepModeColor['main_color'],
+        //   ),
+        //   child: Center(
+        //     child: Column(
+        //       mainAxisAlignment: MainAxisAlignment.center,
+        //       children: [
+        //         Text(
+        //           //'취침 시간\n $sleepEnteredTime',
+        //           prov.goal_sleep_time.isNotEmpty
+        //               ? '목표 취침 시간\n     ${prov.goal_sleep_time}'
+        //               : '아직 목표 취침시간이 설정되지 않았네요!\n 목표 취침시간을 설정해볼까요?',
+        //           style: TextStyle(
+        //             color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['white_color']:modeColor.noSleepModeColor['black_color'],
+        //             fontSize: 20,
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

@@ -107,7 +107,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 activeFgColor: Colors.white,
                 activeBgColors: [[Colors.brown.withOpacity(0.4)], const [Colors.brown]],
                 inactiveFgColor: Colors.white,
-                inactiveBgColor: Colors.grey,
+                inactiveBgColor: Colors.grey.withOpacity(0.8),
                 totalSwitches: 2,
                 labels: const ['조절', '밤샘'],
                 onToggle: (index) {

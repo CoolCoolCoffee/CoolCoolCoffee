@@ -14,5 +14,6 @@ class ModeColor{
     "sub_color": const Color(0xffD4936F),
     "white_color": Colors.white,
     "black_color": Colors.black,
+    "light_brown_color" : const Color(0xFFFFF5EF),
   };
 }
