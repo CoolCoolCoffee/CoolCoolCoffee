@@ -95,7 +95,22 @@ class _GraphPageState extends ConsumerState<GraphPage> {
                     enabled: true,
                     handleBuiltInTouches: true,
                     touchTooltipData: LineTouchTooltipData(
-                      tooltipBgColor: Colors.blueGrey.withOpacity(0.8),
+                      getTooltipItems: (value){
+                        List<LineTooltipItem> list = [];
+                        int count = 0;
+                        return value.map((e){
+                          print('숫자다ㅏㅏㅏㅏㅏㅏㅏ$count');
+                          if(count == 1){
+                            count++;
+                            return LineTooltipItem(sleepCalFunc.setPredictedBedTime(e.x), TextStyle(fontSize: 15));
+                          }
+                          else{
+                            count++;
+                            return LineTooltipItem('', TextStyle(fontSize: 5));
+                          }
+                        }).toList();
+                      },
+                      tooltipBgColor: Colors.blueGrey.withOpacity(0.3),
                     ),
                   ),
                   clipData: FlClipData.all(),
