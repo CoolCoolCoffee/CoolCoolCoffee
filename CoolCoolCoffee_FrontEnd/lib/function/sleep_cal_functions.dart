@@ -10,6 +10,7 @@ class SleepCalFunc{
     double time_left = goal_sleep_time - now - 1;
     //공식 : abstract = scaling * (x) * pow(0.5,(time_left/half_time))
     recommendCaff = abstract * pow(2, (time_left/half_time.toDouble()))* 833.33333;
+    //print('abstract : $abstract , goal_sleep? : $goal_sleep_time , $time_left , ${pow(2, (time_left/half_time.toDouble()))} , recommend: ${recommendCaff}');
     int ret = 0;
     int remain = recommendCaff.toInt() % 10;
     if(remain == 0){

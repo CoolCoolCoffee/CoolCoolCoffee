@@ -1,13 +1,13 @@
 
 import 'package:coolcoolcoffee_front/page/menu/general_menu_add_page.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_list_view.dart';
+import 'package:coolcoolcoffee_front/page/menu/search_page.dart';
 import 'package:coolcoolcoffee_front/page/menu/star_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../provider/star_provider.dart';
-import '../../service/user_favorite_drink_service.dart';
 import 'brand_list_view.dart';
 import 'camera_button.dart';
 
@@ -57,19 +57,24 @@ class _MenuPageState extends ConsumerState<MenuPage> {
           ),
         ),
         actions: [
-          FractionallySizedBox(
-            heightFactor: 0.7,
-            child: IconButton(
+          IconButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (
+                    context) =>SearchPage()));
+              },
+              icon: Icon(Icons.search,)
+            ),
+          IconButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (
                     context) =>StarPage(starCallback: _changeStarCallback,)));
               },
-              icon: Image.asset(
+              icon: Icon(Icons.star_border_rounded,),
+            /*Image.asset(
                 "assets/star_unfilled_with_outer.png",
                 fit: BoxFit.fill,
-              ),
+              ),*/
             ),
-          )
         ],
       ),
       body:Padding(
@@ -97,9 +102,9 @@ class _MenuPageState extends ConsumerState<MenuPage> {
             child: const CameraButton(),
           ),
           Align(
-            alignment: Alignment.bottomRight,
+            alignment: Alignment(Alignment.bottomRight.x,Alignment.bottomRight.y-0.02),
             child: FloatingActionButton(
-              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(50))),
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
               backgroundColor: const Color(0xff93796A),
               focusColor: const Color(0xffF9F8F7),
               child: const Icon(Icons.add,color: Colors.white,),
