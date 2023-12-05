@@ -163,7 +163,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
       predict_time_double = hour+min;
     }
 
-    if(goal_time_double - predict_time_double>0){
+    if(goal_time_double - predict_time_double>=0){
       DateTime dt = DateTime.now();
       int hour = dt.hour;
       int minute = dt.minute;
