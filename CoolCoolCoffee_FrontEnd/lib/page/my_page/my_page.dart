@@ -70,7 +70,7 @@ class _MyPageState extends State<MyPage> {
         backgroundColor:  Color(0xffF9F8F7),
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: const Text('마이 페이지', style: TextStyle(color: Colors.black),),
+          title: const Text('마이페이지', style: TextStyle(color: Colors.black),),
           centerTitle: true,
         ),
         body: Center(
@@ -86,6 +86,7 @@ class _MyPageState extends State<MyPage> {
                     // 사용자 프로필 캐릭터나 사진..?, 일단 원 모양으로 해놓음
                     Center(
                       child: Container(
+                        child: Icon(Icons.person_rounded,color: Colors.white,size: 75,),
                         width: 100.0, // 원의 지름
                         height: 100.0, // 원의 지름
                         decoration: const BoxDecoration(
