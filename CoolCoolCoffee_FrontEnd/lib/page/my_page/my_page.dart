@@ -122,7 +122,9 @@ class _MyPageState extends State<MyPage> {
                           Text(
                             '프로필 수정',
                             style: TextStyle(
-                              color: Colors.black, // 텍스트 색상 설정
+                              color: Colors.black,
+                                fontSize: 22
+                              // 텍스트 색상 설정
                             ),
                           ),
                         ],
@@ -142,7 +144,9 @@ class _MyPageState extends State<MyPage> {
                           Text(
                             '권한 설정',
                             style: TextStyle(
-                              color: Colors.black, // 텍스트 색상 설정
+                              color: Colors.black,
+                              fontSize: 22
+                              // 텍스트 색상 설정
                             ),
                           ),
                         ],
@@ -162,7 +166,9 @@ class _MyPageState extends State<MyPage> {
                           Text(
                             '알림 설정',
                             style: TextStyle(
-                              color: Colors.black, // 텍스트 색상 설정
+                              color: Colors.black,
+                                fontSize: 22
+                              // 텍스트 색상 설정
                             ),
                           ),
                         ],
@@ -182,6 +188,7 @@ class _MyPageState extends State<MyPage> {
                           Text(
                             '로그아웃',
                             style: TextStyle(
+                              fontSize: 22,
                               color: Colors.black, // 텍스트 색상 설정
                             ),
                           ),

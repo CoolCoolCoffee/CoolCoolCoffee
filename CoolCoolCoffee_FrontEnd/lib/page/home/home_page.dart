@@ -91,10 +91,11 @@ class _HomePageState extends ConsumerState<HomePage> {
         appBar: AppBar(
           centerTitle: true,
           title: const Text(
-            '쿨쿨커피',
+            '쿨쿨 커피',
             style: TextStyle(
               color: Colors.black,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
+              fontSize: 24
             ),
           ),
           actions: [         // 조절, 밤샘 모드 선택 토글

@@ -66,7 +66,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                         ? '오늘의 수면정보'
                         : '$selecteddate의 수면 정보',
                     style: const TextStyle(
-                      fontSize: 18.0,
+                      fontSize: 24.0,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -143,7 +143,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                             : null, // Set shape to null if it's not today's date
                         elevation: selecteddate == todaydate ? 3 : 0,
                       ),
-                      child: Text(selecteddate == todaydate ? '가져오기' : '', style: const TextStyle(color: Color(0xffF9F8F7)),),
+                      child: Text(selecteddate == todaydate ? '가져오기' : '', style: const TextStyle(color: Color(0xffF9F8F7), fontSize: 22),),
                     ),
                     SizedBox(width: 10,),
                     if (selecteddate == todaydate)
@@ -158,7 +158,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                           ),
                           elevation: 3,
                         ),
-                        child: Text('입력', style: TextStyle(color: Color(0xffF9F8F7)),),
+                        child: Text('입력', style: TextStyle(color: Color(0xffF9F8F7), fontSize: 22),),
                       ),
                   ],
                 )
@@ -186,10 +186,10 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                         '취침시간',
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 16.0,
+                          fontSize: 20.0,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 5),
                       Text(
                         selecteddate == todaydate ? today_sleep_time : widget.sleepTime ?? '',
                         style: TextStyle(
@@ -219,10 +219,10 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                         '기상시간',
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 16.0,
+                          fontSize: 20.0,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 5),
                       Text(
                         selecteddate == todaydate ? today_wake_time : widget.wakeTime ?? '',
                         style: TextStyle(
@@ -618,6 +618,9 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                       children: [
                         Text(
                           '취침시간',
+                          style: TextStyle(
+                            fontSize: 22,
+                          ),
                           textAlign: TextAlign.start,
                         ),
                         SizedBox(height: 5),
@@ -639,10 +642,10 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                                     children: const [
                                       Padding(
                                         padding: EdgeInsets.symmetric(horizontal: 8),
-                                        child: Text('AM', style: TextStyle(fontSize: 16),),),
+                                        child: Text('AM', style: TextStyle(fontSize: 20),),),
                                       Padding(
                                         padding: EdgeInsets.symmetric(horizontal: 8),
-                                        child: Text('PM', style: TextStyle(fontSize: 16),),),
+                                        child: Text('PM', style: TextStyle(fontSize: 20),),),
                                     ]
                                 ),
                               ],
@@ -684,6 +687,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                     const SizedBox(height: 10),
                     const Text(
                       '기상시간',
+                      style: TextStyle(fontSize: 22),
                       textAlign: TextAlign.start,
                     ),
                     const SizedBox(height: 5),
@@ -705,10 +709,10 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                                 children: const [
                                   Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 8),
-                                    child: Text('AM', style: TextStyle(fontSize: 16),),),
+                                    child: Text('AM', style: TextStyle(fontSize: 20),),),
                                   Padding(
                                     padding: EdgeInsets.symmetric(horizontal: 8),
-                                    child: Text('PM', style: TextStyle(fontSize: 16),),),
+                                    child: Text('PM', style: TextStyle(fontSize: 20),),),
                                 ]
                             ),
                           ],
@@ -753,7 +757,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                   onPressed: () {
                     Navigator.of(context).pop(); // Close the dialog when cancel is pressed
                   },
-                  child: Text('취소'),
+                  child: Text('취소', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
                   style: TextButton.styleFrom(
                     minimumSize: Size(60, 40),
                     primary: Colors.grey,
@@ -775,7 +779,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                     print('Selected Sleep Time: $selectedSleepTime');
                     print('Selected Wake Time: $selectedWakeTime');
                   },
-                  child: Text('입력', style: TextStyle(color: Color(0xff93796A)),),
+                  child: Text('입력', style: TextStyle(fontSize: 24, color: Color(0xff93796A), fontWeight: FontWeight.bold),),
                   style: TextButton.styleFrom(
                     minimumSize: Size(60, 40),
                     primary: Colors.grey,

@@ -56,9 +56,10 @@ class _BrandListViewState extends State<BrandListView> {
                               radius: 25,
                                 backgroundImage: NetworkImage(documentSnapshot['logo_img']),
                             ),
+                            SizedBox(height: 2,),
                             Text(
                                 documentSnapshot.id,
-                              style: TextStyle(fontSize: 10),
+                              style: TextStyle(fontSize: 14),
                             )
                           ],
                         ),

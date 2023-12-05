@@ -53,7 +53,8 @@ class _MenuPageState extends ConsumerState<MenuPage> {
         title: Text(
             _brand,
           style: const TextStyle(
-            color: Colors.black
+            color: Colors.black,
+            fontSize: 24
           ),
         ),
         actions: [
@@ -81,7 +82,7 @@ class _MenuPageState extends ConsumerState<MenuPage> {
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             Container(
                 height: 80,
                 margin: const EdgeInsets.all(5),
