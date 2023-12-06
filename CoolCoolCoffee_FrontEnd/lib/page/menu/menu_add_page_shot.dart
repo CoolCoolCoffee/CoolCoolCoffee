@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 
 import '../../model/brand.dart';
 import '../../model/user_caffeine.dart';
+import '../../page_state/page_state.dart';
 
 class MenuAddPageShot extends StatefulWidget {
   final DocumentSnapshot brandSnapshot;
@@ -328,6 +329,7 @@ class _MenuAddPageShotState extends State<MenuAddPageShot> {
                         onPressed: (){
                           userCaffeineService.addNewUserCaffeine(today, UserCaffeine(drinkTime: time, menuId: _menu.id, brand: _brand.id, menuSize: _size, shotAdded: 0, caffeineContent: _caffeine, menuImg: _menu['menu_img']));
                           Navigator.popUntil(context, (route) => route.isFirst);
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PageStates()));
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xff93796A),
