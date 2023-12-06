@@ -101,7 +101,7 @@ class _DrinkListWidgetState extends ConsumerState<DrinkListWidget> {
           child: Container(
             margin: const EdgeInsets.only(left: 10, right: 10),
             width: MediaQuery.of(context).size.width ,
-            height: 130,
+            height: MediaQuery.of(context).size.width / 3.3 - 5,
             decoration: BoxDecoration(
               color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['white_color']:modeColor.noSleepModeColor['light_brown_color'],
               borderRadius: BorderRadius.circular(10),

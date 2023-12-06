@@ -136,32 +136,6 @@ class _HomePageState extends ConsumerState<HomePage> {
             children: [
               ClockWidget(),
               SizedBox(height: 10),
-              /*Row(
-                children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return LongPopup_A();
-                        },
-                      );
-                    },
-                    child: Text('LongTerm_A'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return LongPopup_B();
-                        },
-                      );
-                    },
-                    child: Text('LongTerm_B'),
-                  ),
-                ],
-              ),*/
               StreamBuilder(
                   stream: FirebaseFirestore.instance.collection('Users').doc(userCaffeineService.uid).collection('user_caffeine').doc(date).snapshots(),
                   builder: (context,snapshot){

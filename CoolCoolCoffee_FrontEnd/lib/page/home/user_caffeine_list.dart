@@ -59,6 +59,32 @@ class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
       }
     }
   }
+  String _setTime(String drinkTime){
+    if(drinkTime == '') return '';
+    String ret = '';
+    var arr = drinkTime.split(':');
+    int hour = int.parse(arr[0]);
+    int minute = int.parse(arr[1]);
+    String today = '오늘';
+    if(!ref.watch(sleepParmaProvider).isToday){
+      today = '어제';
+    }
+    if(hour<12){
+      ret = '$today $hour:${minute.toString().padLeft(2,'0')} AM';
+    }else if(hour==12){
+      ret = '$today $hour:${minute.toString().padLeft(2,'0')} PM';
+    }else if(hour<24){
+      hour -=12;
+      ret = '$today $hour:${minute.toString().padLeft(2,'0')} PM';
+    }else if(hour==24){
+      hour == 0;
+      ret = '오늘 $hour:${minute.toString().padLeft(2,'0')} AM';
+    }else{
+      hour-=24;
+      ret = '오늘 $hour:${minute.toString().padLeft(2,'0')} AM';
+    }
+    return ret;
+  }
   @override
   Widget build(BuildContext context) {
     date = dayFormatter.format(now);
@@ -104,7 +130,7 @@ class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
                     child: Stack(
                       children: [
                           Container(
-                            width: MediaQuery.of(context).size.width / 3 - 5,
+                            width: MediaQuery.of(context).size.width / 3.3 - 5,
                             margin: const EdgeInsets.all(5),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
@@ -124,7 +150,7 @@ class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
                         Align(
                           alignment: Alignment.topLeft,
                           child: FractionallySizedBox(
-                            heightFactor: 0.3,
+                            heightFactor: 0.32,
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.only(
@@ -135,7 +161,13 @@ class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
                               ),
                               alignment: Alignment.topLeft,
                               margin: const EdgeInsets.all(5),
-                              width: (MediaQuery.of(context).size.width / 3 - 5)/2,
+                              width: (MediaQuery.of(context).size.width / 3.3 - 5)/2,
+                              child: Center(
+                                child: Text(
+                                  '${userCaffeine.caffeineContent}mg',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -162,7 +194,7 @@ class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
                             child: FractionallySizedBox(
                               heightFactor: 0.4,
                               child: Container(
-                                width: MediaQuery.of(context).size.width / 3 - 5,
+                                width: MediaQuery.of(context).size.width / 3.3 - 5,
                                 alignment: Alignment.bottomLeft,
                                 margin: const EdgeInsets.all(5),
                                 decoration: BoxDecoration(
@@ -178,32 +210,17 @@ class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
                                     ]),
                                 child: Container(
                                   margin: const EdgeInsets.all(3),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      Center(
-                                        child: Text(
-                                          userCaffeine.brand,
-                                          style: const TextStyle(
-                                              fontSize: 10,
-                                              color: Colors.grey,
-                                              overflow: TextOverflow.ellipsis),
+                                  child:
+                                    Center(
+                                      child: Text(
+                                        _setTime(userCaffeine.drinkTime),
+                                        style: const TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold
                                         ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      Center(
-                                        child: Text(
-                                          userCaffeine.menuId,
-                                          style: const TextStyle(
-                                            fontSize: 12,
-                                          ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      )
-                                    ],
                                   ),
                                 ),
                               ),
