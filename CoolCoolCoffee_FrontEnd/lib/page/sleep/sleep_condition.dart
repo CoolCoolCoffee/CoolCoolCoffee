@@ -1,6 +1,9 @@
+import 'package:coolcoolcoffee_front/page/home/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../../page_state/page_state.dart';
 
 class SleepConditionWidget extends StatefulWidget {
   final Function(int conditionLevel) onConditionSelected;
@@ -13,7 +16,7 @@ class SleepConditionWidget extends StatefulWidget {
 }
 
 class _SleepConditionWidgetState extends State<SleepConditionWidget> {
-  double selectedCondition = 5.0; // Default value
+  double selectedCondition = 0.0; // Default value
 
   @override
   void initState() {
@@ -87,13 +90,34 @@ class _SleepConditionWidgetState extends State<SleepConditionWidget> {
                   inactiveColor: Colors.grey[300],
                   thumbColor: Colors.brown,
                 ),
-                Text(
-                  getConditionLevel(selectedCondition.toInt()),
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.brown,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '   개운',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.brown,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      getConditionLevel(selectedCondition.toInt()),
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.brown,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      '피곤   ',
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.brown,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -112,7 +136,9 @@ class _SleepConditionWidgetState extends State<SleepConditionWidget> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context); // 팝업 닫기
+               Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => PageStates()));
+                // 팝업 닫기
               },
               child: Text('닫기'),
             ),

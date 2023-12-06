@@ -38,7 +38,7 @@ class _CalendarDrinkListWidgetState extends State<CalendarDrinkListWidget> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(10.0),
             border: Border.all(
-              color: Colors.black,
+              color: const Color(0xffF9F8F7),
               width: 2.0,
             ),
           ),
