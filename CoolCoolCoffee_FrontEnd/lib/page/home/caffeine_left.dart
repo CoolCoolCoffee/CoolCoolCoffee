@@ -213,6 +213,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
     if(now_hour>=6&&!isToday){
       ref.watch(sleepParmaProvider.notifier).changeWakeTime("");
       ref.watch(sleepParmaProvider.notifier).changeSleepQuality(-1);
+      ref.watch(shortTermNotiProvider.notifier).setPredictSleepTime('');
     }
     else if(isToday){
       ref.watch(sleepParmaProvider.notifier).changeWakeTime(userSleepDoc['wake_time']);
