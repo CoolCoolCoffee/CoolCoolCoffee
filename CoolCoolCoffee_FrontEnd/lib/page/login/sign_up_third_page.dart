@@ -178,7 +178,7 @@ class _UserFormState extends State<SignUpThirdPage> {
         // Navigator.popUntil(context, (route) => route.isFirst);
 
         if(!mounted) return;
-        Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+        Navigator.popUntil(context, (route) => route.isFirst);
 
       }
     } catch (e) {
