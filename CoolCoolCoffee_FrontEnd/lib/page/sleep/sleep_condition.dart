@@ -137,7 +137,7 @@ class _SleepConditionWidgetState extends State<SleepConditionWidget> {
             TextButton(
               onPressed: () {
                Navigator.pop(context);
-               Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => PageStates()));
+               Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => PageStates(index: 0,)));
                 //Navigator.of(context).push(MaterialPageRoute(builder: (context) => PageStates()));
                 // 팝업 닫기
               },

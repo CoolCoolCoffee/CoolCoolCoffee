@@ -272,7 +272,7 @@ class _ConveniAddPageState extends ConsumerState<ConveniAddPage> {
                           }
                           userCaffeineService.addNewUserCaffeine(today, UserCaffeine(drinkTime: time, menuId: _menu.id, brand: _brand, menuSize: "", shotAdded: -3, caffeineContent: _menu['caffeine_content'], menuImg: _menu['menu_img']));
                           Navigator.popUntil(context, (route) => route.isFirst);
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PageStates()));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PageStates(index: 0,)));
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xff93796A),

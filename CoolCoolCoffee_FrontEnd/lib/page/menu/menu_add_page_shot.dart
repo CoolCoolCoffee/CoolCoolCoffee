@@ -356,7 +356,7 @@ class _MenuAddPageShotState extends ConsumerState<MenuAddPageShot> {
                           }
                           userCaffeineService.addNewUserCaffeine(today, UserCaffeine(drinkTime: time, menuId: _menu.id, brand: _brand.id, menuSize: _size, shotAdded: 0, caffeineContent: _caffeine, menuImg: _menu['menu_img']));
                           Navigator.popUntil(context, (route) => route.isFirst);
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PageStates()));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PageStates(index: 0,)));
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xff93796A),

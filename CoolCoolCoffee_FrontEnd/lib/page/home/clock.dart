@@ -338,7 +338,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
           margin: const EdgeInsets.only(top: 10, right: 20),
           child: TextButton(
             onPressed: () {
-              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => PageStates()));
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => PageStates(index: 2,)));
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,

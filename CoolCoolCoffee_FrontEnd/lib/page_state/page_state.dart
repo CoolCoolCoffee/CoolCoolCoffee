@@ -8,14 +8,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../page/home/home_page.dart';
 
-class PageStates extends ConsumerStatefulWidget {
-  const PageStates({Key? key}) : super(key: key);
+class PageStates extends StatefulWidget {
+  final int index;
+  const PageStates({super.key,required this.index});
 
   @override
   _PageState createState() => _PageState();
 }
 
-class _PageState extends ConsumerState<PageStates> {
+class _PageState extends State<PageStates> {
   int _selectedIndex = 0;
 
   List<Widget> pages = <Widget>[
@@ -33,13 +34,14 @@ class _PageState extends ConsumerState<PageStates> {
   @override
   void initState(){
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    _onItemTapped(widget.index);
+    /*WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ref.watch(sleepParmaProvider);
-    });
+    });*/
   }
   @override
   Widget build(BuildContext context) {
-    ref.listen(sleepParmaProvider, (previous, next) {print('previous : $previous next : $next'); });
+   // ref.listen(sleepParmaProvider, (previous, next) {print('previous : $previous next : $next'); });
     return Scaffold(
       body: pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(

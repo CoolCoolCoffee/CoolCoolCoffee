@@ -50,7 +50,7 @@ class CoolCoolCoffee extends StatelessWidget {
         builder: (ctx, userSnapshot) {
           if (userSnapshot.hasData && userSnapshot.data != null) {
             NotificationGlobal.showDailyNotification();
-            return PageStates();
+            return PageStates(index: 0,);
           } else {
             return LoginPage();
           }
