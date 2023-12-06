@@ -44,7 +44,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
       _getSleepEnteredTime();
       //_setWidget();
     });
-    _initializeSleepParam();
+    //_initializeSleepParam();
   }
 
   Future<void> _getSleepEnteredTime() async {
@@ -76,8 +76,14 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
     } catch (e) {
       print('error2 : $e');
     }
+    _initializeSleepParam();
     setState(() {
-      _calPredictSleepTime();
+      if(ref.watch(sleepParmaProvider).sleep_quality != -1 && ref.watch(sleepParmaProvider).wake_time !=''){
+        _calPredictSleepTime();
+      }else{
+        ref.watch(shortTermNotiProvider.notifier).setPredictSleepTime('');
+        _setWidget();
+      }
       if(ref.watch(sleepParmaProvider).goal_sleep_time !=''&& ref.watch(shortTermNotiProvider).predict_sleep_time!=''){
         _calRecommendCaff();
       }
@@ -190,6 +196,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
   Future<void> _initializeSleepParam() async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     DateTime today = DateTime.now();
+    int now_hour = today.hour;
     String todaydate = today.toLocal().toIso8601String().split('T')[0];
     DateTime yesterday = today.subtract(Duration(days: 1));
     String yesterdaydate = yesterday.toLocal().toIso8601String().split('T')[0];
@@ -203,7 +210,12 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
     bool isToday = userSleepDoc.exists && userSleepDoc.data()!.containsKey('wake_time')&&userSleepDoc.data()!.containsKey('sleep_quality_score');
     bool isYesterday = yesUserSleepDoc.exists&&yesUserSleepDoc.data()!.containsKey('wake_time')&&yesUserSleepDoc.data()!.containsKey('sleep_quality_score');
 
-    if(isToday){
+    if(now_hour>=6&&!isToday){
+      ref.watch(sleepParmaProvider.notifier).changeWakeTime("");
+      ref.watch(sleepParmaProvider.notifier).changeSleepQuality(-1);
+      ref.watch(shortTermNotiProvider.notifier).setPredictSleepTime('');
+    }
+    else if(isToday){
       ref.watch(sleepParmaProvider.notifier).changeWakeTime(userSleepDoc['wake_time']);
       ref.watch(sleepParmaProvider.notifier).changeSleepQuality(userSleepDoc['sleep_quality_score']);
     }
@@ -216,15 +228,20 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
       ref.watch(sleepParmaProvider.notifier).changeWakeTime("");
       ref.watch(sleepParmaProvider.notifier).changeSleepQuality(-1);
     }
-    setState(() {
+    /*setState(() {
       _calPredictSleepTime();
-    });
+    });*/
   }
   @override
   Widget build(BuildContext context) {
     final prov = ref.watch(sleepParmaProvider.notifier);
-
-    _calPredictSleepTime();
+    if(ref.watch(sleepParmaProvider).sleep_quality != -1 && ref.watch(sleepParmaProvider).wake_time !=''){
+      _calPredictSleepTime();
+    }else{
+      ref.watch(shortTermNotiProvider.notifier).setPredictSleepTime('');
+      _setWidget();
+    }
+    //_calPredictSleepTime();
     if(ref.watch(sleepParmaProvider).goal_sleep_time !=''&& ref.watch(shortTermNotiProvider).predict_sleep_time!=''){
       _calRecommendCaff();
     }

@@ -32,7 +32,9 @@ class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
   Future<void> _initializeSleepParam() async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     DateTime today = DateTime.now();
+    int now_hour = today.hour;
     String todaydate = today.toLocal().toIso8601String().split('T')[0];
+
     DateTime yesterday = today.subtract(Duration(days: 1));
     String yesterdaydate = yesterday.toLocal().toIso8601String().split('T')[0];
 
@@ -42,14 +44,19 @@ class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
     DocumentSnapshot<Map<String, dynamic>> yesUserSleepDoc =
     await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(yesterdaydate).get();
     //오늘의 수면 정보 받아오기
-    if(userSleepDoc.exists && userSleepDoc.data()!.containsKey('wake_time')&&userSleepDoc.data()!.containsKey('sleep_quality_score')){
-
-    }
-    //오늘 꺼가 없으면 어제꺼로
-    else if(yesUserSleepDoc.exists&&yesUserSleepDoc.data()!.containsKey('wake_time')&&yesUserSleepDoc.data()!.containsKey('sleep_quality_score')){
-      setState(() {
-        now = yesterday;
-      });
+    if(now_hour<6){
+      if (userSleepDoc.exists &&
+          userSleepDoc.data()!.containsKey('wake_time') &&
+          userSleepDoc.data()!.containsKey('sleep_quality_score')) {
+      }
+      //오늘 꺼가 없으면 어제꺼로
+      else if (yesUserSleepDoc.exists &&
+          yesUserSleepDoc.data()!.containsKey('wake_time') &&
+          yesUserSleepDoc.data()!.containsKey('sleep_quality_score')) {
+        setState(() {
+          now = yesterday;
+        });
+      }
     }
   }
   @override
