@@ -3,26 +3,29 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_img_name_tile.dart';
 import 'package:coolcoolcoffee_front/page/menu/menu_toggle_btn.dart';
+import 'package:coolcoolcoffee_front/provider/sleep_param_provider.dart';
 import 'package:coolcoolcoffee_front/service/user_caffeine_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../model/brand.dart';
 import '../../model/user_caffeine.dart';
+import '../../page_state/page_state.dart';
 
-class ConveniAddPage extends StatefulWidget {
+class ConveniAddPage extends ConsumerStatefulWidget {
   final String brandName;
   final DocumentSnapshot menuSnapshot;
   const ConveniAddPage({super.key, required this.menuSnapshot, required this.brandName});
 
   @override
-  State<ConveniAddPage> createState() => _ConveniAddPageState();
+  _ConveniAddPageState createState() => _ConveniAddPageState();
 }
 
-class _ConveniAddPageState extends State<ConveniAddPage> {
+class _ConveniAddPageState extends ConsumerState<ConveniAddPage> {
   //final timeController = TextEditingController();
-
+  DateTime now = DateTime.now();
   bool isConfirm = false;
   TextEditingController hoursController = TextEditingController();
   TextEditingController minutesController = TextEditingController();
@@ -37,6 +40,8 @@ class _ConveniAddPageState extends State<ConveniAddPage> {
   late UserCaffeineService userCaffeineService;
   late String today;
   late String time;
+  late String todayTime;
+  late String yesterday;
 
   @override
   void initState() {
@@ -45,10 +50,12 @@ class _ConveniAddPageState extends State<ConveniAddPage> {
 
     _brand = widget.brandName;
     _menu = widget.menuSnapshot;
-    DateTime now = DateTime.now();
+
     DateFormat dayFormatter = DateFormat('yyyy-MM-dd');
     DateFormat timeFormatter = DateFormat('HH:mm');
     today = dayFormatter.format(now);
+    yesterday = dayFormatter.format(DateTime.now().subtract(Duration(days:1)));
+    todayTime = timeFormatter.format(now);
     time = timeFormatter.format(now);
     setState(() {});
   }
@@ -184,6 +191,12 @@ class _ConveniAddPageState extends State<ConveniAddPage> {
                             if (!isAM && hours < 12) {
                               hours += 12;
                             }
+                            if(!ref.watch(sleepParmaProvider).isToday&&isAM){
+                              if(hours==12) hours = 24;
+                              else{
+                                hours+=24;
+                              }
+                            }
                             time = '${hours.toString().padLeft(2, '0')}:${minutesController.text}';
                           }
                           isConfirm = !isConfirm;
@@ -243,8 +256,23 @@ class _ConveniAddPageState extends State<ConveniAddPage> {
                       padding: const EdgeInsets.only(left: 10,top: 5,right: 5,),
                       child: ElevatedButton(
                         onPressed: (){
+                          if(!ref.watch(sleepParmaProvider).isToday) {
+                            today = yesterday;
+                            if(time == todayTime){
+                              int hour = now.hour;
+                              int min = now.minute;
+                              if (hour == 12)
+                                hour = 24;
+                              else {
+                                hour += 24;
+                              }
+                              time =
+                                  '${hour.toString().padLeft(2, '0')}:${min.toString().padLeft(2, '0')}';
+                            }
+                          }
                           userCaffeineService.addNewUserCaffeine(today, UserCaffeine(drinkTime: time, menuId: _menu.id, brand: _brand, menuSize: "", shotAdded: -3, caffeineContent: _menu['caffeine_content'], menuImg: _menu['menu_img']));
                           Navigator.popUntil(context, (route) => route.isFirst);
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PageStates()));
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xff93796A),

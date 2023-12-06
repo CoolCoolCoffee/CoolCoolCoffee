@@ -170,12 +170,16 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
     }
 
     if(goal_time_double - predict_time_double>=0){
+      //여기 수정해야함!!!!!!!!!!!!!!!!!!!!!!!!!!!!! isToday = true면 오늘이란 얘기니까 24 더하기 놉
+      //isToday = false면 어제꺼로 계산하고 아지 ㄱ하루가 끝나지 않았다는 뜻 따라서 24더하기
       DateTime dt = DateTime.now();
       int hour = dt.hour;
       int minute = dt.minute;
       double min_scale = minute~/10 * step;
-      if(hour < 12){
-        hour+=24;
+      if(!ref.watch(sleepParmaProvider).isToday){
+        if(hour < 12){
+          hour+=24;
+        }
       }
       double now = hour + min_scale;
       print('recomment = $goal_time : $goal_time_double, $dt : $now');
@@ -214,20 +218,27 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
       ref.watch(sleepParmaProvider.notifier).changeWakeTime("");
       ref.watch(sleepParmaProvider.notifier).changeSleepQuality(-1);
       ref.watch(shortTermNotiProvider.notifier).setPredictSleepTime('');
+      ref.watch(sleepParmaProvider.notifier).setIsAllSet(false);
     }
     else if(isToday){
       ref.watch(sleepParmaProvider.notifier).changeWakeTime(userSleepDoc['wake_time']);
       ref.watch(sleepParmaProvider.notifier).changeSleepQuality(userSleepDoc['sleep_quality_score']);
+      ref.watch(sleepParmaProvider.notifier).setIsAllSet(true);
+      ref.watch(sleepParmaProvider.notifier).setIsToday(true);
     }
     //오늘 꺼가 없으면 어제꺼로
     else if(isYesterday){
       ref.watch(sleepParmaProvider.notifier).changeWakeTime(yesUserSleepDoc['wake_time']);
       ref.watch(sleepParmaProvider.notifier).changeSleepQuality(yesUserSleepDoc['sleep_quality_score']);
+      ref.watch(sleepParmaProvider.notifier).setIsAllSet(true);
+      ref.watch(sleepParmaProvider.notifier).setIsToday(false);
     }
     else{
       ref.watch(sleepParmaProvider.notifier).changeWakeTime("");
       ref.watch(sleepParmaProvider.notifier).changeSleepQuality(-1);
+      ref.watch(sleepParmaProvider.notifier).setIsAllSet(false);
     }
+    print("ㅗㅇ늘꺼냐 ? ${ref.watch(sleepParmaProvider).isToday}");
     /*setState(() {
       _calPredictSleepTime();
     });*/
