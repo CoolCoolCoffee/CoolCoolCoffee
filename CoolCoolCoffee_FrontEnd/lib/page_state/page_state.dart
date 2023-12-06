@@ -11,7 +11,6 @@ import '../page/home/home_page.dart';
 class PageStates extends StatefulWidget {
   final int index;
   const PageStates({super.key,required this.index});
-
   @override
   _PageState createState() => _PageState();
 }
@@ -35,13 +34,9 @@ class _PageState extends State<PageStates> {
   void initState(){
     super.initState();
     _onItemTapped(widget.index);
-    /*WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ref.watch(sleepParmaProvider);
-    });*/
   }
   @override
   Widget build(BuildContext context) {
-   // ref.listen(sleepParmaProvider, (previous, next) {print('previous : $previous next : $next'); });
     return Scaffold(
       body: pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(

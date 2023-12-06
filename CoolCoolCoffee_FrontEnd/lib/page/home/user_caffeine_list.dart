@@ -121,7 +121,25 @@ class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
                                     image:
                                         NetworkImage(userCaffeine.menuImg))),
                           ),
-                          Align(
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: FractionallySizedBox(
+                            heightFactor: 0.3,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                  bottomRight: Radius.circular(20),
+                                ),
+                                color: Color(0xff725F51),
+                              ),
+                              alignment: Alignment.topLeft,
+                              margin: const EdgeInsets.all(5),
+                              width: (MediaQuery.of(context).size.width / 3 - 5)/2,
+                            ),
+                          ),
+                        ),
+                          /*Align(
                             alignment: Alignment.topRight,
                             child: Container(
                               alignment: Alignment.topLeft,
@@ -138,7 +156,7 @@ class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
                               },
                               ),
                             ),
-                          ),
+                          ),*/
                           Align(
                             alignment: Alignment.bottomCenter,
                             child: FractionallySizedBox(
