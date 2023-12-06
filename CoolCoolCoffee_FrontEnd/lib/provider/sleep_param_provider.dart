@@ -10,7 +10,13 @@ final sleepParmaProvider = StateNotifierProvider<SleepParamNotifier,SleepParam>(
 });
 
 class SleepParamNotifier extends StateNotifier<SleepParam>{
-  SleepParamNotifier():super(SleepParam(goal_sleep_time: "", tw: 0, caff_list: [], wake_time: "", sleep_quality: -1,half_time: 5, recommendCaff: 0));
+  SleepParamNotifier():super(SleepParam(isAllSet:false,goal_sleep_time: "", tw: 0, caff_list: [], wake_time: "", sleep_quality: -1,half_time: 5, recommendCaff: 0, isToday: true));
+  void setIsAllSet(bool isSet){
+    state.isAllSet = isSet;
+  }
+  void setIsToday(bool isToday){
+    state.isToday = isToday;
+  }
   void changeRecommendCaff(int caff){
     state.recommendCaff = caff;
   }

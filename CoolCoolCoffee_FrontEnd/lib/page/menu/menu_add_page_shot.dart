@@ -5,13 +5,15 @@ import 'package:coolcoolcoffee_front/page/menu/menu_toggle_btn.dart';
 import 'package:coolcoolcoffee_front/service/user_caffeine_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../model/brand.dart';
 import '../../model/user_caffeine.dart';
 import '../../page_state/page_state.dart';
+import '../../provider/sleep_param_provider.dart';
 
-class MenuAddPageShot extends StatefulWidget {
+class MenuAddPageShot extends ConsumerStatefulWidget {
   final DocumentSnapshot brandSnapshot;
   final DocumentSnapshot menuSnapshot;
   final String size;
@@ -19,11 +21,12 @@ class MenuAddPageShot extends StatefulWidget {
   const MenuAddPageShot({super.key, required this.menuSnapshot, required this.brandSnapshot, required this.size, required this.shot,});
 
   @override
-  State<MenuAddPageShot> createState() => _MenuAddPageShotState();
+  _MenuAddPageShotState createState() => _MenuAddPageShotState();
 }
 
-class _MenuAddPageShotState extends State<MenuAddPageShot> {
+class _MenuAddPageShotState extends ConsumerState<MenuAddPageShot> {
   //final timeController = TextEditingController();
+  DateTime now = DateTime.now();
   num _caffeine = 0;
   String _size = "";
   bool isConfirm = false;
@@ -63,6 +66,8 @@ class _MenuAddPageShotState extends State<MenuAddPageShot> {
   late UserCaffeineService userCaffeineService;
   late String today;
   late String time;
+  late String todayTime;
+  late String yesterday;
   @override
   void initState() {
     super.initState();
@@ -99,11 +104,13 @@ class _MenuAddPageShotState extends State<MenuAddPageShot> {
         i++;
       }
     }
-    DateTime now = DateTime.now();
+
     DateFormat dayFormatter = DateFormat('yyyy-MM-dd');
     DateFormat timeFormatter = DateFormat('HH:mm');
     today = dayFormatter.format(now);
     time = timeFormatter.format(now);
+    yesterday = dayFormatter.format(DateTime.now().subtract(Duration(days:1)));
+    todayTime = timeFormatter.format(now);
     setState(() {});
   }
   @override
@@ -239,6 +246,12 @@ class _MenuAddPageShotState extends State<MenuAddPageShot> {
                             if (!isAM && hours < 12) {
                               hours += 12;
                             }
+                            if(!ref.watch(sleepParmaProvider).isToday&&isAM){
+                              if(hours==12) hours = 24;
+                              else{
+                                hours+=24;
+                              }
+                            }
                             time = '${hours.toString().padLeft(2, '0')}:${minutesController.text}';
                           }
                           isConfirm = !isConfirm;
@@ -327,6 +340,20 @@ class _MenuAddPageShotState extends State<MenuAddPageShot> {
                       padding: const EdgeInsets.only(left: 10,top: 5,bottom: 5,),
                       child: ElevatedButton(
                         onPressed: (){
+                          if(!ref.watch(sleepParmaProvider).isToday) {
+                            today = yesterday;
+                            if(time == todayTime){
+                              int hour = now.hour;
+                              int min = now.minute;
+                              if (hour == 12)
+                                hour = 24;
+                              else {
+                                hour += 24;
+                              }
+                              time =
+                              '${hour.toString().padLeft(2, '0')}:${min.toString().padLeft(2, '0')}';
+                            }
+                          }
                           userCaffeineService.addNewUserCaffeine(today, UserCaffeine(drinkTime: time, menuId: _menu.id, brand: _brand.id, menuSize: _size, shotAdded: 0, caffeineContent: _caffeine, menuImg: _menu['menu_img']));
                           Navigator.popUntil(context, (route) => route.isFirst);
                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PageStates()));
