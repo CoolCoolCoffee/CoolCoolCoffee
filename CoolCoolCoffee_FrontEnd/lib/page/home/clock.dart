@@ -7,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../page_state/page_state.dart';
+
 class EditPopup extends StatefulWidget {
   final Function(String) onSave;
   final void Function(String) updateParentState;
@@ -274,7 +276,7 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
     return Column(
       //crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (prov.goal_sleep_time.isEmpty)
+        prov.goal_sleep_time.isEmpty?
         Container(
           margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
           child: Row(
@@ -282,7 +284,6 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.ideographic,
             children: [
-              if (prov.goal_sleep_time.isEmpty)
                 RichText(
                   textAlign: TextAlign.start,
                   text: TextSpan(
@@ -290,10 +291,10 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
                     style: TextStyle(
                       color: ref.watch(colorModeProvider).isControlMode?modeColor.controlModeColor['black_color']:modeColor.noSleepModeColor['white_color'],
                       fontSize: 20,
+                      fontFamily: 'KNPSKkomi',
                     ),
                   ),
                 ),
-              //Sized침Box(width: 55),
               ElevatedButton(
                 onPressed: () {
                   _showEditPopup(context);
@@ -331,6 +332,33 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
                 ),
               ),
             ],
+          ),
+        )
+        : Container(
+          margin: const EdgeInsets.only(top: 10, right: 20),
+          child: TextButton(
+            onPressed: () {
+              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => PageStates()));
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text('추천음료 보러가기',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(width: 5,),
+                Icon(
+                  Icons.open_in_new,
+                  color: Colors.black,
+                  size: 20,
+
+                ),
+                const SizedBox(width: 3),
+              ],
+            ),
           ),
         ),
         Center(

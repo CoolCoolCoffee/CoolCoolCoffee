@@ -66,7 +66,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                         ? '오늘의 수면정보'
                         : '$selecteddate의 수면 정보',
                     style: const TextStyle(
-                      fontSize: 24.0,
+                      fontSize: 22.0,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -143,7 +143,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                             : null, // Set shape to null if it's not today's date
                         elevation: selecteddate == todaydate ? 3 : 0,
                       ),
-                      child: Text(selecteddate == todaydate ? '가져오기' : '', style: const TextStyle(color: Color(0xffF9F8F7), fontSize: 22),),
+                      child: Text(selecteddate == todaydate ? '가져오기' : '', style: const TextStyle(color: Color(0xffF9F8F7), fontSize: 20),),
                     ),
                     SizedBox(width: 10,),
                     if (selecteddate == todaydate)
@@ -158,7 +158,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                           ),
                           elevation: 3,
                         ),
-                        child: Text('입력', style: TextStyle(color: Color(0xffF9F8F7), fontSize: 22),),
+                        child: Text('입력', style: TextStyle(color: Color(0xffF9F8F7), fontSize: 20),),
                       ),
                   ],
                 )
@@ -779,7 +779,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                     print('Selected Sleep Time: $selectedSleepTime');
                     print('Selected Wake Time: $selectedWakeTime');
                   },
-                  child: Text('입력', style: TextStyle(fontSize: 24, color: Color(0xff93796A), fontWeight: FontWeight.bold),),
+                  child: Text('입력', style: TextStyle(fontSize: 22, color: Color(0xff93796A), fontWeight: FontWeight.bold),),
                   style: TextButton.styleFrom(
                     minimumSize: Size(60, 40),
                     primary: Colors.grey,

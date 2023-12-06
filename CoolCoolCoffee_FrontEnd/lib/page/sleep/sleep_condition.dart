@@ -39,7 +39,7 @@ class _SleepConditionWidgetState extends State<SleepConditionWidget> {
                 margin: const EdgeInsets.only(right:10),
                 child: const Text(
                   '피곤도를 기록해주세요',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
                 ),
               ),
               Container(
@@ -57,7 +57,7 @@ class _SleepConditionWidgetState extends State<SleepConditionWidget> {
                     ),
                     elevation: 3,
                   ),
-                  child: const Text('저장', style: TextStyle(color: Color(0xffF9F8F7),),),
+                  child: const Text('저장', style: TextStyle(color: Color(0xffF9F8F7),fontSize: 20),),
                 ),
               ),
             ],
