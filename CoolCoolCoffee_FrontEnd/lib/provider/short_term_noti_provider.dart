@@ -31,60 +31,50 @@ class ShortTermNotiNotifier extends StateNotifier<ShortTermParam>{
     state.predict_sleep_time = predict_sleep_time;
   }
   void setCaffCompare(int drinkNum){
-    print('predict lseep time : ${state.predict_sleep_time}');
-    print('goal sleep time : ${state.goal_sleep_time}');
-    if(state.predict_sleep_time != ""&&state.goal_sleep_time != "") {
-      print('${state.isControlMode?"조절":"밤샘"}');
+    if(state.predict_sleep_time != ''&&state.goal_sleep_time != '') {
+      bool isAm = false;
+      double goal_sleep_time_hour = 0;
+      double goal_sleep_time_min = 0;
+      double predict_sleep_time_hour = 0;
+      double predict_sleep_time_min = 0;
+      int hour = 0;
+      int minute = 0;
+      //goal sleep time 숫자로 변환
+      if (state.goal_sleep_time.contains('AM')) {
+        isAm = true;
+      } else {
+        isAm = false;
+      }
+      var arr = state.goal_sleep_time.split(' ');
+          arr = arr[0].split(':');
+      goal_sleep_time_hour = double.parse(arr[0]);
+      if (isAm) {
+        if (goal_sleep_time_hour == 12) goal_sleep_time_hour -= 12;
+        goal_sleep_time_hour += 24;
+      } else {
+        goal_sleep_time_hour += 12;
+      }
+      goal_sleep_time_min = double.parse(arr[1]) / 60.0;
+      if (state.predict_sleep_time.contains('AM')) {
+        isAm = true;
+      } else {
+        isAm = false;
+      }
+      arr = state.predict_sleep_time.split(' ');
+
+      arr = arr[0].split(':');
+      predict_sleep_time_hour = double.parse(arr[0]);
+      if (isAm) {
+        if (predict_sleep_time_hour == 12) predict_sleep_time_hour -= 12;
+        predict_sleep_time_hour += 24;
+      } else {
+        predict_sleep_time_hour += 12;
+      }
+      predict_sleep_time_min = double.parse(arr[1]) / 60.0;
       if (state.isControlMode) {
-        bool isAm = false;
-        double goal_sleep_time_hour = 0;
-        double goal_sleep_time_min = 0;
-        double predict_sleep_time_hour = 0;
-        double predict_sleep_time_min = 0;
-        int hour = 0;
-        int minute = 0;
-        //goal sleep time 숫자로 변환
-        if (state.goal_sleep_time.contains('AM')) {
-          isAm = true;
-        } else {
-          isAm = false;
-        }
-        var arr = state.goal_sleep_time.split(' ');
-        arr = arr[0].split(':');
-        goal_sleep_time_hour = double.parse(arr[0]);
-        if (isAm) {
-          if (goal_sleep_time_hour == 12) goal_sleep_time_hour -= 12;
-          goal_sleep_time_hour += 24;
-        } else {
-          goal_sleep_time_hour += 12;
-        }
-        goal_sleep_time_min = double.parse(arr[1]) / 60.0;
-
-        if (state.predict_sleep_time.contains('AM')) {
-          isAm = true;
-        } else {
-          isAm = false;
-        }
-        arr = state.predict_sleep_time.split(' ');
-        print('${state.predict_sleep_time}');
-        arr = arr[0].split(':');
-
-        predict_sleep_time_hour = double.parse(arr[0]);
-
-        if (isAm) {
-          if (predict_sleep_time_hour == 12) predict_sleep_time_hour -= 12;
-          predict_sleep_time_hour += 24;
-        } else {
-          predict_sleep_time_hour += 12;
-        }
-        predict_sleep_time_min = double.parse(arr[1]) / 60.0;
-
-        print('today Alramr ${state.todayAlarm}');
-        print('${goal_sleep_time_hour +
-            goal_sleep_time_min} ,, ${predict_sleep_time_hour +
-            predict_sleep_time_min})');
+        NotificationGlobal.cancelNotification(4);
         if ((goal_sleep_time_hour + goal_sleep_time_min) -
-            (predict_sleep_time_hour + predict_sleep_time_min)>=0) {
+            (predict_sleep_time_hour + predict_sleep_time_min)>0) {
           //short term 2
           print('short term 2');
           if (!state.todayAlarm && !state.isCaffOk) {
@@ -92,7 +82,6 @@ class ShortTermNotiNotifier extends StateNotifier<ShortTermParam>{
             hour = goal_sleep_time_hour.toInt() - 7;
             minute = (goal_sleep_time_min * 60).toInt();
             print('hour : $hour minute : $minute');
-
             NotificationGlobal.shortTermFeedBackNoti(
                 true,
                 false,
@@ -138,12 +127,27 @@ class ShortTermNotiNotifier extends StateNotifier<ShortTermParam>{
             state.isCaffTooMuch = true;
           }
         }
+      }else {
+        print('밤샘모드 레츠고');
+        if(!state.todayAlarm) {
+          print('보내자~~');
+          NotificationGlobal.cancelNotification(2);
+          NotificationGlobal.cancelNotification(3);
+          //밤샘 모드
+          if ((goal_sleep_time_hour + goal_sleep_time_min) -
+              (predict_sleep_time_hour + predict_sleep_time_min)>0) {
+            hour = goal_sleep_time_hour.toInt() - 7;
+            minute = (goal_sleep_time_min * 60).toInt();
+            print('$hour $minute에 피버 타임!!!!!!!!!!!!11');
+            NotificationGlobal.feverFeedBackNoti(hour, minute);
+            state.todayAlarm = true;
+          }
+        }
       }
     }else{
-      if(state.isCaffOk||state.isCaffTooMuch){
-        NotificationGlobal.cancelNotification(2);
-        NotificationGlobal.cancelNotification(3);
-      }
+      NotificationGlobal.cancelNotification(2);
+      NotificationGlobal.cancelNotification(3);
+      NotificationGlobal.cancelNotification(4);
     }
   }
 }

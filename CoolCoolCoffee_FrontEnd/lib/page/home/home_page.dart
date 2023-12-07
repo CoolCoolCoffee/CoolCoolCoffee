@@ -190,6 +190,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ref.watch(colorModeProvider.notifier).switchMode(index!);
                     ref.watch(colorModeProvider.notifier).switchIndex(index);
                     ref.watch(shortTermNotiProvider.notifier).switchMode(index);
+                    ref.watch(shortTermNotiProvider.notifier).resetTodayAlarm();
+                    print('오늘 알림 리셋!!!!!!!');
+                    ref.watch(shortTermNotiProvider.notifier).setCaffCompare(ref.watch(sleepParmaProvider).caff_list.length);
                   });
                 },
               ),
