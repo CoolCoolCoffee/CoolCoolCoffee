@@ -43,6 +43,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   Future<void> _initializeSleepParam() async {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     DateTime today = DateTime.now();
+    int now_hour = today.hour;
     String todaydate = today.toLocal().toIso8601String().split('T')[0];
     DateTime yesterday = today.subtract(Duration(days: 1));
     String yesterdaydate = yesterday.toLocal().toIso8601String().split('T')[0];
@@ -51,29 +52,41 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     DocumentSnapshot<Map<String, dynamic>> yesUserSleepDoc =
     await FirebaseFirestore.instance.collection('Users').doc(uid).collection('user_sleep').doc(yesterdaydate).get();
-    //오늘의 수면 정보 받아오기
-    if(userSleepDoc.exists && userSleepDoc.data()!.containsKey('wake_time')&&userSleepDoc.data()!.containsKey('sleep_quality_score')){
+    bool isToday = userSleepDoc.exists && userSleepDoc.data()!.containsKey('wake_time')&&userSleepDoc.data()!.containsKey('sleep_quality_score');
+    bool isYesterday = yesUserSleepDoc.exists&&yesUserSleepDoc.data()!.containsKey('wake_time')&&yesUserSleepDoc.data()!.containsKey('sleep_quality_score');
 
+    if(now_hour>=6&&!isToday){
+      ref.watch(sleepParmaProvider.notifier).changeWakeTime("");
+      ref.watch(sleepParmaProvider.notifier).changeSleepQuality(-1);
+      ref.watch(shortTermNotiProvider.notifier).setPredictSleepTime('');
+      ref.watch(sleepParmaProvider.notifier).setIsAllSet(false);
+    }
+    else if(isToday){
       ref.watch(sleepParmaProvider.notifier).changeWakeTime(userSleepDoc['wake_time']);
-      //print('wake time ${userSleepDoc['wake_time']}');
       ref.watch(sleepParmaProvider.notifier).changeSleepQuality(userSleepDoc['sleep_quality_score']);
-      setState(() {
-        now = today;
-      });
+      ref.watch(sleepParmaProvider.notifier).setIsAllSet(true);
+      ref.watch(sleepParmaProvider.notifier).setIsToday(true);
     }
     //오늘 꺼가 없으면 어제꺼로
-    else if(yesUserSleepDoc.exists&&yesUserSleepDoc.data()!.containsKey('wake_time')&&yesUserSleepDoc.data()!.containsKey('sleep_quality_score')){
+    else if(isYesterday){
       ref.watch(sleepParmaProvider.notifier).changeWakeTime(yesUserSleepDoc['wake_time']);
-      print('!!!!!!1어제꺼다잉 wake time ${userSleepDoc['wake_time']}');
       ref.watch(sleepParmaProvider.notifier).changeSleepQuality(yesUserSleepDoc['sleep_quality_score']);
-      setState(() {
-        now = yesterday;
-      });
+      ref.watch(sleepParmaProvider.notifier).setIsAllSet(true);
+      ref.watch(sleepParmaProvider.notifier).setIsToday(false);
     }
     else{
       ref.watch(sleepParmaProvider.notifier).changeWakeTime("");
-
       ref.watch(sleepParmaProvider.notifier).changeSleepQuality(-1);
+      ref.watch(sleepParmaProvider.notifier).setIsAllSet(false);
+    }
+    if(ref.watch(sleepParmaProvider).isToday){
+      setState(() {
+        now = today;
+      });
+    }else{
+      setState(() {
+        now = yesterday;
+      });
     }
   }
 

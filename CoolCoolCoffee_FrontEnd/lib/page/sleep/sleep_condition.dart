@@ -173,9 +173,9 @@ class _SleepConditionWidgetState extends State<SleepConditionWidget> {
           //print("tlqkf : $selectedCondition");
         });
       } else {
-        // 문서 없으면 5.0
+        // 문서 없으면 0.0
         setState(() {
-          selectedCondition = 5.0;
+          selectedCondition = 0.0;
         });
       }
     } catch (error) {

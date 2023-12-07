@@ -78,10 +78,22 @@ class NotificationGlobal {
     );
 
     await _localNotification.zonedSchedule(
+      0,
+      '쿨쿨 커피',
+      '오늘의 수면 정보 다 입력하셨나요?',
+      _setTimeZoneSetting(10,0),
+      _details,
+      uiLocalNotificationDateInterpretation:
+      UILocalNotificationDateInterpretation.absoluteTime,
+      androidAllowWhileIdle: true,
+      matchDateTimeComponents: DateTimeComponents.time,
+    );
+
+    await _localNotification.zonedSchedule(
       1,
       '쿨쿨 커피',
-      '오늘의 카페인 다 입력하셨나요?',
-      _timeZoneSetting(),
+      '오늘의 카페인 정보 다 입력하셨나요?',
+      _setTimeZoneSetting(16,0),
       _details,
       uiLocalNotificationDateInterpretation:
       UILocalNotificationDateInterpretation.absoluteTime,

@@ -216,7 +216,7 @@ class _UserCaffeineListState extends ConsumerState<UserCaffeineList> {
                                         _setTime(userCaffeine.drinkTime),
                                         style: const TextStyle(
                                           fontSize: 17,
-                                          fontWeight: FontWeight.bold
+                                          //fontWeight: FontWeight.bold
                                         ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
