@@ -411,7 +411,7 @@ class CameraFunc{
     }
     ret.addAll({"size":size});
     ret.addAll({"shot":shot});
-    final starbucksMenu = korScannedText.split(' ');
+    final starbucksMenu = korScannedText.split(')');
     var collection = FirebaseFirestore.instance.collection('Cafe_brand').doc(brand).collection('menus');
     var wait = await FirebaseFirestore.instance
         .collection('Cafe_brand')

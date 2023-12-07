@@ -169,7 +169,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
       predict_time_double = hour+min;
     }
 
-    if(goal_time_double - predict_time_double>=0){
+    if(goal_time_double - predict_time_double>0){
       //여기 수정해야함!!!!!!!!!!!!!!!!!!!!!!!!!!!!! isToday = true면 오늘이란 얘기니까 24 더하기 놉
       //isToday = false면 어제꺼로 계산하고 아지 ㄱ하루가 끝나지 않았다는 뜻 따라서 24더하기
       DateTime dt = DateTime.now();
@@ -362,7 +362,6 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
       ret = 1-(1-user_wake_h_graph)*exp(-r_t/tw) +tiredness - caff;
     }
     ret = ret*100;
-    double minus = 100 *(0.75 + a * sin(2 * pi * sleepCalFunc.timeMap(t))) - ret;
     return ret;
   }
   Widget setText(bool sleepNotYet, String bedTime){
