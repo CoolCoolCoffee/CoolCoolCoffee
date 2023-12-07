@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:coolcoolcoffee_front/service/user_sleep_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../provider/alarm_permission_provider.dart';
 import '../../provider/sleep_param_provider.dart';
 import '../home/longterm_popup_B.dart';
 
@@ -801,7 +802,9 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context); // 팝업 닫기
+                ref.watch(alarmPermissionProvider.notifier).setPermissionDay(false);
+                Navigator.pop(context);
+                // 팝업 닫기
               },
               child: Text('닫기'),
             ),
@@ -815,10 +818,11 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: Text('취침시간, 기상시간이 새로 입력되었습니다!'),
+          content: Text('취침시간, 기상시간이 새로 입력되었습니다!\n피곤도도 설정하러 가볼까요?'),
           actions: [
             TextButton(
               onPressed: () {
+                ref.watch(alarmPermissionProvider.notifier).setPermissionDay(false);
                 Navigator.pop(context); // 팝업 닫기
               },
               child: Text('닫기'),

@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coolcoolcoffee_front/function/mode_color.dart';
+import 'package:coolcoolcoffee_front/provider/alarm_permission_provider.dart';
 import 'package:coolcoolcoffee_front/provider/color_mode_provider.dart';
 import 'package:coolcoolcoffee_front/provider/long_term_noti_provider.dart';
 import 'package:coolcoolcoffee_front/provider/short_term_noti_provider.dart';
@@ -34,26 +35,33 @@ class _HomePageState extends ConsumerState<HomePage> {
   DateTime now = DateTime.now();
   DateFormat dayFormatter = DateFormat('yyyy-MM-dd');
   String date = '';
-  bool notificationPermissionDialogShown = false;
 
   @override
   void initState(){
     super.initState();
-    print("Init State: $notificationPermissionDialogShown");
-    _requestNotificationPermissions();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ref.watch(alarmPermissionProvider);
+      _requestNotificationPermissions();
+    });
     _initializeSleepParam();
   }
 
   void _requestNotificationPermissions() async {
-    //오늘 떴었나 확인
-    if (notificationPermissionDialogShown) {
-      return;
-    }
     //알림 권한 요청
     final status = await NotificationGlobal().requestNotificationPermissions();
+    print('허용함??? ${ref.watch(alarmPermissionProvider).isPermissioned} 오늘 이미 뜸?? ${ref.watch(alarmPermissionProvider).isToday}');
+    if(status.isGranted){
+      ref.watch(alarmPermissionProvider.notifier).setIsPermissioned(true);
+      return;
+    }
+    //오늘 보냈었냐??
+    if (ref.watch(alarmPermissionProvider).isToday) {
+      return;
+    }
     if (status.isDenied && context.mounted) {
-      notificationPermissionDialogShown = true;
-      print("QQQQQ22222 : $notificationPermissionDialogShown");
+      ref.watch(alarmPermissionProvider.notifier).setIsPermissioned(false);
+      //오늘 이미 보냈다잉
+      ref.watch(alarmPermissionProvider.notifier).setPermissionDay(true);
       showDialog(
         // 알림 권한이 거부되었을 경우 다이얼로그 출력
         context: context,
@@ -66,14 +74,12 @@ class _HomePageState extends ConsumerState<HomePage> {
               onPressed: () {
                 Navigator.of(context).pop();
                 openAppSettings(); //설정 클릭시 권한설정 화면으로 이동
-                print("QQQQ : $notificationPermissionDialogShown");
               },
             ),
             TextButton(
               child: Text('취소'), //다이얼로그 버튼의 우측 텍스트
               onPressed: () {
                 Navigator.of(context).pop();
-                print("QQQQ111111 : $notificationPermissionDialogShown");
               }, //다이얼로그 닫기
             ),
           ],
