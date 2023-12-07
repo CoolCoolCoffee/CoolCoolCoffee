@@ -346,13 +346,13 @@ class _ClockWidgetState extends ConsumerState<ClockWidget>{
                 Text('추천음료 보러가기',
                   style: TextStyle(
                     fontSize: 20,
-                    color: Colors.black,
+                    color: ref.watch(colorModeProvider).isControlMode?Colors.black:Colors.white,
                   ),
                 ),
                 const SizedBox(width: 5,),
                 Icon(
                   Icons.open_in_new,
-                  color: Colors.black,
+                  color: ref.watch(colorModeProvider).isControlMode?Colors.black:Colors.white,
                   size: 20,
 
                 ),
