@@ -3,8 +3,16 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:permission_handler/permission_handler.dart';
 
 class NotificationGlobal {
+  static final NotificationGlobal _instance = NotificationGlobal._();
+  factory NotificationGlobal() {
+    return _instance;
+  }
+  // private 생성자
+  NotificationGlobal._();
+
   static FlutterLocalNotificationsPlugin _localNotification =
   FlutterLocalNotificationsPlugin();
 
@@ -138,5 +146,10 @@ class NotificationGlobal {
 
   static cancelAllNotifications() async {
     await _localNotification.cancelAll();
+  }
+
+  Future<PermissionStatus> requestNotificationPermissions() async {
+    final status = await Permission.notification.request();
+    return status;
   }
 }

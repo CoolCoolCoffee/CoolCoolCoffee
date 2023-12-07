@@ -18,6 +18,7 @@ import 'clock.dart';
 import 'package:coolcoolcoffee_front/page/home/longterm_popup_A.dart';
 import 'package:coolcoolcoffee_front/page/home/longterm_popup_B.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:coolcoolcoffee_front/notification/notification_global.dart';
 
 import '../menu/menu_page.dart';
 
@@ -33,11 +34,52 @@ class _HomePageState extends ConsumerState<HomePage> {
   DateTime now = DateTime.now();
   DateFormat dayFormatter = DateFormat('yyyy-MM-dd');
   String date = '';
+  bool notificationPermissionDialogShown = false;
 
   @override
   void initState(){
     super.initState();
+    print("Init State: $notificationPermissionDialogShown");
+    _requestNotificationPermissions();
     _initializeSleepParam();
+  }
+
+  void _requestNotificationPermissions() async {
+    //오늘 떴었나 확인
+    if (notificationPermissionDialogShown) {
+      return;
+    }
+    //알림 권한 요청
+    final status = await NotificationGlobal().requestNotificationPermissions();
+    if (status.isDenied && context.mounted) {
+      notificationPermissionDialogShown = true;
+      print("QQQQQ22222 : $notificationPermissionDialogShown");
+      showDialog(
+        // 알림 권한이 거부되었을 경우 다이얼로그 출력
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('알림 권한이 거부되었습니다.'),
+          content: Text('알림을 받으려면 앱 설정에서 권한을 허용해야 합니다.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('설정'), //다이얼로그 버튼의 죄측 텍스트
+              onPressed: () {
+                Navigator.of(context).pop();
+                openAppSettings(); //설정 클릭시 권한설정 화면으로 이동
+                print("QQQQ : $notificationPermissionDialogShown");
+              },
+            ),
+            TextButton(
+              child: Text('취소'), //다이얼로그 버튼의 우측 텍스트
+              onPressed: () {
+                Navigator.of(context).pop();
+                print("QQQQ111111 : $notificationPermissionDialogShown");
+              }, //다이얼로그 닫기
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   Future<void> _initializeSleepParam() async {
