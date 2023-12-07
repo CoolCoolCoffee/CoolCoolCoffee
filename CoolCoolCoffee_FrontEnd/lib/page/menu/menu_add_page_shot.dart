@@ -326,7 +326,7 @@ class _MenuAddPageShotState extends ConsumerState<MenuAddPageShot> {
                         ),
                       ),
                     ),
-                    Text(_caffeine.toString(),
+                    Text('${_caffeine}mg',
                       style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold

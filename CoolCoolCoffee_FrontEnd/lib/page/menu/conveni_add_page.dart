@@ -240,7 +240,7 @@ class _ConveniAddPageState extends ConsumerState<ConveniAddPage> {
                                 fontSize: 12
                             ),
                           ),
-                          Text(_menu['caffeine_content'].toString(),
+                          Text('${_menu['caffeine_content']}mg',
                             style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold
