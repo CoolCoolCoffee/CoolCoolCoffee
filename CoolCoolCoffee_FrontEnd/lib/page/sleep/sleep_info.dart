@@ -184,7 +184,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '취침시간',
+                        '어제 취침한 시간',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 20.0,
@@ -217,7 +217,7 @@ class _SleepInfoWidgetState extends ConsumerState<SleepInfoWidget> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '기상시간',
+                        '오늘 기상한 시간',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 20.0,

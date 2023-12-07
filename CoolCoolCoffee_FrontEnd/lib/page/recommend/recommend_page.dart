@@ -74,7 +74,7 @@ class _RecommendPageState extends ConsumerState<RecommendPage> {
                   child: ref.watch(colorModeProvider).isControlMode?
                         Text('$userCaffeine mg 까지 마실 수 있어요!',
                             style: const TextStyle(fontSize: 20, color: Colors.black,)) :
-                        Text('밤샘을 위해 $userCaffeine mg 마셔봐요!',
+                        Text('밤샘을 위해 $userCaffeine mg 이상 마셔봐요!',
                             style: const TextStyle(fontSize: 20, color: Colors.black,)),
               ),
             ),
