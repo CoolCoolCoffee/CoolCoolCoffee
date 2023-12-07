@@ -32,6 +32,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
   String bedTime = '';
   late Timer timer;
   bool sleepNotYet = true;
+  bool goalNotYet = true;
   bool temp = false;
   late SleepParam provider;
   late dynamic snapshots;
@@ -194,7 +195,8 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
   }
   void _setWidget(){
     final provider = ref.watch(sleepParmaProvider);
-    sleepNotYet = (provider.goal_sleep_time == "" ||provider.wake_time == ""|| provider.sleep_quality == -1);
+    sleepNotYet = (provider.wake_time == ""|| provider.sleep_quality == -1);
+    goalNotYet = (provider.goal_sleep_time == "");
     setState(() { bedTime = ref.watch(shortTermNotiProvider).predict_sleep_time;});
   }
   Future<void> _initializeSleepParam() async {
@@ -248,7 +250,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
     final prov = ref.watch(sleepParmaProvider.notifier);
     if(ref.watch(sleepParmaProvider).sleep_quality != -1 && ref.watch(sleepParmaProvider).wake_time !=''){
       _calPredictSleepTime();
-    }else{
+    }else {
       ref.watch(shortTermNotiProvider.notifier).setPredictSleepTime('');
       _setWidget();
     }
@@ -280,7 +282,7 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
               child: Row(
                 children: [
                   Expanded(
-                      child: setText(sleepNotYet, bedTime),
+                      child: setText(sleepNotYet,goalNotYet, bedTime),
                   ),
                   Container(
                     margin: const EdgeInsets.all(10),
@@ -364,13 +366,35 @@ class _CaffeineLeftWidgetState extends ConsumerState<CaffeineLeftWidget> {
     ret = ret*100;
     return ret;
   }
-  Widget setText(bool sleepNotYet, String bedTime){
+  Widget setText(bool sleepNotYet,bool goalNotYet, String bedTime){
     if(sleepNotYet){
       return const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             '수면 정보를',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20.0,
+            ),
+          ),
+          SizedBox(height: 15),
+          Text(
+            '입력해주세요!',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20.0,
+            ),
+          )
+        ],
+      );
+    }
+    if(goalNotYet){
+      return const Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            '목표 수면 시간을',
             style: TextStyle(
               color: Colors.black,
               fontSize: 20.0,
