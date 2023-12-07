@@ -78,7 +78,7 @@
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
     <application
-        android:label="coolcoolcoffee_front"
+        android:label="쿨쿨커피"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
