@@ -41,12 +41,11 @@ class _HomePageState extends ConsumerState<HomePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       ref.watch(alarmPermissionProvider);
-      _requestNotificationPermissions();
+      _initializeSleepParam();
     });
-    _initializeSleepParam();
   }
 
-  void _requestNotificationPermissions() async {
+  void _requestNotificationPermissions(BuildContext context) async {
     //알림 권한 요청
     final status = await NotificationGlobal().requestNotificationPermissions();
     //print('허용함??? ${ref.watch(alarmPermissionProvider).isPermissioned} 오늘 이미 뜸?? ${ref.watch(alarmPermissionProvider).isToday}');
@@ -61,7 +60,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         .isToday) {
       return;
     }
-    if (status.isDenied) {
+    if (status.isDenied&&context.mounted) {
       ref.watch(alarmPermissionProvider.notifier).setIsPermissioned(false);
       ref.watch(alarmPermissionProvider.notifier).setPermissionDay(true);
       _showEditPopup(context);
@@ -108,14 +107,17 @@ class _HomePageState extends ConsumerState<HomePage> {
       ref.watch(sleepParmaProvider.notifier).setIsAllSet(false);
     }
     if(ref.watch(sleepParmaProvider).isToday){
+      _requestNotificationPermissions(context);
       setState(() {
         now = today;
       });
     }else{
+      _requestNotificationPermissions(context);
       setState(() {
         now = yesterday;
       });
     }
+
   }
 
   void _showEditPopup(BuildContext context) async {
@@ -146,7 +148,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
   @override
   Widget build(BuildContext context) {
-
     //DateFormat timeFormatter = DateFormat('HH:mm:ss');
     date = dayFormatter.format(now);
     UserCaffeineService userCaffeineService = UserCaffeineService();
