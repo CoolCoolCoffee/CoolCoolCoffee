@@ -102,6 +102,14 @@ class _GraphPageState extends ConsumerState<GraphPage> {
                 ),
                 Row(
                   children: [
+                    Container(margin:EdgeInsets.only(left:20,right: 10),width: 30,height: 2,color: Colors.blue,),
+                    Text('와',style: TextStyle(fontSize: 20)),
+                    Container(margin:EdgeInsets.only(left:20,right: 10),width: 30,height: 2,color: Colors.greenAccent,),
+                    Text('사이의 간격 : 피로 누적 정도',style: TextStyle(fontSize: 20)),
+                  ],
+                ),
+                Row(
+                  children: [
                     Container(margin:EdgeInsets.only(left:20,right: 10),width: 30,height: 2,color: Colors.purple,),
                     Text('과',style: TextStyle(fontSize: 20)),
                     Container(margin:EdgeInsets.only(left:20,right: 10),width: 30,height: 2,color: Colors.greenAccent,),
