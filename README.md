@@ -34,8 +34,7 @@ If you want to run this program in your local system, please follow this guide.
 > OS: Windows 10, MacOS
 
 #### Install "Flutter SDK"
-
-- For [Windows](https://docs.flutter.dev/release/archive?tab=windows)
+- #### For [Windows](https://docs.flutter.dev/release/archive?tab=windows)
   
 Remember to unpack the Flutter SDK file at the appropriate position. Do not unpack the file in folders like Program Files. <br/>
 Ex) D:\flutter
@@ -43,8 +42,7 @@ Ex) D:\flutter
 Then, set the SDK path to the environment variable. You should set the variable to the path of flutter SDK’s bin folder.<br/>
 Ex) D:\flutter\bin
 
-
-- For [MacOS](https://docs.flutter.dev/release/archive?tab=macos)
+- #### For [MacOS](https://docs.flutter.dev/release/archive?tab=macos)
   
 Open terminal and type commands below.
 
@@ -67,6 +65,7 @@ Save and close the editor.
 For Windows and MacOs, check whether you have completed all your tasks for using flutter with the command below.
 
 	flutter doctor
+
 
 #### Download [Android Studio](https://developer.android.com/studio/install?hl=ko) 
 #### Install "Flutter plugin & Dart plugin" in Android Studio
