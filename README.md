@@ -21,7 +21,7 @@ CoolCoolCoffee helps people to control caffeine intake for sleeping well when pe
 
 #### Demo Video about CoolCoolCoffee
 
-(https://youtu.be/lQ6Sh3euh6E)
+[![Demo_video](http://img.youtube.com/vi/lQ6Sh3euh6E/0.jpg)](https://youtu.be/lQ6Sh3euh6E)
 
 
 ## Build
@@ -35,7 +35,8 @@ OS: Windows 10, MacOS
 
 #### Install "Flutter SDK"
 
-For Windows (https://docs.flutter.dev/release/archive?tab=windows)<br/>
+- For [Windows](https://docs.flutter.dev/release/archive?tab=windows)
+  
 Remember to unpack the Flutter SDK file at the appropriate position. Do not unpack the file in folders like Program Files. <br/>
 Ex) D:\flutter
 
@@ -43,8 +44,10 @@ Then, set the SDK path to the environment variable. You should set the variable 
 Ex) D:\flutter\bin
 
 
-For MacOS (https://docs.flutter.dev/release/archive?tab=macos)<br/>
-Open terminal and type commands below.<br/>
+- For [MacOS](https://docs.flutter.dev/release/archive?tab=macos)
+  
+Open terminal and type commands below.
+
 If your terminal is zsh,
 
 	touch ~/.zshrc
@@ -66,7 +69,7 @@ For Windows and MacOs, check whether you have completed all your tasks for using
 	flitter doctor
 
 #### Download [Android Studio](https://developer.android.com/studio/install?hl=ko) 
-After the installation, go to
+After the installation, go to 
 #### Install "Flutter & Dart plugin" in Android Studio
 
 
