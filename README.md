@@ -8,7 +8,15 @@ CoolCoolCoffee helps people to control caffeine intake for sleeping well when pe
 
 > #### Tag v1.0 : Tag 하나 달아서 적으면 됨
 
-> #### Target device: Android<br/>OS: Window 10, MacOS<br/>Editor: Android Studio<br/>Language: Dart<br/>Needed: Flutter SDK, Flutter & Dart plugin
+> #### Target device: Android
+
+> #### OS: Window 10, MacOS
+
+> #### Editor: Android Studio
+
+> #### Language: Dart
+
+> #### Needed: Flutter SDK, Flutter & Dart plugin
 
 
 ## Demo Video about CoolCoolCoffee
