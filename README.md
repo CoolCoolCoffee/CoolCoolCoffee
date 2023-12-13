@@ -1,6 +1,6 @@
 # CoolCoolCoffee
 
-## Introduction
+## 📑 Introduction
 
 2023 Chungang-univ Capstone Design Project Team05
 
@@ -16,15 +16,17 @@ CoolCoolCoffee helps people to control caffeine intake for sleeping well when pe
 
 > #### Needed: Flutter SDK, Flutter & Dart plugin
 
-## App Icon
-<img src="https://github.com/CoolCoolCoffee/CoolCoolCoffee/assets/69229909/08e88b16-7626-41cc-a411-b76379c5151c.png" width="150" height="150"/>
+## 📱 App Icon
+<img src="https://github.com/CoolCoolCoffee/CoolCoolCoffee/assets/69229909/731439bd-c500-4f9d-8676-886bd62962e3.png" width="150" height="150"/>
 
-## Demo Video about CoolCoolCoffee
+## 📹 Demo Video about CoolCoolCoffee
 
 [![Demo_video](http://img.youtube.com/vi/lQ6Sh3euh6E/0.jpg)](https://youtu.be/lQ6Sh3euh6E)
 
+## 🛠️ Skill Stack
 
-## Build
+
+## 🖥️ Build
 If you want to run this program in your local system, please follow this guide. 
 
 ### 1. Prerequisites
@@ -87,19 +89,19 @@ In the terminal, ‘flutter pub get’ is needed before running the program.
 
 Now, Run the ‘main.dart’ and Enjoy our program!
 
-(If you are using Android Emulator in Android Studio, you can’t use the camera so that you may not use ‘OCR’ function for menu logging automatin.)
+(If you are using Android Emulator in Android Studio, you can’t use the camera so that you may not use ‘OCR’ function for menu logging automation.)
 
 
-## Common Problems
+## 📌 Common Problems
 
 - We use the “Health Connect” app to connect our project with Samsung Health to get user's sleep information automatically. But “Health Connect” is still in beta, so it may not work properly in some cases. Therefore, if you can’t recall it, proceed with the setting again. If error occurs continuously, please record your sleep information by manual input and use the app.
 
-## Bug Reporting and Feature Request
+## ⏰ Bug Reporting and Feature Request
 If you find any bugs, please report it by submitting an issue on our [issue page](https://github.com/CoolCoolCoffee/CoolCoolCoffee/issues) with a detailed explanation. Giving some screenshots would also be very helpful. You can also submit a feature request on our [issue page](https://github.com/CoolCoolCoffee/CoolCoolCoffee/issues) and we will try to implement it as soon as possible.
 
 
 
-## Team Members
+## 🧑‍🤝‍🧑 Team Members
 
 | 권현민 | 이수민 | 이은화|
 |:---:|:---:|:---:|
