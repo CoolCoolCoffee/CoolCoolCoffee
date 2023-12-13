@@ -6,7 +6,7 @@
 
 CoolCoolCoffee helps people to control caffeine intake for sleeping well when people want to get to sleep. It provides the user with the information about the amount of caffeine intake and drink time before going to bed.
 
-#### Tag v1.0 : Tag 하나 달아서 적으면 됨
+> #### Tag v1.0 : Tag 하나 달아서 적으면 됨
 
 > #### Target device: Android<br/>OS: Window 10, MacOS<br/>Editor: Android Studio<br/>Language: Dart<br/>Needed: Flutter SDK, Flutter & Dart plugin
 
@@ -21,9 +21,9 @@ If you want to run this program in your local system, please follow this guide.
 
 ### 1. Prerequisites
 
-Target Device: Android
+> Target Device: Android
 
-OS: Windows 10, MacOS
+> OS: Windows 10, MacOS
 
 #### Install "Flutter SDK"
 
@@ -61,8 +61,7 @@ For Windows and MacOs, check whether you have completed all your tasks for using
 	flutter doctor
 
 #### Download [Android Studio](https://developer.android.com/studio/install?hl=ko) 
-After the installation, go to 
-#### Install "Flutter & Dart plugin" in Android Studio
+#### Install "Flutter plugin & Dart plugin" in Android Studio
 
 
 ### 2. Clone the repository
