@@ -83,11 +83,11 @@ This will create a local copy of the repository.
 
 ### 3. Build the project
 
-To build Files for development, open the **CoolCoolCoffee_FrontEnd** package in Android Studio and run “main.dart”.
+To build Files for development, open the **CoolCoolCoffee_FrontEnd** package in Android Studio.
 
 In the terminal, ‘flutter pub get’ is needed before running the program.
 
-Now, Click the ‘build’ and Enjoy our program!
+Now, Run the ‘main.dart’ and Enjoy our program!
 
 (If you are using Android Emulator in Android Studio, you can’t use the camera so that you may not use ‘OCR’ function for capturing Starbucks Label.)
 
