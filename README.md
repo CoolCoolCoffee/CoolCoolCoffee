@@ -100,3 +100,11 @@ Now, Click the ‘build’ and Enjoy our program!
 If you find any bugs, please report it by submitting an issue on our [issue page](https://github.com/CoolCoolCoffee/CoolCoolCoffee/issues) with a detailed explanation. Giving some screenshots would also be very helpful. You can also submit a feature request on our [issue page](https://github.com/CoolCoolCoffee/CoolCoolCoffee/issues) and we will try to implement it as soon as possible.
 
 
+
+## Team Members
+
+| 권현민 | 이수민 | 이은화|
+|:---:|:---:|:---:|
+|역할|역할|역할|
+|상세|상세|상세|
+
