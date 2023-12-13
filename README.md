@@ -83,7 +83,7 @@ This will create a local copy of the repository.
 
 ### 3. Build the project
 
-To build Files for development, open the **CoolCoolCoffee_FrontEnd** package in Android Studio.
+To build Files for development, open the **CoolCoolCoffee_FrontEnd** package in Android Studio and run “main.dart”.
 
 In the terminal, ‘flutter pub get’ is needed before running the program.
 
