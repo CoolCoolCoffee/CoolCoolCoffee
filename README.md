@@ -6,8 +6,6 @@
 
 CoolCoolCoffee helps people to control caffeine intake for sleeping well when people want to get to sleep. It provides the user with the information about the amount of caffeine intake and drink time before going to bed.
 
-> #### Tag v1.0 : Tag 하나 달아서 적으면 됨
-
 > #### Target device: Android
 
 > #### OS: Window 10, MacOS
