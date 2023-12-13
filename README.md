@@ -109,8 +109,7 @@ Now, Run the ‘main.dart’ and Enjoy our program!
 
 
 ## 📌 Common Problems
-
-- We use the “Health Connect” app to connect our project with Samsung Health to get user's sleep information automatically. But “Health Connect” is still in beta, so it may not work properly in some cases. Therefore, if you can’t recall it, proceed with the setting again. If error occurs continuously, please record your sleep information by manual input and use the app.
+We use the “Health Connect” app to connect our project with Samsung Health to get user's sleep information automatically. But “Health Connect” is still in beta, so it may not work properly in some cases. Therefore, if you can’t recall it, proceed with the setting again. If error occurs continuously, please record your sleep information by manual input and use the app.
 
 ## ⏰ Bug Reporting and Feature Request
 If you find any bugs, please report it by submitting an issue on our [issue page](https://github.com/CoolCoolCoffee/CoolCoolCoffee/issues) with a detailed explanation. Giving some screenshots would also be very helpful. You can also submit a feature request on our [issue page](https://github.com/CoolCoolCoffee/CoolCoolCoffee/issues) and we will try to implement it as soon as possible.
