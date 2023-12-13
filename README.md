@@ -34,7 +34,9 @@ Target Device: Android
 OS: Windows 10, MacOS
 
 * Install "Flutter SDK"
+
 For Windows (https://docs.flutter.dev/release/archive?tab=windows)
+
 Remember to unpack the Flutter SDK file at the appropriate position. Do not unpack the file in folders like Program Files. 
 Ex) D:\flutter
 
@@ -43,12 +45,15 @@ Ex) D:\flutter\bin
 
 
 For MacOS (https://docs.flutter.dev/release/archive?tab=macos)
+
 Open terminal and type commands below.
 If your terminal is zsh,
+
 	touch ~/.zshrc
 	open ~/.zshrc
 
 If your terminal is bash,
+
 	touch ~/.bash_profile
 	open ~/.bash_profile
 
