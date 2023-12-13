@@ -27,13 +27,13 @@ CoolCoolCoffee helps people to control caffeine intake for sleeping well when pe
 ## Build
 If you want to run this program in your local system, please follow this guide. 
 
-#### 1. Prerequisites
+### 1. Prerequisites
 
 Target Device: Android
 
 OS: Windows 10, MacOS
 
-* Install "Flutter SDK"
+#### Install "Flutter SDK"
 
 For Windows (https://docs.flutter.dev/release/archive?tab=windows)
 Remember to unpack the Flutter SDK file at the appropriate position. Do not unpack the file in folders like Program Files. 
@@ -67,12 +67,12 @@ For Windows and MacOs, check whether you have completed all your tasks for using
 
 	flitter doctor
 
-* Download [Android Studio](https://developer.android.com/studio/install?hl=ko) 
+#### Download [Android Studio](https://developer.android.com/studio/install?hl=ko) 
 After the installation, go to
-* Install "Flutter & Dart plugin" in Android Studio
+#### Install "Flutter & Dart plugin" in Android Studio
 
 
-#### 2. Clone the repository
+### 2. Clone the repository
 
 
     git clone https://github.com/CoolCoolCoffee/CoolCoolCoffee.git
@@ -80,7 +80,7 @@ After the installation, go to
 
 This will create a local copy of the repository.
 
-#### 3. Build the project
+### 3. Build the project
 
 To build Files for development, open the **CoolCoolCoffee_FrontEnd** package in Android Studio.
 
