@@ -19,7 +19,7 @@ CoolCoolCoffee helps people to control caffeine intake for sleeping well when pe
 > #### Needed: Flutter SDK, Flutter & Dart plugin
 
 ## App Icon
-<img src="https://github.com/CoolCoolCoffee/CoolCoolCoffee/assets/69229909/08e88b16-7626-41cc-a411-b76379c5151c.png" width="200" height="200"/>
+<img src="https://github.com/CoolCoolCoffee/CoolCoolCoffee/assets/69229909/08e88b16-7626-41cc-a411-b76379c5151c.png" width="150" height="150"/>
 
 ## Demo Video about CoolCoolCoffee
 
