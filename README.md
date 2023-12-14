@@ -19,7 +19,7 @@ This survice also has __an overnight mode__ that helps user to ultilize caffeine
 <img src="https://github.com/CoolCoolCoffee/CoolCoolCoffee/assets/69229909/731439bd-c500-4f9d-8676-886bd62962e3.png" width="150" height="150"/>
 
 ## 📹 Demo Video about CoolCoolCoffee
-
+This video contains the basic usage instructions of the App.
 [![Demo_video](http://img.youtube.com/vi/lQ6Sh3euh6E/0.jpg)](https://youtu.be/lQ6Sh3euh6E)
 
 ## 🛠️ Skill Stack
