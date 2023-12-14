@@ -76,7 +76,7 @@ class _SignUpPageState extends State<SignUpPage> {
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
         labelText: '비밀번호',
-        hintText: '비밀번호를 입력하세요',
+        hintText: '6자 이상 입력해주세요',
         hintStyle: const TextStyle(color: Colors.grey),
           suffixIcon: IconButton(
             onPressed: () {
@@ -93,6 +93,8 @@ class _SignUpPageState extends State<SignUpPage> {
       validator: (value){
         if(value == null || value.isEmpty){
           return "비밀번호를 입력해주세요.";
+        } else if(value.length < 6){
+          return "비밀번호 6자 이상 입력해주세요.";
         }
         return null;
       },
