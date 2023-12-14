@@ -8,7 +8,7 @@ CoolCoolCoffee helps people to control caffeine intake for sleeping well when pe
 
 > #### Target device: Android
 
-> #### OS: Window 10, MacOS
+> #### OS: Window 10, MacOS <- 이거 뺄까..?
 
 > #### Editor: Android Studio
 
@@ -87,7 +87,9 @@ For Windows and MacOs, check whether you have completed all your tasks for using
 
 #### Download [Android Studio](https://developer.android.com/studio/install?hl=ko) 
 #### Install "Flutter plugin & Dart plugin" in Android Studio
-
+- #### For Windows
+- #### For MacOS
+  <img src="https://github.com/CoolCoolCoffee/CoolCoolCoffee/assets/69229909/50f4fa9f-543f-45f9-90e7-1078d77659f9.png" width="600" height="450"/>
 
 ### 2. Clone the repository
 
