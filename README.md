@@ -8,7 +8,7 @@ CoolCoolCoffee helps people to control caffeine intake for sleeping well when pe
 
 > #### Target device: Android
 
-> #### OS: Window 10, MacOS <- 이거 뺄까..?
+> #### OS: Window 10, macOS <- 이거 뺄까..?
 
 > #### Editor: Android Studio
 
@@ -49,7 +49,7 @@ If you want to run this program in your local system, please follow this guide.
 
 > Target Device: Android
 
-> OS: Windows 10, MacOS
+> OS: Windows 10, macOS
 
 #### Install "Flutter SDK"
 - #### For [Windows](https://docs.flutter.dev/release/archive?tab=windows)
@@ -60,7 +60,7 @@ Ex) D:\flutter
 Then, set the SDK path to the environment variable. You should set the variable to the path of flutter SDK’s bin folder.<br/>
 Ex) D:\flutter\bin
 
-- #### For [MacOS](https://docs.flutter.dev/release/archive?tab=macos)
+- #### For [macOS](https://docs.flutter.dev/release/archive?tab=macos)
   
 Open terminal and type commands below.
 
@@ -80,7 +80,7 @@ Then a text editor will pop. You should add the code below with the address of Y
 Save and close the editor.
 <br/>
 <br/>
-For Windows and MacOs, check whether you have completed all your tasks for using flutter with the command below.
+For Windows and macOs, check whether you have completed all your tasks for using flutter with the command below.
 
 	flutter doctor
 
@@ -88,7 +88,7 @@ For Windows and MacOs, check whether you have completed all your tasks for using
 #### Download [Android Studio](https://developer.android.com/studio/install?hl=ko) 
 #### Install "Flutter plugin & Dart plugin" in Android Studio
 - #### For Windows
-- #### For MacOS
+- #### For macOS
   <img src="https://github.com/CoolCoolCoffee/CoolCoolCoffee/assets/69229909/50f4fa9f-543f-45f9-90e7-1078d77659f9.png" width="600" height="450"/>
 
 ### 2. Clone the repository
