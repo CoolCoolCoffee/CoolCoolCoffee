@@ -308,6 +308,8 @@ class _UserFormState extends State<SignUpSecondPage> {
                                     const Text('시간을 알려주세요.', style: TextStyle(
                                         fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
                                     const SizedBox(width: 4),
+                                    const Text('(이만큼 자면 개운해요)', style: TextStyle(
+                                        fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),),
                                   ],
                                 ),
                                 const SizedBox(height: 10),
