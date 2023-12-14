@@ -9,8 +9,6 @@ This survice also has __an overnight mode__ that helps user to ultilize caffeine
 
 > #### Target device: Android
 
-> #### OS: Window 10, macOS <- 이거 뺄까..?
-
 > #### Editor: Android Studio
 
 > #### Language: Dart
