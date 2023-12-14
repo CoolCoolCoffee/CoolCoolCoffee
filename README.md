@@ -4,7 +4,8 @@
 
 2023 Chungang-univ Capstone Design Project Team05
 
-CoolCoolCoffee helps people to control caffeine intake for sleeping well when people want to get to sleep. It provides the user with the information about the amount of caffeine intake and drink time before going to bed.
+CoolCoolCoffee helps users control caffeine so that the caffeine does not negatively affect their sleep. It recommends users the amount of caffeine they can intake without sleep side effects. Also it provides various feedback based on user's sleep info, intake caffeine amount and caffeine intake time.
+This survice also has an overnight mode that helps user to ultilize caffeine as a tool for delaying one's sleep.
 
 > #### Target device: Android
 
