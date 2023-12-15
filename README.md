@@ -127,8 +127,7 @@ If you find any bugs, please report it by submitting an issue on our [issue page
 
 ## 🧑‍🤝‍🧑 Team Members
 
-| 권현민 | 이수민 | 이은화|
+| [권현민](https://github.com/hvunrnin) | [이수민](https://github.com/suminl22) | [이은화](https://github.com/Ontheway-01)|
 |:---:|:---:|:---:|
-|역할|역할|역할|
-|상세|상세|상세|
+
 
