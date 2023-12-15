@@ -18,9 +18,16 @@ This survice also has __an overnight mode__ that helps user to ultilize caffeine
 ## 📱 App Icon
 <img src="https://github.com/CoolCoolCoffee/CoolCoolCoffee/assets/69229909/731439bd-c500-4f9d-8676-886bd62962e3.png" width="150" height="150"/>
 
+## 🗃️ App Configuration Chart
+<img src="https://github.com/CoolCoolCoffee/CoolCoolCoffee/assets/69229909/ec8a1d8b-3c2e-441b-a86b-692ee1927476.png" width="800" height="500"/>
+
 ## 📹 Demo Video about CoolCoolCoffee
 #### This video contains the basic usage instructions of the App.  
 [![Demo_video](http://img.youtube.com/vi/lQ6Sh3euh6E/0.jpg)](https://youtu.be/lQ6Sh3euh6E)
+
+## 🖇️ More about our App
+#### This file includes description of how our app was created and how it functions in detail ect. (It is written in Korean.)
+[App Description in Detail](https://github.com/CoolCoolCoffee/CoolCoolCoffee/files/13680945/all.about.our.App.pdf)
 
 ## 🛠️ Skill Stack
 <div align=center> 
@@ -87,6 +94,7 @@ For Windows and macOs, check whether you have completed all your tasks for using
 #### Download [Android Studio](https://developer.android.com/studio/install?hl=ko) 
 #### Install "Flutter plugin & Dart plugin" in Android Studio
 - #### For Windows
+  <img src="https://github.com/CoolCoolCoffee/CoolCoolCoffee/assets/69229909/d2bef7e6-86f3-4d05-81cf-bc70266972a1.png" width="600" height="450"/>
 - #### For macOS
   <img src="https://github.com/CoolCoolCoffee/CoolCoolCoffee/assets/69229909/50f4fa9f-543f-45f9-90e7-1078d77659f9.png" width="600" height="450"/>
 
