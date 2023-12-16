@@ -28,6 +28,8 @@ This survice also has __an overnight mode__ that helps user to ultilize caffeine
 ## 🖇️ More about our App
 #### This file includes description of how our app was created and how it functions in detail ect. (It is written in Korean.)
 [App Description in Detail](https://github.com/CoolCoolCoffee/CoolCoolCoffee/files/13680945/all.about.our.App.pdf)
+#### 🔔 If you want to get your short term feedback push notification, you should turn on the notification permission.
+#### 🩺 If you want to use sleep info logging automation, you should go to the mypage and click permission setting. Then you will get a popup which guides you to download Health Connect and handle with the health permission.
 
 ## 🛠️ Skill Stack
 <div align=center> 
