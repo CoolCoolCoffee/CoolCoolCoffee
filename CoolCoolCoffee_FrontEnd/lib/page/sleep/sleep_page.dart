@@ -58,7 +58,7 @@ class _SleepPageState extends State<SleepPage> {
                   this.selectedDay = selectedDay;
                   this._sleepTime = sleepTime;
                   this._wakeTime = wakeTime;
-                  print("tlqkf11 - sleep_time: $_sleepTime, wake_time: $_wakeTime");
+                  //print("tlqkf11 - sleep_time: $_sleepTime, wake_time: $_wakeTime");
                 });
               },
             ),

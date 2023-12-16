@@ -119,7 +119,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
       // 업데이트 후에는 UI를 다시 그리기
       setState(() {
-        print("tlqkdfdfdf - sleep_time: $_sleepTime, wake_time: $_wakeTime");
+        //print("tlqkdfdfdf - sleep_time: $_sleepTime, wake_time: $_wakeTime");
       });
     } catch (e) {
       print('Error : $e');

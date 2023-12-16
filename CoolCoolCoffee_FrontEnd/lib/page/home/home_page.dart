@@ -210,7 +210,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               StreamBuilder(
                   stream: FirebaseFirestore.instance.collection('Users').doc(userCaffeineService.uid).collection('user_caffeine').doc(date).snapshots(),
                   builder: (context,snapshot){
-                    print('좀 바뀌어라 ㅅㅂ');
+                    //print('좀 바뀌어라 ㅅㅂ');
                     return CaffeineLeftWidget(snapshots: snapshot,);
                   }),
               SizedBox(height: 20),
