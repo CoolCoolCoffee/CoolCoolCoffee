@@ -30,6 +30,7 @@ This survice also has __an overnight mode__ that helps user to ultilize caffeine
 [App Description in Detail](https://github.com/CoolCoolCoffee/CoolCoolCoffee/files/13680945/all.about.our.App.pdf)
 #### 🔔 If you want to get your short term feedback push notification, you should turn on the notification permission.
 #### 🩺 If you want to use sleep info logging automation, you should go to the mypage and click permission setting. Then you will get a popup which guides you to download Health Connect and handle with the health permission.
+#### 🕸️ Make sure to connect NETWORK and then enjoy the survice.
 
 ## 🛠️ Skill Stack
 <div align=center> 
